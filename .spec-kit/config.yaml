@@ -1,0 +1,209 @@
+# Spec-Kit Plus Configuration for Evolution of Todo - Phase I
+# This configuration drives the spec-driven development process
+
+project:
+  name: "Evolution of Todo"
+  phase: "Phase I - Console Application"
+  version: "0.1.0"
+  description: "Spec-driven Python console Todo application with in-memory storage"
+
+# Technology Stack Configuration
+tech_stack:
+  language: "Python"
+  version: "3.13+"
+  package_manager: "UV"
+  storage: "in-memory"
+  architecture: "console-application"
+
+# Phase I Feature Set
+features:
+  core:
+    - name: "add_todo"
+      priority: "high"
+      spec_file: "specs/add-todo.md"
+      description: "Add new todo items to the list"
+
+    - name: "view_todos"
+      priority: "high"
+      spec_file: "specs/view-todos.md"
+      description: "View all todo items with their status"
+
+    - name: "update_todo"
+      priority: "high"
+      spec_file: "specs/update-todo.md"
+      description: "Update existing todo item details"
+
+    - name: "delete_todo"
+      priority: "high"
+      spec_file: "specs/delete-todo.md"
+      description: "Delete todo items from the list"
+
+    - name: "mark_complete"
+      priority: "high"
+      spec_file: "specs/mark-complete.md"
+      description: "Mark todo items as complete or incomplete"
+
+# Development Workflow
+workflow:
+  process:
+    - "spec_first": true
+    - "test_driven": false  # Phase I focuses on console app without tests
+    - "incremental": true
+
+  stages:
+    - stage: "specification"
+      description: "Define feature specs in markdown files"
+      output: "specs/*.md"
+
+    - stage: "implementation"
+      description: "Implement features based on specs"
+      output: "src/*.py"
+
+    - stage: "validation"
+      description: "Manual validation through console interaction"
+      method: "manual_testing"
+
+# Project Structure
+structure:
+  specs_dir: "specs/"
+  source_dir: "src/"
+  config_dir: ".spec-kit/"
+  docs:
+    - "CLAUDE.md"
+    - "README.md"
+
+# Spec-Kit Plus Principles for Phase I
+principles:
+  spec_driven:
+    enabled: true
+    description: "All features must have a spec file before implementation"
+    enforcement: "strict"
+
+  incremental_development:
+    enabled: true
+    description: "Build features one at a time, validate before moving to next"
+
+  minimal_viable:
+    enabled: true
+    description: "Focus on core functionality, avoid over-engineering"
+
+  clear_separation:
+    enabled: true
+    description: "Separate UI logic from business logic"
+
+# Data Model for Phase I
+data_model:
+  todo_item:
+    fields:
+      - name: "id"
+        type: "int"
+        description: "Auto-incremented unique identifier"
+
+      - name: "title"
+        type: "str"
+        description: "Todo item title/description"
+        required: true
+
+      - name: "completed"
+        type: "bool"
+        description: "Completion status"
+        default: false
+
+      - name: "created_at"
+        type: "datetime"
+        description: "Creation timestamp"
+        auto: true
+
+# Console Interface Configuration
+interface:
+  type: "console"
+  menu_driven: true
+  commands:
+    - "1: Add Todo"
+    - "2: View Todos"
+    - "3: Update Todo"
+    - "4: Delete Todo"
+    - "5: Mark Complete/Incomplete"
+    - "6: Exit"
+
+# Future Phases (Reference Only)
+roadmap:
+  phase_ii:
+    description: "Add file persistence (JSON/CSV)"
+    estimated: "Next iteration"
+
+  phase_iii:
+    description: "Add SQLite database"
+    estimated: "Future"
+
+  phase_iv:
+    description: "Add Web API (FastAPI)"
+    estimated: "Future"
+
+# Development Guidelines
+guidelines:
+  code_style:
+    - "Follow PEP 8 conventions"
+    - "Use type hints for all functions"
+    - "Keep functions small and focused"
+    - "Use descriptive variable names"
+
+  error_handling:
+    - "Handle invalid user input gracefully"
+    - "Provide clear error messages"
+    - "Never crash the application"
+
+  user_experience:
+    - "Clear menu options"
+    - "Confirm destructive actions"
+    - "Display success/failure messages"
+    - "Show current state after operations"
+
+# Agent & Skills Configuration (For AI Development)
+ai_assistance:
+  subagents:
+    - name: "spec-writer"
+      purpose: "Create detailed specification documents"
+      skills: ["markdown", "requirement_analysis", "user_story_writing"]
+
+    - name: "python-developer"
+      purpose: "Implement features based on specs"
+      skills: ["python", "console_ui", "data_structures"]
+
+    - name: "code-reviewer"
+      purpose: "Review code for quality and spec compliance"
+      skills: ["code_review", "spec_validation", "python_best_practices"]
+
+  skills:
+    - name: "spec-validation"
+      description: "Validate that implementation matches specification"
+
+    - name: "console-ui-design"
+      description: "Design user-friendly console interfaces"
+
+    - name: "data-modeling"
+      description: "Design efficient in-memory data structures"
+
+# Validation Criteria
+validation:
+  spec_complete:
+    - "All features have corresponding spec files"
+    - "Specs follow the defined template"
+    - "Acceptance criteria are clear and testable"
+
+  implementation_complete:
+    - "All spec features are implemented"
+    - "Code follows style guidelines"
+    - "Error handling is comprehensive"
+    - "User experience is smooth and intuitive"
+
+# Notes
+notes: |
+  Phase I is focused on establishing the foundation:
+  - Spec-driven development workflow
+  - Core CRUD operations
+  - Clean console interface
+  - In-memory data management
+
+  Keep it simple, functional, and well-documented.
+  Each feature should be fully specified before implementation.
