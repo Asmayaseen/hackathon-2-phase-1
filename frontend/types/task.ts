@@ -1,3 +1,9 @@
+/**
+ * Task Types
+ *
+ * TypeScript type definitions for task-related data structures.
+ */
+
 export interface Task {
   id: number
   user_id: string

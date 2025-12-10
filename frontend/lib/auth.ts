@@ -37,12 +37,6 @@ export const auth = betterAuth({
   plugins: [nextCookies()],
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.BETTER_AUTH_URL,
-  advanced: {
-    generateId: () => {
-      // Generate a unique ID using timestamp + random string
-      return `${Date.now()}-${Math.random().toString(36).substring(2, 15)}`
-    },
-  },
 })
 
 export type Session = typeof auth.$Infer.Session
