@@ -1,300 +1,441 @@
-# Evolution of Todo - Phase I
+# Evolution of Todo - Phase II
 
-> A Spec-Driven Python Console Application built with Spec-Kit Plus Principles
+> **Hackathon:** Panaversity Hackathon II
+> **Phase:** II - Full-Stack Web Application
+> **Points:** 150 (of 1,000 total)
+> **Status:** 🚧 Ready for Implementation
 
-## 📋 Project Overview
+A production-ready, multi-user todo application built with Next.js 16+, FastAPI, and PostgreSQL.
 
-**Evolution of Todo** is a multi-phase project that demonstrates professional software development methodology through building a todo list application that evolves from a simple console app to a full-featured web application.
+---
 
-**Current Phase:** Phase I - Python Console Application with In-Memory Storage
+## 🎯 Project Overview
 
-## 🎯 Phase I Goals
+Transform a Phase I console application into a full-stack web application with:
+- ✅ Modern responsive UI (Next.js 16+ with App Router)
+- ✅ RESTful API backend (FastAPI with SQLModel)
+- ✅ User authentication (Better Auth with JWT)
+- ✅ Cloud database (Neon Serverless PostgreSQL)
+- ✅ Secure multi-user isolation
 
-Build a solid foundation with:
-- ✅ Spec-driven development methodology
-- ✅ Clean, maintainable Python code
-- ✅ Complete CRUD operations for todos
-- ✅ User-friendly console interface
-- ✅ Robust error handling
+---
 
-## 🛠️ Technology Stack
+## 🏗️ Technology Stack
 
-- **Language:** Python 3.13+
-- **Package Manager:** UV (modern Python package manager)
-- **Storage:** In-memory (Python list)
-- **Interface:** Console (menu-driven)
-- **Architecture:** Layered (UI, Business Logic, Data Model)
+### Frontend
+```
+Framework:     Next.js 16+ (App Router)
+Language:      TypeScript 5.0+
+Styling:       Tailwind CSS 3.4+
+Authentication: Better Auth
+UI Components: shadcn/ui
+```
 
-## 🏗️ Project Structure
+### Backend
+```
+Framework:     FastAPI (latest)
+Language:      Python 3.13+
+ORM:           SQLModel
+Database:      Neon Serverless PostgreSQL
+Auth:          JWT verification
+Validation:    Pydantic v2
+```
+
+### Development
+```
+Monorepo:      Single repository
+Docker:        docker-compose for local development
+Git:           Version control with detailed history
+AI:            Claude Code (spec-driven development)
+```
+
+---
+
+## 📁 Project Structure
 
 ```
 hackathon-2-phase-1/
-├── .spec-kit/
-│   └── config.yaml          # Project configuration & feature definitions
-├── specs/
-│   ├── add-todo.md          # Specification: Adding todos
-│   ├── view-todos.md        # Specification: Viewing todos
-│   ├── update-todo.md       # Specification: Updating todos
-│   ├── delete-todo.md       # Specification: Deleting todos
-│   └── mark-complete.md     # Specification: Marking complete
-├── src/
-│   ├── main.py              # Application entry point
-│   ├── todo_manager.py      # Business logic & CRUD operations
-│   ├── ui.py                # Console UI layer
-│   └── models.py            # Data models (Todo class)
-├── CLAUDE.md                # AI Assistant instructions
-├── README.md                # This file
-└── pyproject.toml           # UV project configuration
+├── frontend/                  # Next.js application
+│   ├── app/                   # App Router pages
+│   ├── components/            # React components
+│   ├── lib/                   # Utilities
+│   ├── types/                 # TypeScript types
+│   ├── package.json           # Dependencies
+│   └── CLAUDE.md              # Frontend guidelines
+│
+├── backend/                   # FastAPI application
+│   ├── routes/                # API endpoints
+│   ├── middleware/            # JWT verification
+│   ├── schemas/               # Pydantic schemas
+│   ├── models.py              # Database models
+│   ├── main.py                # FastAPI app
+│   ├── requirements.txt       # Python dependencies
+│   └── CLAUDE.md              # Backend guidelines
+│
+├── specs/                     # Specifications
+│   ├── overview.md            # Project mission
+│   ├── architecture.md        # System design
+│   ├── database/schema.md     # Database schema
+│   ├── api/rest-endpoints.md # API documentation
+│   ├── features/              # Feature specs
+│   └── ui/                    # UI specs
+│
+├── specs-history/             # Spec history
+│   └── phase-2-fullstack/
+│       ├── spec.md            # Consolidated spec
+│       ├── plan.md            # Implementation plan
+│       └── tasks.md           # Task breakdown
+│
+├── .claude/                   # Claude Code configuration
+│   ├── agents/                # Subagents (4)
+│   └── skills/                # Skills (10)
+│
+├── docker-compose.yml         # Local development
+├── CLAUDE.md                  # Root AI guidelines
+└── README.md                  # This file
 ```
 
-## ✨ Features (Phase I)
+---
 
-### Core Operations
-1. **Add Todo** - Create new todo items with titles
-2. **View Todos** - Display all todos with status and timestamps
-3. **Update Todo** - Modify existing todo item details
-4. **Delete Todo** - Remove todos from the list
-5. **Mark Complete** - Toggle completion status
-
-### User Experience
-- Simple, intuitive menu-driven interface
-- Clear feedback for all operations
-- Input validation and error handling
-- Visual status indicators (✓ for complete, ✗ for pending)
-- Timestamps for todo creation
-
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- Python 3.13 or higher
-- UV package manager
 
-### Installation
+- Node.js 18+ and npm
+- Python 3.13+
+- PostgreSQL (or use Neon cloud)
+- Git
 
-#### Option 1: Automatic Setup (Recommended) ⚡
+### Option 1: Docker (Recommended)
 
-**Linux / macOS / WSL:**
 ```bash
+# Clone repository
+git clone https://github.com/Asmayaseen/hackathon-2-phase-1.git
 cd hackathon-2-phase-1
-./setup_uv.sh
+
+# Set environment variables
+cp frontend/.env.local.example frontend/.env.local
+cp backend/.env.example backend/.env
+# Edit .env files with your values
+
+# Start all services
+docker-compose up
 ```
 
-**Windows:**
+**Access:**
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
+
+### Option 2: Manual Setup
+
+#### Frontend Setup
+
 ```bash
-cd hackathon-2-phase-1
-setup_uv.bat
+cd frontend
+
+# Install dependencies
+npm install
+
+# Create environment file
+cp .env.local.example .env.local
+# Edit .env.local with your values
+
+# Run development server
+npm run dev
 ```
 
-This will automatically:
-- Install UV (if not present)
-- Create virtual environment
-- Install all dependencies
-- Verify installation
+#### Backend Setup
 
-#### Option 2: Manual Setup
-
-1. **Install UV** (if not already installed)
-   ```bash
-   # macOS/Linux/WSL
-   curl -LsSf https://astral.sh/uv/install.sh | sh
-
-   # Windows (PowerShell)
-   powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-   ```
-
-2. **Setup the project**
-   ```bash
-   cd hackathon-2-phase-1
-
-   # Create virtual environment
-   uv venv
-
-   # Install project with dependencies
-   uv pip install -e ".[dev]"
-   ```
-
-### Running the Application
-
-#### With UV (Recommended - No activation needed) ⚡
 ```bash
-# Run directly with UV
-uv run python src/main.py
+cd backend
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Create environment file
+cp .env.example .env
+# Edit .env with your values
+
+# Run development server
+uvicorn main:app --reload
 ```
 
-#### With Activated Environment
+---
+
+## 🔐 Environment Variables
+
+### Frontend (.env.local)
+
+```env
+# Backend API URL
+NEXT_PUBLIC_API_URL=http://localhost:8000
+
+# Better Auth (must match backend)
+BETTER_AUTH_SECRET=your-secret-key-min-32-chars
+BETTER_AUTH_URL=http://localhost:3000
+
+# Database (for Better Auth)
+DATABASE_URL=postgresql://user:password@host/db
+```
+
+### Backend (.env)
+
+```env
+# Database
+DATABASE_URL=postgresql://user:password@host/db
+
+# Authentication (must match frontend)
+BETTER_AUTH_SECRET=your-secret-key-min-32-chars
+
+# CORS
+ALLOWED_ORIGINS=http://localhost:3000
+
+# Server
+PORT=8000
+ENVIRONMENT=development
+```
+
+**Generate Secret Key:**
 ```bash
-# Activate environment first
-source .venv/bin/activate  # Linux/macOS/WSL
-# or
-.venv\Scripts\activate     # Windows
-
-# Then run
-python src/main.py
+openssl rand -base64 32
 ```
 
-## 📖 Usage Example
+---
 
-```
-=== Todo List Manager ===
-1. Add Todo
-2. View Todos
-3. Update Todo
-4. Delete Todo
-5. Mark Complete/Incomplete
-6. Exit
+## 📊 Database Setup
 
-Enter your choice (1-6): 1
-Enter todo title: Buy groceries
-✓ Todo added successfully!
+### Using Neon (Recommended)
 
-Enter your choice (1-6): 2
+1. Create account at https://console.neon.tech/
+2. Create new project
+3. Copy connection string
+4. Add to `.env` files as `DATABASE_URL`
 
-=== Your Todos ===
-1. [ ] Buy groceries (Created: 2025-01-10 14:30)
+### Using Local PostgreSQL
 
-Total: 1 todos (0 completed, 1 pending)
+```bash
+# Create database
+createdb todo_db
+
+# Update DATABASE_URL
+DATABASE_URL=postgresql://username:password@localhost/todo_db
 ```
 
-## 🎨 Development Methodology
+---
 
-### Spec-Kit Plus Principles
+## 🎨 Features
 
-This project follows **Spec-Driven Development**:
+### Phase II Features
 
-1. **Specification First** - Every feature starts with a detailed spec
-2. **Incremental Development** - Build one feature at a time
-3. **Minimal Viable** - Implement only what's needed
-4. **Clear Separation** - UI, logic, and data are separated
-5. **Quality Focus** - Clean code, error handling, good UX
+- ✅ **User Authentication**
+  - Sign up with email/password
+  - Sign in with credentials
+  - Secure JWT tokens (7-day expiry)
+  - Protected routes
 
-### Development Workflow
+- ✅ **Task Management**
+  - Create tasks (title + description)
+  - View all user's tasks
+  - Update task details
+  - Delete tasks
+  - Mark complete/incomplete
+  - Filter by status (all/pending/completed)
 
-```mermaid
-graph LR
-    A[Write Spec] --> B[Review Spec]
-    B --> C[Implement Feature]
-    C --> D[Review Code]
-    D --> E[Validate]
-    E --> F[Next Feature]
+- ✅ **User Isolation**
+  - Each user sees only their own tasks
+  - Backend enforces authorization
+  - Database queries filtered by user_id
+
+- ✅ **Responsive UI**
+  - Mobile-first design
+  - Works on phone, tablet, desktop
+  - Touch-friendly controls
+
+- ✅ **Real-time Feedback**
+  - Loading states
+  - Success/error messages
+  - Form validation
+
+---
+
+## 🛣️ API Endpoints
+
+| Method | Endpoint | Purpose | Auth |
+|--------|----------|---------|------|
+| GET | `/health` | Health check | No |
+| GET | `/api/{user_id}/tasks` | List tasks | Yes |
+| POST | `/api/{user_id}/tasks` | Create task | Yes |
+| GET | `/api/{user_id}/tasks/{id}` | Get task | Yes |
+| PUT | `/api/{user_id}/tasks/{id}` | Update task | Yes |
+| DELETE | `/api/{user_id}/tasks/{id}` | Delete task | Yes |
+| PATCH | `/api/{user_id}/tasks/{id}/complete` | Toggle completion | Yes |
+
+**Authentication:** All endpoints (except `/health`) require JWT token in `Authorization: Bearer <token>` header.
+
+**API Documentation:** http://localhost:8000/docs
+
+---
+
+## 🧪 Testing
+
+### Backend Testing
+
+```bash
+cd backend
+
+# Test health endpoint
+curl http://localhost:8000/health
+
+# Test with JWT (replace $TOKEN)
+curl -H "Authorization: Bearer $TOKEN" \
+     http://localhost:8000/api/user123/tasks
 ```
 
-## 📁 Key Files
+### Frontend Testing
 
-### Configuration
-- **`.spec-kit/config.yaml`** - Project configuration, features, and guidelines
-- **`CLAUDE.md`** - Instructions for AI assistant development
+```bash
+cd frontend
 
-### Specifications
-- **`specs/*.md`** - Detailed feature specifications with acceptance criteria
+# Type checking
+npm run type-check
 
-### Source Code
-- **`src/models.py`** - Todo data model (dataclass)
-- **`src/todo_manager.py`** - Business logic (CRUD operations)
-- **`src/ui.py`** - Console interface (menu, display, input)
-- **`src/main.py`** - Application entry point and main loop
+# Linting
+npm run lint
 
-## 🔍 Code Quality Standards
+# Build test
+npm run build
+```
 
-- ✅ PEP 8 compliant
-- ✅ Type hints throughout
-- ✅ Comprehensive error handling
-- ✅ Clear function documentation
-- ✅ Separation of concerns
-- ✅ No code duplication
+---
 
-## 🧪 Validation
+## 📦 Deployment
 
-Phase I uses **manual validation** through console interaction:
-- Test each feature thoroughly
-- Verify edge cases
-- Ensure error handling works
-- Validate user experience
+### Frontend (Vercel)
 
-## 🛣️ Roadmap
+```bash
+# Install Vercel CLI
+npm i -g vercel
 
-### Phase I (Current) - Console Application ✅
-- In-memory storage
-- Core CRUD operations
-- Console interface
+# Deploy
+cd frontend
+vercel
+```
 
-### Phase II (Next) - File Persistence
-- JSON/CSV file storage
-- Load/save on startup/shutdown
-- Data persistence between sessions
+**Environment Variables:** Set in Vercel dashboard
+- `NEXT_PUBLIC_API_URL`
+- `BETTER_AUTH_SECRET`
+- `BETTER_AUTH_URL`
+- `DATABASE_URL`
 
-### Phase III (Future) - Database
-- SQLite integration
-- Advanced fields (priority, due date, tags)
-- Query and filter capabilities
+### Backend (Railway/Render)
 
-### Phase IV (Future) - Web API
-- FastAPI backend
-- RESTful endpoints
-- Web and console clients
+1. Create new project
+2. Connect GitHub repository
+3. Set root directory to `backend/`
+4. Add environment variables
+5. Deploy
+
+**Start Command:** `uvicorn main:app --host 0.0.0.0 --port $PORT`
+
+---
 
 ## 📚 Documentation
 
-- **CLAUDE.md** - Complete AI assistant guide
-- **specs/** - Feature specifications
-- **.spec-kit/config.yaml** - Project configuration reference
+### For Developers
+
+- **Frontend Guidelines:** `frontend/CLAUDE.md`
+- **Backend Guidelines:** `backend/CLAUDE.md`
+- **Root Guidelines:** `CLAUDE.md`
+
+### Specifications
+
+- **Overview:** `specs/overview.md`
+- **Architecture:** `specs/architecture.md`
+- **Database Schema:** `specs/database/schema.md`
+- **API Endpoints:** `specs/api/rest-endpoints.md`
+- **Features:** `specs/features/`
+- **UI Design:** `specs/ui/`
+
+### Implementation
+
+- **Spec:** `specs-history/phase-2-fullstack/spec.md`
+- **Plan:** `specs-history/phase-2-fullstack/plan.md`
+- **Tasks:** `specs-history/phase-2-fullstack/tasks.md`
+
+---
 
 ## 🤝 Contributing
 
-This project follows strict specification-driven development:
+This is a hackathon project. Development follows spec-driven methodology:
 
-1. Create/update specification in `specs/`
-2. Get specification approved
-3. Implement according to spec
-4. Review code against spec
-5. Validate functionality
-
-## 📝 License
-
-This is an educational project for demonstration purposes.
-
-## 🎓 Learning Outcomes
-
-This project demonstrates:
-- Spec-driven development methodology
-- Clean architecture principles
-- Python best practices
-- Error handling and validation
-- User experience design
-- Incremental development approach
-
-## 📞 Support
-
-For questions or issues:
-1. Review `CLAUDE.md` for development guidance
-2. Check `.spec-kit/config.yaml` for configuration
-3. Read feature specs in `specs/` folder
-
-## 🏆 Project Status
-
-**Phase:** I - Foundation
-**Status:** Specification Phase - Ready for Implementation
-**Next:** Create feature specifications and implement
+1. Read specifications in `specs/`
+2. Review implementation plan in `specs-history/`
+3. Follow coding guidelines in `CLAUDE.md` files
+4. Commit with descriptive messages
 
 ---
 
-## Quick Start Commands
+## 📊 Progress
 
-```bash
-# Install dependencies
-uv sync
+**Completed:**
+- ✅ All Phase II specifications (8 files)
+- ✅ Subagents and skills
+- ✅ Frontend structure (Next.js 16+)
+- ✅ Backend structure (FastAPI)
+- ✅ Docker configuration
+- ✅ Documentation
 
-# Run the application
-uv run python src/main.py
+**In Progress:**
+- 🚧 API endpoint implementation
+- 🚧 Frontend components
+- 🚧 Authentication integration
 
-# Check code style
-uv run ruff check src/
-
-# Format code
-uv run ruff format src/
-```
+**Pending:**
+- ⏳ Full CRUD operations
+- ⏳ Testing
+- ⏳ Deployment
 
 ---
 
-**Built with Spec-Kit Plus Methodology**
+## 🏆 Hackathon Goals
 
-*Remember: Specification → Implementation → Review → Success*
+- **Phase I:** ✅ Console App (Complete)
+- **Phase II:** 🚧 Full-Stack Web App (In Progress)
+- **Phase III:** ⏳ AI Chatbot Integration
+- **Phase IV:** ⏳ Local Kubernetes Deployment
+- **Phase V:** ⏳ Cloud Production Deployment
+
+**Total Points:** 1,000 + 600 bonus
+
+---
+
+## 📜 License
+
+This project is part of Panaversity Hackathon II.
+
+---
+
+## 🙏 Acknowledgments
+
+- **Hackathon:** Panaversity Hackathon II
+- **AI Assistant:** Claude Code (Sonnet 4.5)
+- **Methodology:** Spec-Driven Development
+- **Contributors:** Human + AI pair programming
+
+---
+
+## 📞 Contact
+
+**GitHub:** https://github.com/Asmayaseen/hackathon-2-phase-1
+**Author:** Asma Yaseen
+
+---
+
+**Built with ❤️ using Next.js, FastAPI, and Claude Code**
+
+🚀 **From Console to Cloud - The Evolution Continues!**
