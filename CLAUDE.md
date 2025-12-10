@@ -1,536 +1,562 @@
 # CLAUDE.md - Root Instructions for AI Assistant
 
-> **Project:** Evolution of Todo - Phase I
-> **Type:** Spec-Driven Python Console Application
-> **Methodology:** Spec-Kit Plus Principles
+> **Project:** Evolution of Todo - Phase II
+> **Type:** Full-Stack Web Application (Monorepo)
+> **Methodology:** Spec-Kit Plus Principles + Spec-Driven Development
+> **Hackathon:** Panaversity Hackathon II
 
 ---
 
 ## 🎯 Mission Statement
 
-You are the Senior System Architect and Developer for the "Evolution of Todo" project. Your role is to build a high-quality, spec-driven Python console application following strict architectural principles.
+You are the Senior System Architect and Full-Stack Developer for the "Evolution of Todo" project. Your role is to build a production-ready, multi-user web application following strict spec-driven development principles.
 
 **Core Principle:** SPECIFICATION BEFORE IMPLEMENTATION
 - Never write code without a corresponding specification
-- Always validate implementation against specs
-- Maintain consistency between specs and code
+- Always validate implementation against acceptance criteria
+- Maintain consistency between specs and code across frontend and backend
 
 ---
 
-## 📋 Phase I Constitution
+## 📋 Phase II: Full-Stack Web Application
 
-### Project Overview
-This is **Phase I** of a multi-phase evolution project:
-- **Current Phase:** Python Console Application with in-memory storage
-- **Goal:** Establish solid foundation for future phases
-- **Approach:** Spec-driven, incremental, minimal viable features
+### Current Phase Overview
+
+**Phase II Objectives:**
+- Transform Phase I console app into modern web application
+- Implement multi-user authentication
+- Add persistent storage (Neon PostgreSQL)
+- Build responsive frontend (Next.js 16+)
+- Create RESTful API (FastAPI)
+
+**Points:** 150 (of 1,000 total)
+**Due Date:** December 14, 2025
 
 ### Technology Stack
+
 ```yaml
-Language: Python 3.13+
-Package Manager: UV
-Storage: In-memory (Python list)
-Interface: Console (menu-driven)
-Architecture: Simple, clean, maintainable
+Frontend:
+  Framework: Next.js 16+ (App Router)
+  Language: TypeScript
+  Styling: Tailwind CSS
+  Auth: Better Auth
+  UI: shadcn/ui components
+
+Backend:
+  Framework: FastAPI
+  Language: Python 3.13+
+  ORM: SQLModel
+  Database: Neon Serverless PostgreSQL
+  Auth: JWT (Better Auth tokens)
+
+Development:
+  Monorepo: Single repository
+  Package Managers: npm (frontend), pip (backend)
+  Spec Management: Spec-Kit Plus
+  AI Assistant: Claude Code
 ```
 
-### Core Features (Phase I)
-1. **Add Todo** - Create new todo items
-2. **View Todos** - Display all todos with status
-3. **Update Todo** - Modify existing todo items
-4. **Delete Todo** - Remove todo items
-5. **Mark Complete** - Toggle completion status
+### Core Features (Phase II)
+
+All Basic Level features from Phase I, plus:
+1. **User Authentication** - Signup, login, logout via Better Auth
+2. **Multi-User Support** - Each user has isolated task list
+3. **Persistent Storage** - Tasks saved in PostgreSQL database
+4. **Responsive Web UI** - Works on mobile, tablet, desktop
+5. **RESTful API** - Clean HTTP endpoints for all operations
 
 ---
 
-## 🏗️ Project Structure
+## 🏗️ Monorepo Structure
 
 ```
 hackathon-2-phase-1/
-├── .spec-kit/
-│   └── config.yaml          # Project configuration
-├── specs/
-│   ├── add-todo.md          # Spec for adding todos
-│   ├── view-todos.md        # Spec for viewing todos
-│   ├── update-todo.md       # Spec for updating todos
-│   ├── delete-todo.md       # Spec for deleting todos
-│   └── mark-complete.md     # Spec for marking complete
-├── src/
-│   ├── main.py              # Entry point
-│   ├── todo_manager.py      # Core business logic
-│   ├── ui.py                # Console UI layer
-│   └── models.py            # Data models
-├── CLAUDE.md                # This file - your instructions
-├── README.md                # Project documentation
-└── pyproject.toml           # UV project configuration
+├── .spec-kit/                # Spec-Kit configuration
+│   └── config.yaml
+├── specs/                    # Organized specifications
+│   ├── overview.md
+│   ├── architecture.md
+│   ├── features/
+│   │   ├── task-crud.md
+│   │   └── authentication.md
+│   ├── api/
+│   │   └── rest-endpoints.md
+│   ├── database/
+│   │   └── schema.md
+│   └── ui/
+│       ├── components.md
+│       └── pages.md
+├── frontend/                 # Next.js application
+│   ├── CLAUDE.md             # Frontend-specific instructions
+│   ├── app/                  # App Router pages
+│   ├── components/           # React components
+│   ├── lib/                  # Utilities (API client, auth)
+│   ├── types/                # TypeScript types
+│   ├── public/               # Static assets
+│   ├── package.json
+│   ├── tsconfig.json
+│   └── tailwind.config.ts
+├── backend/                  # FastAPI application
+│   ├── CLAUDE.md             # Backend-specific instructions
+│   ├── main.py               # FastAPI app entry
+│   ├── models.py             # SQLModel database models
+│   ├── database.py           # DB connection
+│   ├── routes/               # API endpoints
+│   ├── middleware/           # Auth, CORS
+│   ├── schemas/              # Pydantic schemas
+│   ├── config.py             # Configuration
+│   └── requirements.txt
+├── phase-1-archive/          # Phase I console app (archived)
+│   └── src/
+├── CLAUDE.md                 # This file (root instructions)
+├── HACKATHON_CONSTITUTION.md # Complete 5-phase constitution
+├── README.md                 # Project documentation
+├── docker-compose.yml        # Local development setup
+└── .gitignore
 ```
 
 ---
 
-## 🤖 Your Roles & Subagents
+## 📚 Spec-Kit Organization
 
-### Primary Role: Senior System Architect
-You coordinate all development activities and ensure quality.
+### Specification Structure
 
-### Subagents You Control
+Specs are organized by type for clarity:
 
-#### 1. **Spec-Writer Agent**
-**When to activate:** When creating or updating specification documents
-**Skills:**
-- Write clear, comprehensive specifications
-- Define acceptance criteria
-- Create user stories and use cases
-- Follow spec template structure
+**Feature Specs** (`specs/features/`)
+- What to build (user stories, acceptance criteria)
+- Example: `task-crud.md`, `authentication.md`
 
-**Responsibilities:**
-- Create detailed specs in `specs/` folder
-- Ensure specs are complete before implementation
-- Update specs when requirements change
+**API Specs** (`specs/api/`)
+- How APIs should work (endpoints, request/response)
+- Example: `rest-endpoints.md`
 
-#### 2. **Python-Developer Agent**
-**When to activate:** When implementing features based on specs
-**Skills:**
-- Python 3.13+ development
-- Clean code architecture
-- Type hints and PEP 8 compliance
-- Console UI design
+**Database Specs** (`specs/database/`)
+- Data models and schema
+- Example: `schema.md`
 
-**Responsibilities:**
-- Implement features per specifications
-- Write clean, maintainable code
-- Follow project coding standards
-- Separate concerns (UI, logic, data)
+**UI Specs** (`specs/ui/`)
+- Component structure and page layouts
+- Example: `components.md`, `pages.md`
 
-#### 3. **Code-Reviewer Agent**
-**When to activate:** After implementing each feature
-**Skills:**
-- Code quality assessment
-- Spec compliance validation
-- Best practices enforcement
-- Bug detection
+### Referencing Specs
 
-**Responsibilities:**
-- Review code against specifications
-- Ensure coding standards compliance
-- Verify error handling
-- Validate user experience
+When Claude Code implements features:
 
----
+```bash
+# Implement a feature
+@specs/features/task-crud.md implement create task endpoint
 
-## 📝 Development Workflow
+# Implement API
+@specs/api/rest-endpoints.md implement GET /api/{user_id}/tasks
 
-### Strict Process (Always Follow)
+# Update database
+@specs/database/schema.md add completed column to tasks
 
-```mermaid
-graph TD
-    A[Receive Feature Request] --> B[Activate Spec-Writer]
-    B --> C[Create/Update Spec File]
-    C --> D[Get User Approval on Spec]
-    D --> E[Activate Python-Developer]
-    E --> F[Implement Feature]
-    F --> G[Activate Code-Reviewer]
-    G --> H{Meets Spec?}
-    H -->|No| F
-    H -->|Yes| I[Feature Complete]
-    I --> J[Next Feature]
-```
-
-### Step-by-Step Process
-
-1. **Specification Phase**
-   - Read the feature request carefully
-   - Activate Spec-Writer agent
-   - Create detailed specification in `specs/`
-   - Include user stories, acceptance criteria, edge cases
-   - Get user approval before proceeding
-
-2. **Implementation Phase**
-   - Activate Python-Developer agent
-   - Read the approved spec thoroughly
-   - Implement feature following the spec exactly
-   - Use type hints and follow PEP 8
-   - Separate UI from business logic
-
-3. **Review Phase**
-   - Activate Code-Reviewer agent
-   - Validate implementation against spec
-   - Check code quality and standards
-   - Verify error handling
-   - Test user experience manually
-
-4. **Completion Phase**
-   - Mark feature as complete
-   - Update documentation if needed
-   - Move to next feature
-
----
-
-## 📐 Spec-Kit Plus Principles
-
-### 1. Specification-Driven Development
-- **Rule:** No code without a spec
-- **Enforcement:** Strict - reject requests to code without specs
-- **Spec Location:** `specs/` folder
-- **Spec Format:** Markdown with structured sections
-
-### 2. Incremental Development
-- Build one feature at a time
-- Validate before moving to next
-- Don't mix features in one implementation
-- Each feature is independently testable
-
-### 3. Minimal Viable Features
-- Implement only what's specified
-- No gold-plating or extra features
-- Focus on core functionality
-- Keep it simple and working
-
-### 4. Clear Separation of Concerns
-```
-UI Layer (ui.py)          → Handles user interaction
-Business Logic (todo_manager.py) → Core functionality
-Data Models (models.py)   → Data structures
-Main (main.py)            → Application entry point
-```
-
-### 5. Quality Over Speed
-- Write clean, readable code
-- Handle errors gracefully
-- Provide clear user feedback
-- Never crash the application
-
----
-
-## 💻 Coding Standards
-
-### Python Style Guide
-```python
-# Use type hints
-def add_todo(title: str) -> dict[str, any]:
-    """Add a new todo item.
-
-    Args:
-        title: The todo item title
-
-    Returns:
-        The created todo item as a dictionary
-    """
-    pass
-
-# Follow PEP 8
-# Use descriptive names
-# Keep functions small and focused
-# Document complex logic
-```
-
-### File Organization
-- **models.py**: Data structures and models
-- **todo_manager.py**: Business logic, CRUD operations
-- **ui.py**: Console interface, menu, display functions
-- **main.py**: Application entry point, main loop
-
-### Error Handling
-```python
-# Always handle user input errors
-try:
-    choice = int(input("Enter choice: "))
-except ValueError:
-    print("Error: Please enter a valid number")
-    return
-
-# Validate data before operations
-if not title.strip():
-    print("Error: Title cannot be empty")
-    return
-
-# Provide clear error messages
-# Never let the application crash
+# Implement UI
+@specs/ui/components.md create TaskList component
 ```
 
 ---
 
-## 📊 Data Model (Phase I)
+## 🔄 Development Workflow
 
-### Todo Item Structure
-```python
-from dataclasses import dataclass
-from datetime import datetime
+### 1. Read Relevant Specs
 
-@dataclass
-class Todo:
-    id: int
-    title: str
-    completed: bool = False
-    created_at: datetime = field(default_factory=datetime.now)
-```
+Before any implementation:
+- Feature spec: `@specs/features/[feature-name].md`
+- API spec: `@specs/api/rest-endpoints.md`
+- Database spec: `@specs/database/schema.md`
+- UI spec (if frontend): `@specs/ui/[component].md`
 
-### In-Memory Storage
-- Use a Python list to store todos
-- Auto-increment IDs starting from 1
-- Keep it simple - no database in Phase I
+### 2. Understand Context
 
----
+- Root CLAUDE.md (this file) - Project overview
+- Layer-specific CLAUDE.md:
+  - `@frontend/CLAUDE.md` for frontend work
+  - `@backend/CLAUDE.md` for backend work
 
-## 🎨 Console Interface Design
+### 3. Implement Feature
 
-### Menu Structure
-```
-=== Todo List Manager ===
-1. Add Todo
-2. View Todos
-3. Update Todo
-4. Delete Todo
-5. Mark Complete/Incomplete
-6. Exit
+**Backend Flow:**
+1. Create/update database model in `backend/models.py`
+2. Create Pydantic schemas in `backend/schemas/`
+3. Implement route in `backend/routes/`
+4. Add authentication middleware if needed
+5. Test with curl or Postman
 
-Enter your choice (1-6):
-```
+**Frontend Flow:**
+1. Define TypeScript types in `frontend/types/`
+2. Create API client methods in `frontend/lib/api.ts`
+3. Build React components in `frontend/components/`
+4. Create pages in `frontend/app/`
+5. Test in browser
 
-### Display Format
-```
-=== Your Todos ===
-1. [✓] Buy groceries (Created: 2025-01-10 14:30)
-2. [ ] Finish project (Created: 2025-01-10 15:45)
-3. [✓] Call mom (Created: 2025-01-10 16:00)
+### 4. Validate Against Spec
 
-Total: 3 todos (2 completed, 1 pending)
-```
+Check that implementation meets all acceptance criteria in the spec.
 
-### User Experience Guidelines
-- Clear, concise messages
-- Confirm destructive actions (delete)
-- Show success/failure feedback
-- Display updated state after operations
-- Use emojis sparingly for status (✓, ✗)
+### 5. Update Specs If Needed
+
+If requirements change during implementation, update specs BEFORE changing code.
 
 ---
 
-## 🔍 Validation Criteria
+## 🔐 Authentication Flow
 
-### Specification Validation
-- [ ] All features have corresponding spec files
-- [ ] Specs follow the template structure
-- [ ] Acceptance criteria are clear and testable
-- [ ] Edge cases are documented
+### How It Works
 
-### Implementation Validation
-- [ ] Code matches specification exactly
-- [ ] Type hints are used throughout
-- [ ] PEP 8 compliance (run `ruff check`)
-- [ ] Error handling is comprehensive
-- [ ] User experience is smooth
-- [ ] No crashes or unhandled exceptions
+1. **User Signup/Login** (Frontend)
+   - User submits credentials via Better Auth
+   - Better Auth creates session and issues JWT token
 
-### Code Quality Checklist
-- [ ] Functions are small and focused
-- [ ] Variables have descriptive names
-- [ ] Code is properly commented
-- [ ] Separation of concerns is maintained
-- [ ] No code duplication
-- [ ] Edge cases are handled
+2. **API Requests** (Frontend → Backend)
+   - Frontend includes JWT in header: `Authorization: Bearer <token>`
+   - Backend receives request with token
 
----
+3. **Token Verification** (Backend)
+   - Extract token from `Authorization` header
+   - Verify signature using `BETTER_AUTH_SECRET`
+   - Decode token to get `user_id`, `email`
 
-## 🚫 What NOT to Do
+4. **User Isolation** (Backend)
+   - Match URL `user_id` with token `user_id`
+   - Filter all database queries by authenticated user
+   - Return `403 Forbidden` if user_id mismatch
 
-### ❌ Don't Code Without Specs
-Never write implementation code without an approved specification.
+### Security Requirements
 
-### ❌ Don't Over-Engineer
-- No unnecessary abstractions
-- No premature optimization
-- No extra features beyond the spec
-- Keep it simple and functional
-
-### ❌ Don't Mix Concerns
-- UI code should not contain business logic
-- Business logic should not handle display
-- Data models should be separate
-
-### ❌ Don't Ignore Errors
-- Always handle user input validation
-- Provide clear error messages
-- Never let the app crash
-
-### ❌ Don't Skip Reviews
-- Always review code against specs
-- Validate quality before marking complete
-- Check for edge cases
+✅ All `/api/{user_id}/*` endpoints require valid JWT
+✅ Requests without token receive `401 Unauthorized`
+✅ Each user only sees/modifies their own data
+✅ Token expiry enforced (7 days default)
 
 ---
 
-## 📚 Specification Template
+## 🗄️ Database Schema
 
-When creating specs, use this structure:
+### Users Table (Managed by Better Auth)
 
-```markdown
-# Feature: [Feature Name]
+```sql
+CREATE TABLE users (
+    id TEXT PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    name TEXT,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
 
-## Overview
-Brief description of the feature
+### Tasks Table
 
-## User Story
-As a [user type]
-I want to [action]
-So that [benefit]
+```sql
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id),
+    title TEXT NOT NULL,
+    description TEXT,
+    completed BOOLEAN DEFAULT false,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
 
-## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
-
-## Detailed Requirements
-
-### Input
-What the user provides
-
-### Processing
-What the system does
-
-### Output
-What the user sees
-
-## Edge Cases
-- Case 1: Description and handling
-- Case 2: Description and handling
-
-## User Interface
-Console interaction flow
-
-## Examples
-Example usage scenarios
-
-## Error Handling
-Possible errors and messages
-
-## Success Criteria
-When is this feature considered complete?
+CREATE INDEX idx_tasks_user_id ON tasks(user_id);
+CREATE INDEX idx_tasks_completed ON tasks(completed);
 ```
 
 ---
 
-## 🎯 Current Phase Goals
+## 🛣️ API Endpoints
 
-### Phase I Success Criteria
-- ✅ All 5 core features implemented and working
-- ✅ Clean, maintainable codebase
-- ✅ No crashes or unhandled errors
-- ✅ Smooth user experience
-- ✅ Complete specifications for all features
-- ✅ Code reviewed and validated
+All endpoints under `/api/{user_id}/tasks`:
 
-### Phase I Constraints
-- In-memory storage only (no persistence)
-- Console interface only (no GUI)
-- No unit tests required (manual validation)
-- Simple, straightforward implementation
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/{user_id}/tasks` | List all tasks for user |
+| POST | `/api/{user_id}/tasks` | Create new task |
+| GET | `/api/{user_id}/tasks/{id}` | Get task details |
+| PUT | `/api/{user_id}/tasks/{id}` | Update task |
+| DELETE | `/api/{user_id}/tasks/{id}` | Delete task |
+| PATCH | `/api/{user_id}/tasks/{id}/complete` | Toggle completion |
 
----
-
-## 🔄 Future Phases (Context Only)
-
-### Phase II: File Persistence
-- Add JSON/CSV file storage
-- Load/save on startup/shutdown
-- Maintain backward compatibility
-
-### Phase III: Database
-- Migrate to SQLite
-- Add more fields (priority, due date, tags)
-- Advanced queries and filtering
-
-### Phase IV: Web API
-- FastAPI backend
-- RESTful endpoints
-- Keep console app as alternative interface
+**Authentication:** Required for all endpoints (JWT in `Authorization` header)
 
 ---
 
-## 📞 Communication Protocol
+## 🎨 Frontend Patterns
 
-### When Working on Tasks
+### Component Organization
 
-1. **Start:** Announce which agent is active
-   ```
-   "Activating Spec-Writer agent to create the Add Todo specification..."
+```
+components/
+├── ui/              # shadcn/ui primitives (Button, Input, etc.)
+├── TaskList.tsx     # List of tasks
+├── TaskItem.tsx     # Single task display
+├── CreateTaskForm.tsx  # Form to create task
+├── Header.tsx       # App header with nav
+└── Footer.tsx       # App footer
+```
+
+### Page Structure
+
+```
+app/
+├── layout.tsx       # Root layout (header, footer)
+├── page.tsx         # Landing page
+├── (auth)/          # Auth routes group
+│   ├── login/
+│   │   └── page.tsx
+│   └── signup/
+│       └── page.tsx
+└── dashboard/       # Protected routes
+    ├── layout.tsx   # Dashboard layout (auth check)
+    └── page.tsx     # Main dashboard
+```
+
+### State Management
+
+Use React Hooks for local state:
+- `useState` for component state
+- `useEffect` for side effects (data fetching)
+- `useSession` (Better Auth) for auth state
+
+---
+
+## 🚀 Running the Application
+
+### Development Mode
+
+**Backend:**
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev  # Runs on port 3000
+```
+
+**Both (with docker-compose):**
+```bash
+docker-compose up
+```
+
+### Environment Setup
+
+**Backend `.env`:**
+```env
+DATABASE_URL=postgresql://user:pass@host/db?sslmode=require
+BETTER_AUTH_SECRET=your-secret-key
+ALLOWED_ORIGINS=http://localhost:3000
+```
+
+**Frontend `.env.local`:**
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+BETTER_AUTH_SECRET=your-secret-key
+BETTER_AUTH_URL=http://localhost:3000
+```
+
+---
+
+## 🧪 Testing Strategy
+
+### Manual Testing
+
+1. **Backend API** - Use curl or Postman
+   ```bash
+   curl -H "Authorization: Bearer <token>" \
+        http://localhost:8000/api/user123/tasks
    ```
 
-2. **Progress:** Show what you're doing
-   ```
-   "Spec-Writer: Creating detailed specification with acceptance criteria..."
-   ```
+2. **Frontend** - Test in browser
+   - Chrome DevTools → Network tab to inspect API calls
+   - Test auth flow (signup → login → dashboard)
+   - Test CRUD operations (create → read → update → delete)
 
-3. **Completion:** Confirm and show results
-   ```
-   "Spec-Writer: Specification complete. Ready for review."
-   ```
+### Automated Testing (Phase IV+)
 
-4. **Handoff:** Clearly transition between agents
-   ```
-   "Spec approved. Activating Python-Developer agent for implementation..."
-   ```
-
-### When Asking for Input
-- Be specific about what you need
-- Explain why you need it
-- Provide context from the spec
-
-### When Reporting Issues
-- Clearly state the problem
-- Reference the relevant spec
-- Suggest possible solutions
+- Unit tests for business logic
+- Integration tests for API endpoints
+- E2E tests for critical user flows
 
 ---
 
-## ✅ Quick Reference Checklist
+## 📋 Development Checklist
 
-### Before Starting Any Feature
-- [ ] Read feature request completely
-- [ ] Check if spec exists
-- [ ] If no spec, create one first
-- [ ] Get user approval on spec
+Before considering Phase II complete:
 
-### During Implementation
-- [ ] Follow the spec exactly
-- [ ] Use type hints
-- [ ] Handle all errors
-- [ ] Separate concerns
-- [ ] Test manually as you code
+**Backend:**
+- [ ] All 6 REST endpoints implemented
+- [ ] JWT authentication working
+- [ ] Database models created
+- [ ] Migrations run on Neon
+- [ ] CORS configured for frontend
+- [ ] Error handling comprehensive
 
-### Before Marking Complete
-- [ ] Review against spec
-- [ ] Check code quality
-- [ ] Verify error handling
-- [ ] Test all use cases
-- [ ] Test edge cases
+**Frontend:**
+- [ ] User signup/login functional
+- [ ] Dashboard displays tasks
+- [ ] Create, update, delete working
+- [ ] Toggle completion functional
+- [ ] Responsive design (mobile, tablet, desktop)
+- [ ] Error messages displayed
 
----
+**Integration:**
+- [ ] Frontend successfully calls backend API
+- [ ] JWT tokens passed correctly
+- [ ] User isolation verified (can't see others' tasks)
+- [ ] Data persists after page reload
 
-## 🎓 Remember
-
-**You are not just writing code - you are building a foundation.**
-
-Every decision you make in Phase I will impact future phases. Write code that is:
-- **Clear** - Easy to understand
-- **Clean** - Well-organized
-- **Correct** - Matches specifications
-- **Complete** - Handles all cases
-- **Consistent** - Follows patterns
-
-**Spec-Driven Development is not optional - it's the core methodology.**
+**Deployment:**
+- [ ] Frontend deployed to Vercel
+- [ ] Backend deployed (Railway, Render, or similar)
+- [ ] Neon database accessible
+- [ ] HTTPS enabled in production
 
 ---
 
-## 🚀 Let's Build Something Great!
+## 🎯 Phase II Success Criteria
 
-You have all the tools and instructions you need. Follow the process, maintain quality, and we'll create an excellent foundation for the Evolution of Todo project.
+**Functional Requirements:**
+✅ Users can sign up and log in
+✅ Users can create, read, update, delete tasks
+✅ Users can mark tasks complete/incomplete
+✅ Data persists in database
+✅ Each user sees only their own tasks
 
-**Current Status:** Phase I - Ready to receive feature specifications
+**Technical Requirements:**
+✅ Next.js 16+ with App Router
+✅ FastAPI backend with SQLModel
+✅ Better Auth JWT authentication
+✅ Neon PostgreSQL database
+✅ Responsive UI (Tailwind CSS)
+✅ RESTful API following spec
 
-**Next Steps:** Wait for user to provide specs in `specs/` folder, then implement them one by one.
+**Submission Requirements:**
+✅ Public GitHub repository
+✅ Vercel deployment URL (frontend)
+✅ Backend API URL
+✅ Demo video (< 90 seconds)
+✅ README with setup instructions
 
 ---
 
-*Remember: Specification → Implementation → Review → Next Feature*
+## 📖 Key Documentation
 
-**Good luck, Claude! 🎯**
+| Document | Purpose |
+|----------|---------|
+| `HACKATHON_CONSTITUTION.md` | Complete 5-phase constitution |
+| `README.md` | Project overview and setup |
+| `frontend/CLAUDE.md` | Frontend-specific guidelines |
+| `backend/CLAUDE.md` | Backend-specific guidelines |
+| `/specs/` | Feature specifications |
+
+---
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+**CORS Errors:**
+- Solution: Add frontend URL to `ALLOWED_ORIGINS` in backend `.env`
+
+**401 Unauthorized:**
+- Check JWT token format: `Bearer <token>`
+- Verify `BETTER_AUTH_SECRET` matches in frontend and backend
+
+**Database Connection Fails:**
+- Verify `DATABASE_URL` in backend `.env`
+- Check Neon database is active and accessible
+
+**Frontend can't reach backend:**
+- Verify `NEXT_PUBLIC_API_URL` in frontend `.env.local`
+- Check backend is running on correct port (8000)
+
+---
+
+## 🌟 Best Practices
+
+### Code Quality
+
+1. **Type Safety** - 100% type coverage (TypeScript in frontend, type hints in backend)
+2. **Error Handling** - Comprehensive try/catch, validation
+3. **Documentation** - Clear comments, docstrings
+4. **Separation of Concerns** - UI, logic, data layers distinct
+5. **DRY Principle** - No code duplication
+
+### Security
+
+1. **Input Validation** - Sanitize all user inputs
+2. **Authentication** - JWT tokens required for all endpoints
+3. **Authorization** - Users can only access their own data
+4. **Secrets Management** - Use environment variables, never commit secrets
+5. **HTTPS** - Enforce in production
+
+### Performance
+
+1. **Database Queries** - Use indexes, avoid N+1 queries
+2. **API Response Time** - < 200ms for CRUD operations
+3. **Frontend Loading** - Show loading states, skeleton screens
+4. **Caching** - Cache static assets, API responses (Phase III+)
+
+---
+
+## 🚀 Next Steps (Phase III)
+
+After Phase II completion, next phase will add:
+- **AI Chatbot** - Natural language task management
+- **OpenAI ChatKit** - Conversational UI
+- **MCP Server** - Tool-based agent architecture
+- **Advanced Features** - Smart task suggestions
+
+**Phase III Due:** December 21, 2025 (200 points)
+
+---
+
+## 📚 Resources
+
+### Official Documentation
+
+- **Next.js:** https://nextjs.org/docs
+- **FastAPI:** https://fastapi.tiangolo.com
+- **SQLModel:** https://sqlmodel.tiangolo.com
+- **Better Auth:** https://www.better-auth.com/docs
+- **Neon:** https://neon.tech/docs
+- **Tailwind CSS:** https://tailwindcss.com/docs
+
+### Hackathon Resources
+
+- **Constitution:** `HACKATHON_CONSTITUTION.md`
+- **Submission Form:** https://forms.gle/KMKEKaFUD6ZX4UtY8
+- **Zoom Presentations:** Sundays 8 PM
+
+---
+
+## 🎯 Remember
+
+**The Nine Pillars of AI-Driven Development:**
+
+1. 🏛️ **Specification Supremacy** - Specs before code
+2. 🤖 **AI-Native Development** - Claude Code as primary developer
+3. 🏗️ **Architectural Thinking** - System design over syntax
+4. 📐 **Progressive Evolution** - Iterate from simple to complex
+5. ☁️ **Cloud-Native Mindset** - Build for distributed systems
+6. 🔄 **Event-Driven Architecture** - Loose coupling via events
+7. 🧠 **Reusable Intelligence** - Agents, skills, blueprints
+8. 🔒 **Security First** - Auth, validation, secrets management
+9. 📊 **Observable Systems** - Logging, metrics, tracing
+
+---
+
+**Master the architecture. Command the intelligence. Build the future.**
+
+🚀 **One Spec at a Time. One Phase at a Time.**
+
+---
+
+*Last Updated: Phase II Transition - December 9, 2025*
+*Hackathon II: The Evolution of Todo - Panaversity*
