@@ -2,7 +2,7 @@
 
 from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal
 
 
 class TaskCreate(BaseModel):
@@ -10,6 +10,8 @@ class TaskCreate(BaseModel):
 
     title: str = Field(..., min_length=1, max_length=200)
     description: Optional[str] = Field(None, max_length=1000)
+    priority: Literal['low', 'medium', 'high'] = Field('medium')
+    due_date: Optional[datetime] = Field(None)
 
     @field_validator('title')
     @classmethod
@@ -34,6 +36,8 @@ class TaskUpdate(BaseModel):
 
     title: Optional[str] = Field(None, min_length=1, max_length=200)
     description: Optional[str] = Field(None, max_length=1000)
+    priority: Optional[Literal['low', 'medium', 'high']] = None
+    due_date: Optional[datetime] = None
 
     @field_validator('title')
     @classmethod
@@ -52,6 +56,8 @@ class TaskResponse(BaseModel):
     title: str
     description: Optional[str]
     completed: bool
+    priority: str
+    due_date: Optional[datetime]
     created_at: datetime
     updated_at: datetime
 

@@ -2,11 +2,14 @@
 
 from sqlmodel import SQLModel, Field
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Literal
+
+# Type for task priority
+TaskPriority = Literal['low', 'medium', 'high']
 
 
 class Task(SQLModel, table=True):
-    """Task model."""
+    """Task model with priority and due date support."""
 
     __tablename__ = "tasks"
 
@@ -15,5 +18,7 @@ class Task(SQLModel, table=True):
     title: str = Field(max_length=200)
     description: Optional[str] = Field(default=None, max_length=1000)
     completed: bool = Field(default=False, index=True)
+    priority: str = Field(default='medium', index=True)  # 'low', 'medium', 'high'
+    due_date: Optional[datetime] = Field(default=None, index=True)
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)

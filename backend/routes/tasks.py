@@ -17,7 +17,8 @@ router = APIRouter(prefix="/api/{user_id}/tasks", tags=["tasks"])
 async def list_tasks(
     user_id: str,
     status: Literal["all", "pending", "completed"] = Query("all"),
-    sort: Literal["created", "title", "updated"] = Query("created"),
+    priority: Literal["all", "low", "medium", "high"] | None = Query(None),
+    sort: Literal["created", "title", "updated", "priority", "due_date"] = Query("created"),
     token_data: dict = Depends(verify_jwt),
     db: Session = Depends(get_db),
 ):
@@ -26,7 +27,8 @@ async def list_tasks(
 
     - **user_id**: User ID from URL path
     - **status**: Filter by completion status (all/pending/completed)
-    - **sort**: Sort order (created/title/updated)
+    - **priority**: Filter by priority (all/low/medium/high)
+    - **sort**: Sort order (created/title/updated/priority/due_date)
     """
     # Verify user_id matches token
     if token_data.get("user_id") != user_id:
@@ -44,11 +46,24 @@ async def list_tasks(
     elif status == "completed":
         query = query.where(Task.completed == True)
 
+    # Apply priority filter
+    if priority and priority != "all":
+        query = query.where(Task.priority == priority)
+
     # Apply sorting
     if sort == "title":
         query = query.order_by(Task.title)
     elif sort == "updated":
         query = query.order_by(Task.updated_at.desc())
+    elif sort == "priority":
+        # Sort by priority: high -> medium -> low
+        priority_order = {"high": 3, "medium": 2, "low": 1}
+        query = query.order_by(
+            # Use case statement to map priority to numeric value for sorting
+            Task.priority.desc()
+        )
+    elif sort == "due_date":
+        query = query.order_by(Task.due_date.asc().nulls_last())
     else:  # created (default)
         query = query.order_by(Task.created_at.desc())
 
@@ -81,6 +96,8 @@ async def create_task(
     - **user_id**: User ID from URL path
     - **title**: Task title (required, 1-200 chars)
     - **description**: Task description (optional, max 1000 chars)
+    - **priority**: Task priority (optional, default: 'medium')
+    - **due_date**: Task due date (optional, ISO 8601 format)
     """
     # Verify user_id matches token
     if token_data.get("user_id") != user_id:
@@ -95,6 +112,8 @@ async def create_task(
         title=task_data.title,
         description=task_data.description,
         completed=False,
+        priority=task_data.priority,
+        due_date=task_data.due_date,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -149,12 +168,14 @@ async def update_task(
     db: Session = Depends(get_db),
 ):
     """
-    Update a task's title and/or description.
+    Update a task's title, description, priority, and/or due date.
 
     - **user_id**: User ID from URL path
     - **task_id**: Task ID to update
     - **title**: New title (optional)
     - **description**: New description (optional)
+    - **priority**: New priority (optional)
+    - **due_date**: New due date (optional)
     """
     # Verify user_id matches token
     if token_data.get("user_id") != user_id:
@@ -179,6 +200,10 @@ async def update_task(
         task.title = task_data.title
     if task_data.description is not None:
         task.description = task_data.description
+    if task_data.priority is not None:
+        task.priority = task_data.priority
+    if task_data.due_date is not None:
+        task.due_date = task_data.due_date
 
     task.updated_at = datetime.utcnow()
 

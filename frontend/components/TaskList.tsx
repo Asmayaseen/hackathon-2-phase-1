@@ -1,119 +1,64 @@
-/**
- * Task List Component
- *
- * Displays a list of tasks with filtering options.
- */
+'use client'
 
-"use client"
-
-import type { Task } from '@/types/task'
 import TaskItem from './TaskItem'
+
+interface Task {
+  id: number
+  title: string
+  description?: string
+  completed: boolean
+  priority: 'low' | 'medium' | 'high'
+  due_date?: string
+  created_at: string
+}
 
 interface TaskListProps {
   tasks: Task[]
-  onToggle: (id: number) => Promise<void>
-  onDelete: (id: number) => Promise<void>
-  onUpdate: (id: number, title: string, description?: string) => Promise<void>
-  filter: 'all' | 'pending' | 'completed'
-  onFilterChange: (filter: 'all' | 'pending' | 'completed') => void
+  onToggleComplete: (id: number) => void
+  onUpdateTask: (id: number, updates: Partial<Task>) => void
+  onDeleteTask: (id: number) => void
+  selectedTaskIds?: Set<number>
+  onToggleSelect?: (id: number) => void
+  focusedTaskIndex?: number
 }
 
 export default function TaskList({
   tasks,
-  onToggle,
-  onDelete,
-  onUpdate,
-  filter,
-  onFilterChange,
+  onToggleComplete,
+  onUpdateTask,
+  onDeleteTask,
+  selectedTaskIds,
+  onToggleSelect,
+  focusedTaskIndex = -1
 }: TaskListProps) {
-  const completedCount = tasks.filter((t) => t.completed).length
-  const pendingCount = tasks.length - completedCount
+  if (tasks.length === 0) {
+    return (
+      <div className="bg-card border border-border rounded-xl p-12 text-center">
+        <div className="w-20 h-20 bg-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg className="w-10 h-10 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+          </svg>
+        </div>
+        <h3 className="text-xl font-semibold text-foreground mb-2">No tasks found</h3>
+        <p className="text-muted-foreground">Create your first task to get started!</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="space-y-4">
-      {/* Stats and Filters */}
-      <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          {/* Stats */}
-          <div className="flex items-center gap-6 text-sm">
-            <div>
-              <span className="font-semibold text-gray-900">{tasks.length}</span>
-              <span className="text-gray-600 ml-1">Total</span>
-            </div>
-            <div>
-              <span className="font-semibold text-amber-600">{pendingCount}</span>
-              <span className="text-gray-600 ml-1">Pending</span>
-            </div>
-            <div>
-              <span className="font-semibold text-green-600">{completedCount}</span>
-              <span className="text-gray-600 ml-1">Completed</span>
-            </div>
-          </div>
-
-          {/* Filter Buttons */}
-          <div className="flex gap-2">
-            <button
-              onClick={() => onFilterChange('all')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === 'all'
-                  ? 'bg-black text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => onFilterChange('pending')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === 'pending'
-                  ? 'bg-black text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Pending
-            </button>
-            <button
-              onClick={() => onFilterChange('completed')}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                filter === 'completed'
-                  ? 'bg-black text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Completed
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Task List */}
-      {tasks.length === 0 ? (
-        <div className="bg-white p-12 rounded-lg shadow-sm border border-gray-200 text-center">
-          <div className="text-6xl mb-4">📝</div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            {filter === 'all' && 'No tasks yet'}
-            {filter === 'pending' && 'No pending tasks'}
-            {filter === 'completed' && 'No completed tasks'}
-          </h3>
-          <p className="text-gray-600">
-            {filter === 'all' && 'Create your first task to get started!'}
-            {filter === 'pending' && 'All your tasks are completed!'}
-            {filter === 'completed' && 'Complete some tasks to see them here.'}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-3">
-          {tasks.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onToggle={onToggle}
-              onDelete={onDelete}
-              onUpdate={onUpdate}
-            />
-          ))}
-        </div>
-      )}
+    <div className="space-y-3">
+      {tasks.map((task, index) => (
+        <TaskItem
+          key={task.id}
+          task={task}
+          onToggleComplete={onToggleComplete}
+          onUpdateTask={onUpdateTask}
+          onDeleteTask={onDeleteTask}
+          isSelected={selectedTaskIds?.has(task.id)}
+          onToggleSelect={onToggleSelect}
+          isFocused={index === focusedTaskIndex}
+        />
+      ))}
     </div>
   )
 }

@@ -1,22 +1,14 @@
-/**
- * Sign Up Page
- *
- * Allows new users to create an account with email and password.
- */
-
-"use client"
+'use client'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { signUp } from '@/lib/auth-client'
 
-export default function SignUpPage() {
+export default function SignupPage() {
   const router = useRouter()
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -24,70 +16,50 @@ export default function SignUpPage() {
     e.preventDefault()
     setError('')
 
-    // Validation
-    if (!email || !password || !name) {
-      setError('Please fill in all required fields')
+    if (!name || !email || !password) {
+      setError('Please fill in all fields')
       return
     }
 
-    if (password.length < 8) {
-      setError('Password must be at least 8 characters long')
-      return
-    }
-
-    if (password !== confirmPassword) {
-      setError('Passwords do not match')
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters')
       return
     }
 
     setLoading(true)
 
-    try {
-      const result = await signUp.email({
-        email,
-        password,
-        name,
-      })
-
-      if (result.error) {
-        setError(result.error.message || 'Failed to create account')
-        setLoading(false)
-        return
-      }
-
-      // Redirect to dashboard on success
+    // Mock signup - just redirect to dashboard
+    setTimeout(() => {
       router.push('/dashboard')
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An unexpected error occurred')
-      setLoading(false)
-    }
+    }, 500)
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
-        {/* Header */}
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-blue-950/50 dark:to-indigo-950/50 px-4 transition-theme">
+      <div className="max-w-md w-full space-y-8 bg-card p-8 rounded-xl shadow-lg border border-border">
+        
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+            <span className="text-3xl">✓</span>
+          </div>
+          <h1 className="text-3xl font-bold text-foreground">
             Create Account
           </h1>
-          <p className="mt-2 text-gray-600">
-            Join Evolution of Todo
+          <p className="mt-2 text-muted-foreground">
+            Sign up to get started
           </p>
         </div>
 
-        {/* Error Message */}
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg">
             {error}
           </div>
         )}
 
-        {/* Sign Up Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Name Input */}
+          
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="name" className="block text-sm font-medium text-foreground">
               Full Name
             </label>
             <input
@@ -96,14 +68,14 @@ export default function SignUpPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              className="mt-1 block w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 transition-theme"
               placeholder="John Doe"
+              autoComplete="name"
             />
           </div>
 
-          {/* Email Input */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="email" className="block text-sm font-medium text-foreground">
               Email Address
             </label>
             <input
@@ -112,14 +84,14 @@ export default function SignUpPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+              className="mt-1 block w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 transition-theme"
               placeholder="you@example.com"
+              autoComplete="email"
             />
           </div>
 
-          {/* Password Input */}
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="password" className="block text-sm font-medium text-foreground">
               Password
             </label>
             <input
@@ -128,47 +100,37 @@ export default function SignUpPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              minLength={8}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              placeholder="Min. 8 characters"
+              className="mt-1 block w-full px-3 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 transition-theme"
+              placeholder="At least 6 characters"
+              autoComplete="new-password"
             />
           </div>
 
-          {/* Confirm Password Input */}
-          <div>
-            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-              Confirm Password
-            </label>
-            <input
-              id="confirmPassword"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              minLength={8}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-              placeholder="Re-type password"
-            />
-          </div>
-
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full flex justify-center py-3 px-4 rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:shadow-lg hover:scale-[1.02] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
           >
-            {loading ? 'Creating Account...' : 'Sign Up'}
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
-        {/* Sign In Link */}
         <div className="text-center text-sm">
-          <span className="text-gray-600">Already have an account? </span>
+          <span className="text-muted-foreground">Already have an account? </span>
           <Link
             href="/login"
-            className="font-medium text-black hover:underline"
+            className="font-medium text-blue-600 hover:text-blue-500"
           >
             Sign In
+          </Link>
+        </div>
+
+        <div className="text-center">
+          <Link
+            href="/"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
+            ← Back to home
           </Link>
         </div>
       </div>

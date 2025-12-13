@@ -1,31 +1,330 @@
+'use client'
+
+import ThemeToggle from '@/components/ThemeToggle'
+
 export default function HomePage() {
   return (
-    <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="text-center space-y-6 p-8">
-        <h1 className="text-6xl font-bold text-gray-900">
-          🎯 Evolution of Todo
-        </h1>
-        <p className="text-2xl text-gray-600">
-          Phase II - Full-Stack Web Application
-        </p>
-        <div className="flex gap-4 justify-center mt-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-950 dark:via-blue-950/50 dark:to-indigo-950/50 transition-theme">
+      {/* Navigation */}
+      <nav className="container mx-auto px-6 py-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+              <span className="text-2xl">✓</span>
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              TaskFlow
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <a
+              href="/login"
+              className="text-foreground/80 hover:text-foreground font-medium transition-colors"
+            >
+              Sign In
+            </a>
+            <a
+              href="/signup"
+              className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-medium hover:shadow-lg hover:scale-105 transition-all duration-200"
+            >
+              Get Started Free
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section className="container mx-auto px-6 py-20">
+        <div className="max-w-4xl mx-auto text-center space-y-8">
+          <div className="inline-block">
+            <span className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
+              ✨ The Future of Task Management
+            </span>
+          </div>
+
+          <h1 className="text-6xl md:text-7xl font-extrabold text-foreground leading-tight">
+            Organize Your Life,
+            <br />
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              One Task at a Time
+            </span>
+          </h1>
+
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            Experience the most intuitive task management platform. Stay organized,
+            boost productivity, and achieve your goals with powerful features designed for modern workflows.
+          </p>
+
+          <div className="flex gap-4 justify-center mt-8">
+            <a
+              href="/signup"
+              className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-200"
+            >
+              Start Free Trial →
+            </a>
+            <a
+              href="#features"
+              className="px-8 py-4 bg-white border-2 border-border rounded-xl font-semibold text-lg hover:border-gray-300 hover:shadow-lg transition-all duration-200"
+            >
+              See Features
+            </a>
+          </div>
+
+          <div className="pt-8 flex items-center justify-center gap-8 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>No credit card required</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>Free forever plan</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <span>Unlimited tasks</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="container mx-auto px-6 py-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Everything You Need to Stay Productive
+          </h2>
+          <p className="text-xl text-muted-foreground">
+            Powerful features that help you manage tasks like a pro
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {/* Feature 1 */}
+          <div className="bg-card p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-border">
+            <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl flex items-center justify-center mb-5">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-3">Secure Authentication</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Enterprise-grade JWT authentication with encrypted tokens. Your data is protected with industry-standard security protocols.
+            </p>
+          </div>
+
+          {/* Feature 2 */}
+          <div className="bg-card p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-border">
+            <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-5">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-3">Smart Organization</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Organize tasks with priorities, due dates, tags, and categories. Advanced filtering and search to find what you need instantly.
+            </p>
+          </div>
+
+          {/* Feature 3 */}
+          <div className="bg-card p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-border">
+            <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center mb-5">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-3">Lightning Fast</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Built with Next.js 16 and optimized for performance. Real-time updates and instant sync across all your devices.
+            </p>
+          </div>
+
+          {/* Feature 4 */}
+          <div className="bg-card p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-border">
+            <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mb-5">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-3">Task Analytics</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Track your productivity with detailed analytics. Visualize completion rates, trends, and insights to optimize your workflow.
+            </p>
+          </div>
+
+          {/* Feature 5 */}
+          <div className="bg-card p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-border">
+            <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center mb-5">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-3">Export & Backup</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Export your tasks to CSV, JSON, or PDF. Automatic backups ensure your data is always safe and accessible.
+            </p>
+          </div>
+
+          {/* Feature 6 */}
+          <div className="bg-card p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-border">
+            <div className="w-14 h-14 bg-gradient-to-br from-violet-500 to-purple-500 rounded-xl flex items-center justify-center mb-5">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-foreground mb-3">Keyboard Shortcuts</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Power user? Use keyboard shortcuts for lightning-fast task management. Create, complete, and navigate without touching your mouse.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="container mx-auto px-6 py-20 bg-card rounded-3xl my-20">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Get Started in 3 Simple Steps
+          </h2>
+          <p className="text-xl text-muted-foreground">
+            Start managing your tasks in less than a minute
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+          <div className="text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span className="text-3xl font-bold text-white">1</span>
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-4">Create Account</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Sign up with your email in seconds. No credit card required, no commitments.
+            </p>
+          </div>
+
+          <div className="text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span className="text-3xl font-bold text-white">2</span>
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-4">Add Your Tasks</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Create tasks, set priorities, add due dates, and organize with tags.
+            </p>
+          </div>
+
+          <div className="text-center">
+            <div className="w-20 h-20 bg-gradient-to-br from-green-600 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span className="text-3xl font-bold text-white">3</span>
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-4">Get Things Done</h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Track progress, complete tasks, and watch your productivity soar.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="container mx-auto px-6 py-20">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-12 md:p-16 text-center shadow-2xl">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+            Ready to Transform Your Productivity?
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+            Join thousands of users who are already managing their tasks smarter, not harder.
+          </p>
           <a
             href="/signup"
-            className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+            className="inline-block px-10 py-4 bg-white text-blue-600 rounded-xl font-bold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-200"
           >
-            Get Started
+            Start Your Free Trial →
           </a>
-          <a
-            href="/login"
-            className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-          >
-            Sign In
-          </a>
+          <p className="text-blue-100 mt-4 text-sm">
+            No credit card required • Free forever plan available
+          </p>
         </div>
-        <p className="text-sm text-gray-500 mt-12">
-          Built with Next.js 16+ • FastAPI • PostgreSQL
-        </p>
-      </div>
-    </main>
+      </section>
+
+      {/* Footer */}
+      <footer className="container mx-auto px-6 py-12 border-t border-border">
+        <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div>
+            <div className="flex items-center space-x-2 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                <span className="text-lg">✓</span>
+              </div>
+              <span className="text-xl font-bold">TaskFlow</span>
+            </div>
+            <p className="text-muted-foreground text-sm">
+              The most intuitive way to manage your tasks and boost productivity.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">Product</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#features" className="hover:text-gray-900">Features</a></li>
+              <li><a href="#" className="hover:text-gray-900">Pricing</a></li>
+              <li><a href="#" className="hover:text-gray-900">Integrations</a></li>
+              <li><a href="#" className="hover:text-gray-900">API</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">Company</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#" className="hover:text-gray-900">About</a></li>
+              <li><a href="#" className="hover:text-gray-900">Blog</a></li>
+              <li><a href="#" className="hover:text-gray-900">Careers</a></li>
+              <li><a href="#" className="hover:text-gray-900">Contact</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-semibold text-foreground mb-4">Legal</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li><a href="#" className="hover:text-gray-900">Privacy</a></li>
+              <li><a href="#" className="hover:text-gray-900">Terms</a></li>
+              <li><a href="#" className="hover:text-gray-900">Security</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-sm text-muted-foreground">
+            © 2025 TaskFlow. Built with Next.js 16+ • FastAPI • PostgreSQL
+          </p>
+          <div className="flex gap-6">
+            <a href="#" className="text-gray-400 hover:text-muted-foreground">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+              </svg>
+            </a>
+            <a
+              href="https://github.com/Asmayaseen"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-muted-foreground transition-colors"
+              title="GitHub"
+            >
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd"/>
+              </svg>
+            </a>
+            <a href="#" className="text-gray-400 hover:text-muted-foreground">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path fillRule="evenodd" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z" clipRule="evenodd"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </footer>
+    </div>
   )
 }
