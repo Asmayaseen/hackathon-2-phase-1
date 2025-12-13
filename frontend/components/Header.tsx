@@ -7,6 +7,7 @@
 "use client"
 
 import { useState } from 'react'
+import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
 import KeyboardShortcutsModal from './KeyboardShortcutsModal'
 
@@ -31,7 +32,7 @@ export default function Header() {
           {/* Logo and Branding */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Home Icon */}
-            <a
+            <Link
               href="/"
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-secondary transition-colors group"
               title="Go to Home"
@@ -52,7 +53,7 @@ export default function Header() {
               <span className="hidden sm:inline text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors">
                 Home
               </span>
-            </a>
+            </Link>
 
             {/* Separator */}
             <div className="h-6 sm:h-8 w-px bg-border"></div>

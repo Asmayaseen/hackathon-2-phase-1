@@ -5,18 +5,19 @@ import { useToast } from './ToastProvider'
 
 interface Task {
   id: number
+  user_id: string
   title: string
-  description: string
+  description?: string
   priority: 'low' | 'medium' | 'high'
   due_date?: string
   completed: boolean
-  created_at?: string
-  updated_at?: string
+  created_at: string
+  updated_at: string
 }
 
 interface ExportImportMenuProps {
   tasks: Task[]
-  onImport: (tasks: Omit<Task, 'id' | 'created_at' | 'updated_at'>[]) => void
+  onImport: (tasks: Omit<Task, 'id' | 'user_id' | 'created_at' | 'updated_at'>[]) => void
 }
 
 export default function ExportImportMenu({ tasks, onImport }: ExportImportMenuProps) {

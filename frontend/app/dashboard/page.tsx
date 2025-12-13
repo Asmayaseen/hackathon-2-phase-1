@@ -187,7 +187,7 @@ export default function DashboardPage() {
   }
 
   // Export/Import
-  const handleImport = (importedTasks: Omit<Task, 'id' | 'created_at' | 'updated_at'>[]) => {
+  const handleImport = (importedTasks: Omit<Task, 'id' | 'user_id' | 'created_at' | 'updated_at'>[]) => {
     const newTasks = importedTasks.map((task, index) => ({
       ...task,
       id: Math.max(0, ...tasks.map(t => t.id)) + index + 1,
