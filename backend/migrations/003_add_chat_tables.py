@@ -8,10 +8,13 @@ the AI chatbot feature in Phase III.
 """
 
 from sqlmodel import SQLModel, create_engine, text
-from models import Conversation, Message
 import os
 import sys
 from dotenv import load_dotenv
+
+# Add parent directory to path to import models
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from models import Conversation, Message
 
 # Load environment variables from .env file
 load_dotenv()

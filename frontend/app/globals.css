@@ -98,3 +98,185 @@
     animation: slide-out-right 0.3s ease-in;
   }
 }
+
+/* ======================================
+   NEON THEME - Phase III Chat Interface
+   ====================================== */
+
+@layer utilities {
+  /* Neon Glow Effects */
+  .neon-glow-purple {
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.4),
+                0 0 20px rgba(168, 85, 247, 0.2),
+                0 0 30px rgba(168, 85, 247, 0.1);
+  }
+
+  .neon-glow-pink {
+    box-shadow: 0 0 10px rgba(236, 72, 153, 0.4),
+                0 0 20px rgba(236, 72, 153, 0.2),
+                0 0 30px rgba(236, 72, 153, 0.1);
+  }
+
+  .neon-glow-cyan {
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.4),
+                0 0 20px rgba(6, 182, 212, 0.2),
+                0 0 30px rgba(6, 182, 212, 0.1);
+  }
+
+  /* Animated Gradient for Text */
+  @keyframes gradient {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient 3s ease infinite;
+  }
+
+  /* Slide Up Animation for Messages */
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  /* Custom Scrollbar with Neon Effect */
+  .scrollbar-neon::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-neon::-webkit-scrollbar-track {
+    background: rgba(15, 23, 42, 0.5);
+    border-radius: 10px;
+  }
+
+  .scrollbar-neon::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #06b6d4, #a855f7);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+  }
+
+  .scrollbar-neon::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #0891b2, #9333ea);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
+  }
+
+  /* Delay utilities for animations */
+  .delay-100 {
+    animation-delay: 100ms;
+  }
+
+  .delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .delay-500 {
+    animation-delay: 500ms;
+  }
+
+  .delay-1000 {
+    animation-delay: 1000ms;
+  }
+
+  /* Cyberpunk Grid Background */
+  .cyber-grid {
+    background-image:
+      linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+
+  /* Glitch Effect (Optional - for special elements) */
+  @keyframes glitch {
+    0%, 100% {
+      transform: translate(0);
+    }
+    20% {
+      transform: translate(-2px, 2px);
+    }
+    40% {
+      transform: translate(-2px, -2px);
+    }
+    60% {
+      transform: translate(2px, 2px);
+    }
+    80% {
+      transform: translate(2px, -2px);
+    }
+  }
+
+  .animate-glitch:hover {
+    animation: glitch 0.3s ease-in-out;
+  }
+
+  /* Pulse Glow Animation */
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 5px rgba(168, 85, 247, 0.5),
+                  0 0 10px rgba(168, 85, 247, 0.3),
+                  0 0 15px rgba(168, 85, 247, 0.1);
+    }
+    50% {
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.8),
+                  0 0 20px rgba(168, 85, 247, 0.6),
+                  0 0 30px rgba(168, 85, 247, 0.4);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+}
+
+/* Chat Interface Specific Styles */
+@layer components {
+  .chat-container {
+    @apply bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950;
+    @apply relative overflow-hidden;
+  }
+
+  .message-user {
+    @apply bg-gradient-to-r from-pink-500 to-purple-600;
+    @apply text-white rounded-2xl p-4;
+    @apply shadow-lg shadow-pink-500/20;
+  }
+
+  .message-assistant {
+    @apply bg-slate-900/70 backdrop-blur-sm;
+    @apply border border-purple-500/30;
+    @apply text-slate-100 rounded-2xl p-4;
+    @apply shadow-lg shadow-purple-500/10;
+  }
+
+  .input-neon {
+    @apply bg-slate-900/90 backdrop-blur-sm;
+    @apply border-2 border-purple-500/50;
+    @apply text-slate-100 placeholder:text-slate-500;
+    @apply rounded-2xl px-6 py-4;
+    @apply focus:outline-none focus:border-purple-400;
+    @apply focus:ring-2 focus:ring-purple-500/50;
+    @apply transition-all duration-300;
+  }
+
+  .button-neon {
+    @apply bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500;
+    @apply text-white rounded-2xl px-6 py-4;
+    @apply hover:shadow-2xl hover:shadow-purple-500/50;
+    @apply transition-all duration-300;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+}
