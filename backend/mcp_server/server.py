@@ -14,7 +14,6 @@ Following Constitution principles:
 """
 
 from mcp.server import Server
-from mcp.server.stdio import stdio_server
 from .config import MCP_SERVER_NAME, MCP_SERVER_VERSION, MCP_SERVER_DESCRIPTION
 import logging
 
@@ -26,25 +25,8 @@ logger = logging.getLogger(__name__)
 mcp_app = Server(MCP_SERVER_NAME)
 
 # Server metadata
-mcp_app.server_info = {
-    "name": MCP_SERVER_NAME,
-    "version": MCP_SERVER_VERSION,
-    "description": MCP_SERVER_DESCRIPTION,
-}
-
-
-@mcp_app.on_startup
-async def startup():
-    """Initialize MCP server on startup."""
-    logger.info(f"MCP Server '{MCP_SERVER_NAME}' v{MCP_SERVER_VERSION} starting...")
-    logger.info("Registering tools...")
-
-
-@mcp_app.on_shutdown
-async def shutdown():
-    """Cleanup on server shutdown."""
-    logger.info(f"MCP Server '{MCP_SERVER_NAME}' shutting down...")
-
+logger.info(f"MCP Server '{MCP_SERVER_NAME}' v{MCP_SERVER_VERSION} initialized")
+logger.info(f"Description: {MCP_SERVER_DESCRIPTION}")
 
 # Tools will be registered in tools.py
 # They are imported and registered automatically when the module loads
