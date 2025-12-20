@@ -179,18 +179,15 @@ async def save_message(
     logger.debug(f"Saved message: conv={conversation_id}, role={role}, length={len(content)}")
 
 
-# Mock AI Response (will be replaced with OpenAI Agents SDK)
 async def get_ai_response(
     messages: List[Dict[str, str]],
     user_id: str
 ) -> tuple[str, List[ToolCall]]:
     """
-    Get AI response using OpenAI Agents SDK.
+    Get AI response using OpenAI API with function calling.
 
     Task: T-404 - Integrate OpenAI Agents SDK
     Constitution: AI Agent Principles
-
-    This is a MOCK implementation. Replace with actual OpenAI Agents SDK integration.
 
     Args:
         messages: Conversation history in OpenAI format
@@ -199,59 +196,276 @@ async def get_ai_response(
     Returns:
         tuple: (response_text, tool_calls_made)
     """
-    # TODO: Replace with actual OpenAI Agents SDK integration
-    # For now, return a mock response
+    try:
+        from openai import OpenAI
+        import json
 
+        # Check if OpenAI API key is configured
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            logger.warning("OPENAI_API_KEY not set, using mock response")
+            return await get_mock_ai_response(messages, user_id)
+
+        client = OpenAI(api_key=api_key)
+        tool_calls_made = []
+
+        # Define available MCP tools for OpenAI
+        tools = [
+            {
+                "type": "function",
+                "function": {
+                    "name": "add_task",
+                    "description": "Create a new task in the user's todo list",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "description": "The task title or description"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Optional detailed description"
+                            }
+                        },
+                        "required": ["title"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "list_tasks",
+                    "description": "Get the user's tasks, optionally filtered by status",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": ["all", "pending", "completed"],
+                                "description": "Filter tasks by status (default: all)"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "complete_task",
+                    "description": "Toggle the completion status of a task",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "task_id": {
+                                "type": "integer",
+                                "description": "The ID of the task to toggle"
+                            }
+                        },
+                        "required": ["task_id"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "delete_task",
+                    "description": "Delete a task from the user's todo list",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "task_id": {
+                                "type": "integer",
+                                "description": "The ID of the task to delete"
+                            }
+                        },
+                        "required": ["task_id"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "update_task",
+                    "description": "Update a task's title or description",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "task_id": {
+                                "type": "integer",
+                                "description": "The ID of the task to update"
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "New title for the task"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "New description for the task"
+                            }
+                        },
+                        "required": ["task_id"]
+                    }
+                }
+            }
+        ]
+
+        # Add system message for AI personality
+        system_message = {
+            "role": "system",
+            "content": """You are a helpful AI assistant for managing todo tasks. You have access to tools to help users:
+- Create new tasks
+- View their tasks (all, pending, or completed)
+- Mark tasks as complete/incomplete
+- Update task details
+- Delete tasks
+
+Be friendly, concise, and helpful. When users ask to add tasks, extract the task details and use the add_task function.
+When showing tasks, format them clearly with their IDs. Always confirm actions taken."""
+        }
+
+        # Call OpenAI API with function calling
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",  # Using cost-effective model
+            messages=[system_message] + messages,
+            tools=tools,
+            tool_choice="auto",
+            temperature=0.7,
+            max_tokens=500
+        )
+
+        message = response.choices[0].message
+
+        # Check if AI wants to call functions
+        if message.tool_calls:
+            # Execute each tool call
+            for tool_call in message.tool_calls:
+                function_name = tool_call.function.name
+                arguments = json.loads(tool_call.function.arguments)
+
+                logger.info(f"AI calling tool: {function_name} with args: {arguments}")
+
+                # Call the appropriate MCP tool
+                if function_name == "add_task":
+                    result = await add_task(user_id, arguments.get("title"), arguments.get("description"))
+                    tool_calls_made.append(ToolCall(tool="add_task", parameters=arguments))
+
+                elif function_name == "list_tasks":
+                    status = arguments.get("status", "all")
+                    result = await list_tasks(user_id, status)
+                    tool_calls_made.append(ToolCall(tool="list_tasks", parameters={"status": status}))
+
+                elif function_name == "complete_task":
+                    result = await complete_task(user_id, arguments["task_id"])
+                    tool_calls_made.append(ToolCall(tool="complete_task", parameters=arguments))
+
+                elif function_name == "delete_task":
+                    result = await delete_task(user_id, arguments["task_id"])
+                    tool_calls_made.append(ToolCall(tool="delete_task", parameters=arguments))
+
+                elif function_name == "update_task":
+                    result = await update_task(
+                        user_id,
+                        arguments["task_id"],
+                        arguments.get("title"),
+                        arguments.get("description")
+                    )
+                    tool_calls_made.append(ToolCall(tool="update_task", parameters=arguments))
+
+            # Get final response from AI after tool execution
+            # In a full implementation, we'd send tool results back to AI
+            # For now, use the AI's initial message or generate a confirmation
+            if message.content:
+                final_response = message.content
+            else:
+                # Generate a simple confirmation based on tools called
+                action = tool_calls_made[0].tool if tool_calls_made else "action"
+                final_response = f"Done! I've completed your {action.replace('_', ' ')} request."
+        else:
+            # AI responded without calling tools
+            final_response = message.content or "I'm here to help with your tasks!"
+
+        logger.info(f"AI response: {final_response}, tools called: {len(tool_calls_made)}")
+        return final_response, tool_calls_made
+
+    except ImportError:
+        logger.warning("OpenAI library not available, using mock response")
+        return await get_mock_ai_response(messages, user_id)
+    except Exception as e:
+        logger.error(f"OpenAI API error: {str(e)}")
+        return await get_mock_ai_response(messages, user_id)
+
+
+# Mock AI Response (fallback when OpenAI is not configured)
+async def get_mock_ai_response(
+    messages: List[Dict[str, str]],
+    user_id: str
+) -> tuple[str, List[ToolCall]]:
+    """
+    Fallback mock AI response when OpenAI API is not available.
+    Uses simple pattern matching.
+    """
     last_message = messages[-1]["content"].lower() if messages else ""
     tool_calls = []
 
     # Simple pattern matching for demo
     if "add" in last_message or "create" in last_message:
-        # Extract task from message (very basic)
-        task_title = last_message.replace("add", "").replace("create", "").strip()
+        task_title = last_message.replace("add", "").replace("create", "").replace("task", "").strip()
         if task_title:
             result = await add_task(user_id, task_title)
             tool_calls.append(ToolCall(tool="add_task", parameters={"title": task_title}))
-
             if "error" not in result:
-                response = f"I've added '{result['title']}' to your todo list!"
+                response = f"✓ Added '{result['title']}' to your todo list!"
             else:
-                response = f"Sorry, I couldn't add that task: {result['error']}"
+                response = f"Sorry, couldn't add task: {result['error']}"
         else:
-            response = "I'd be happy to add a task! What would you like to add?"
+            response = "What task would you like to add?"
 
-    elif "show" in last_message or "list" in last_message:
+    elif "show" in last_message or "list" in last_message or "what" in last_message:
         result = await list_tasks(user_id, "all")
         tool_calls.append(ToolCall(tool="list_tasks", parameters={"status": "all"}))
-
-        if isinstance(result, list) and len(result) > 0 and "error" not in result[0]:
-            task_list = "\n".join([f"- {t['title']}" for t in result[:5]])
-            response = f"Here are your tasks:\n{task_list}"
+        if isinstance(result, list) and len(result) > 0:
+            task_list = "\n".join([f"#{t['id']} - {t['title']} {'✓' if t['completed'] else '○'}" for t in result[:10]])
+            response = f"Your tasks:\n{task_list}"
         else:
             response = "You don't have any tasks yet!"
 
-    elif "complete" in last_message or "done" in last_message:
-        # Try to extract task ID (very basic)
+    elif "complete" in last_message or "done" in last_message or "finish" in last_message:
         words = last_message.split()
         task_id = None
         for word in words:
             if word.isdigit():
                 task_id = int(word)
                 break
-
         if task_id:
             result = await complete_task(user_id, task_id)
             tool_calls.append(ToolCall(tool="complete_task", parameters={"task_id": task_id}))
-
             if "error" not in result:
-                response = f"Great! I've marked '{result['title']}' as {result['status']}."
+                response = f"✓ Marked '{result['title']}' as {result['status']}!"
             else:
-                response = f"Sorry, I couldn't complete that task: {result['error']}"
+                response = f"Couldn't complete task: {result['error']}"
         else:
-            response = "Which task would you like to mark as complete? Please provide the task number."
+            response = "Which task number would you like to complete?"
+
+    elif "delete" in last_message or "remove" in last_message:
+        words = last_message.split()
+        task_id = None
+        for word in words:
+            if word.isdigit():
+                task_id = int(word)
+                break
+        if task_id:
+            result = await delete_task(user_id, task_id)
+            tool_calls.append(ToolCall(tool="delete_task", parameters={"task_id": task_id}))
+            if "error" not in result:
+                response = f"✓ Deleted '{result['title']}'!"
+            else:
+                response = f"Couldn't delete task: {result['error']}"
+        else:
+            response = "Which task number would you like to delete?"
 
     else:
-        response = "I can help you manage your tasks! Try saying 'add buy milk' or 'show my tasks'."
+        response = "I can help you manage tasks! Try:\n• 'add buy milk'\n• 'show my tasks'\n• 'complete task 1'\n• 'delete task 2'"
 
     return response, tool_calls
 
