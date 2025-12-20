@@ -36,9 +36,9 @@ export default function TaskItem({
   const [editDescription, setEditDescription] = useState(task.description || '')
 
   const priorityStyles = {
-    high: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800',
-    medium: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800',
-    low: 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700',
+    high: 'bg-red-500/20 text-red-400 border-red-500/30',
+    medium: 'bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30',
+    low: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
   }
 
   const getDueDateStatus = (dueDate?: string) => {
@@ -68,10 +68,10 @@ export default function TaskItem({
 
   return (
     <div className={
-      'bg-card border rounded-lg p-4 hover:shadow-md transition-all ' +
+      'relative group bg-white/80 dark:bg-black/30 border rounded-lg p-4 hover:shadow-lg backdrop-blur-sm transition-all ' +
       (task.completed ? 'opacity-60 ' : '') +
-      (isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 ring-2 ring-blue-500 ' : 'border-border ') +
-      (isFocused ? 'ring-2 ring-purple-500 ' : '')
+      (isSelected ? 'border-cyan-500 bg-cyan-500/10 ring-2 ring-cyan-500 ' : 'border-cyan-500/40 dark:border-cyan-500/20 hover:border-cyan-500/60 dark:hover:border-cyan-500/40 ') +
+      (isFocused ? 'ring-2 ring-fuchsia-500 ' : '')
     }>
       <div className="flex items-start gap-3">
         {/* Selection checkbox (if onToggleSelect is provided) */}
@@ -80,7 +80,7 @@ export default function TaskItem({
             type="checkbox"
             checked={isSelected}
             onChange={() => onToggleSelect(task.id)}
-            className="mt-1 w-4 h-4 rounded border-2 border-border text-blue-600 focus:ring-2 focus:ring-blue-500 cursor-pointer"
+            className="mt-1 w-4 h-4 rounded border-2 border-gray-400 dark:border-gray-600 text-cyan-600 focus:ring-2 focus:ring-cyan-500 cursor-pointer"
             onClick={(e) => e.stopPropagation()}
           />
         )}
@@ -90,7 +90,7 @@ export default function TaskItem({
           className={'mt-1 w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 transition-colors ' + (
             task.completed
               ? 'bg-green-500 border-green-500'
-              : 'border-border hover:border-blue-500'
+              : 'border-gray-400 dark:border-gray-600 hover:border-cyan-500'
           )}
         >
           {task.completed && (
@@ -107,26 +107,26 @@ export default function TaskItem({
                 type="text"
                 value={editTitle}
                 onChange={(e) => setEditTitle(e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded text-foreground"
+                className="w-full px-3 py-2 bg-white dark:bg-black/50 border border-cyan-500/40 dark:border-cyan-500/30 rounded text-gray-900 dark:text-white focus:ring-2 focus:ring-cyan-500 focus:border-cyan-400"
               />
               <textarea
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
-                className="w-full px-3 py-2 bg-background border border-border rounded text-foreground"
+                className="w-full px-3 py-2 bg-white dark:bg-black/50 border border-fuchsia-500/40 dark:border-fuchsia-500/30 rounded text-gray-900 dark:text-white focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-400 resize-none"
                 rows={2}
               />
               <div className="flex gap-2">
-                <button onClick={handleSave} className="px-3 py-1 bg-blue-600 text-white rounded text-sm">Save</button>
-                <button onClick={() => setIsEditing(false)} className="px-3 py-1 bg-secondary text-foreground rounded text-sm">Cancel</button>
+                <button onClick={handleSave} className="px-3 py-1 bg-cyan-600 hover:bg-cyan-700 text-white rounded text-sm transition-colors">Save</button>
+                <button onClick={() => setIsEditing(false)} className="px-3 py-1 bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-700 rounded text-sm transition-colors">Cancel</button>
               </div>
             </div>
           ) : (
             <>
-              <h3 className={'font-semibold text-foreground ' + (task.completed ? 'line-through' : '')}>
+              <h3 className={'font-semibold text-gray-900 dark:text-white ' + (task.completed ? 'line-through' : '')}>
                 {task.title}
               </h3>
               {task.description && (
-                <p className={'text-sm text-muted-foreground mt-1 ' + (task.completed ? 'line-through' : '')}>
+                <p className={'text-sm text-gray-600 dark:text-gray-400 mt-1 ' + (task.completed ? 'line-through' : '')}>
                   {task.description}
                 </p>
               )}
@@ -151,17 +151,17 @@ export default function TaskItem({
           <div className="flex gap-1">
             <button
               onClick={() => setIsEditing(true)}
-              className="p-2 hover:bg-secondary rounded transition-colors"
+              className="p-2 hover:bg-cyan-500/20 rounded transition-colors"
             >
-              <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
             </button>
             <button
               onClick={() => onDeleteTask(task.id)}
-              className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors"
+              className="p-2 hover:bg-red-500/20 rounded transition-colors"
             >
-              <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </button>

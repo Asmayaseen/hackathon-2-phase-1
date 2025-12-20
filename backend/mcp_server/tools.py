@@ -15,7 +15,6 @@ All tools follow these Constitution principles:
 5. Error Handling - Graceful, user-friendly errors
 """
 
-from mcp.server import tool
 from typing import Dict, List, Any, Optional
 from database import get_db
 from services.task_service import (
@@ -31,7 +30,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@tool
 async def add_task(
     user_id: str,
     title: str,
@@ -108,7 +106,7 @@ async def add_task(
         db.close()
 
 
-@tool
+
 async def list_tasks(
     user_id: str,
     status: str = "all"
@@ -191,7 +189,7 @@ async def list_tasks(
         db.close()
 
 
-@tool
+
 async def complete_task(
     user_id: str,
     task_id: int
@@ -263,7 +261,7 @@ async def complete_task(
         db.close()
 
 
-@tool
+
 async def delete_task(
     user_id: str,
     task_id: int
@@ -347,7 +345,7 @@ async def delete_task(
         db.close()
 
 
-@tool
+
 async def update_task(
     user_id: str,
     task_id: int,

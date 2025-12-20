@@ -1,11 +1,13 @@
-# THE EVOLUTION OF TODO - CONSTITUTIONAL FRAMEWORK
-## Complete 5-Phase Hackathon Constitution
 
-> **Document Version:** 1.0
+# THE EVOLUTION OF TODO - COMPLETE CONSTITUTIONAL FRAMEWORK
+## Comprehensive 5-Phase Hackathon Constitution (Merged Version 4.0)
+
+> **Document Version:** 4.0 (Merged)
 > **Project:** The Evolution of Todo - Mastering Spec-Driven Development & Cloud Native AI
 > **Hackathon:** Panaversity Hackathon II
 > **Total Points:** 1,000 (+ 600 Bonus)
 > **Timeline:** December 1, 2025 - January 18, 2026
+> **Last Updated:** December 20, 2025
 
 ---
 
@@ -23,36 +25,79 @@ Do hereby establish this Constitution to govern the development, architecture, a
 
 ---
 
+## 🎯 NINE PILLARS OF AI-DRIVEN DEVELOPMENT
+
+1. 🏛️ **Specification Supremacy** - Specs before code, always
+2. 🤖 **AI-Native Development** - Claude Code as primary developer
+3. 🏗️ **Architectural Thinking** - System design over syntax
+4. 📐 **Progressive Evolution** - Iterate from simple to complex
+5. ☁️ **Cloud-Native Mindset** - Build for distributed systems
+6. 🔄 **Event-Driven Architecture** - Loose coupling via events
+7. 🧠 **Reusable Intelligence** - Agents, skills, blueprints
+8. 🔒 **Security First** - Auth, validation, secrets management
+9. 📊 **Observable Systems** - Logging, metrics, tracing
+
+---
+
 ## 🏛️ PART I: FOUNDATIONAL ARTICLES
 
 ### Article I: Specification Supremacy
 
-**Section 1.1 - Spec-First Mandate**
+**Section 1.1 - Spec-First Mandate (NON-NEGOTIABLE)**
 
 All code SHALL be generated from specifications. Manual coding is PROHIBITED except for:
 - Emergency bug fixes with post-facto spec updates
 - Configuration files (with spec documentation)
 - Infrastructure-as-code templates (with spec justification)
 
-**Section 1.2 - Specification Structure**
+**Section 1.2 - Mandatory Specification Structure**
 
 ```
 /specs/
-├── overview.md           # Project vision & status
-├── architecture.md       # System architecture
-├── features/            # Feature specifications
-│   ├── [feature-name].md
-├── api/                 # API specifications
-│   ├── rest-endpoints.md
-│   ├── mcp-tools.md
-├── database/            # Database specifications
-│   └── schema.md
-└── ui/                  # UI specifications
-    ├── components.md
-    └── pages.md
+├── overview.md              # Project vision & current phase status
+├── architecture.md          # System architecture (MANDATORY for Phase II+)
+├── features/               # Feature specifications
+│   ├── task-crud.md        # Task CRUD operations
+│   ├── authentication.md   # User authentication
+│   └── chatbot.md          # AI chatbot (Phase III)
+├── api/                    # API specifications
+│   ├── rest-endpoints.md   # REST API endpoints
+│   ├── chat-endpoint.md    # Chat API (Phase III - MANDATORY)
+│   └── mcp-tools.md        # MCP tools (Phase III - MANDATORY)
+├── database/               # Database specifications
+│   └── schema.md           # Database schema and models
+└── ui/                     # UI specifications
+    ├── components.md       # UI components
+    └── pages.md            # UI pages and routes
 ```
 
-**Section 1.3 - Spec Template Requirements**
+**Section 1.3 - Spec-Kit Plus Configuration (MANDATORY)**
+
+Configuration file MUST be at `/.spec-kit/config.yaml`:
+
+```yaml
+name: hackathon-todo
+version: "4.0.0"
+structure:
+  specs_dir: specs
+  features_dir: specs/features
+  api_dir: specs/api
+  database_dir: specs/database
+  ui_dir: specs/ui
+phases:
+  phase1-console:
+    features: [task-crud]
+  phase2-web:
+    features: [task-crud, authentication]
+  phase3-chatbot:
+    features: [task-crud, authentication, chatbot]
+  phase4-kubernetes:
+    features: [task-crud, authentication, chatbot, deployment]
+  phase5-cloud:
+    features: [task-crud, authentication, chatbot, deployment, event-driven]
+```
+
+**Section 1.4 - Spec Template Requirements**
 
 Every specification MUST contain:
 - **User Stories** - As a [role], I want [goal] so that [benefit]
@@ -63,14 +108,6 @@ Every specification MUST contain:
 - **UI/UX Behavior** - Interaction patterns, states
 - **Error Handling** - Edge cases, failure modes
 - **Security Considerations** - Auth, validation, sanitization
-
-**Section 1.4 - Spec Evolution**
-
-Specifications are **living documents**:
-- Version controlled alongside code
-- Updated BEFORE implementation changes
-- Reviewed and approved by AI agents or human architect
-- Historical versions preserved in `/specs/history/`
 
 ---
 
@@ -84,119 +121,69 @@ Specifications are **living documents**:
 4. **Validate Against Spec** - All acceptance criteria met
 5. **Document Deviations** - If any, update spec immediately
 
-**Section 2.2 - CLAUDE.md Hierarchy**
+**Section 2.2 - CLAUDE.md Hierarchy (MANDATORY)**
 
 ```
-/CLAUDE.md                  # Root: Project overview, navigation
-/frontend/CLAUDE.md         # Frontend: Next.js patterns
-/backend/CLAUDE.md          # Backend: FastAPI patterns
-/.spec-kit/config.yaml      # Spec-Kit configuration
+/CLAUDE.md                  # Root: Project overview, MCP usage, GitHub workflow
+/frontend/CLAUDE.md         # Frontend: Next.js 16+ patterns, ChatKit setup
+/backend/CLAUDE.md          # Backend: FastAPI patterns, JWT verification
 ```
 
-**Section 2.3 - Prompt Engineering Standards**
+**Section 2.3 - MCP Server Usage (MANDATORY - All Phases)**
 
-When invoking Claude Code:
-- Reference specific specs: `@specs/features/task-crud.md implement create task`
-- Provide context: `@specs/architecture.md` for cross-cutting changes
-- Request validation: `Verify implementation against acceptance criteria`
-- Iterate on specs, NOT code: `Update spec with [new requirement]`
+**ALL version control and context operations MUST use MCP servers:**
+
+- **GitHub MCP Server** - MUST be used for ALL git operations:
+  - Commits, pushes, pulls
+  - Branch creation and management
+  - Repository operations
+  - NO direct git commands allowed
+
+- **Context7 MCP Server** - MUST be used for:
+  - Code context management
+  - Codebase understanding
+  - Context retrieval across sessions
+
+- **Better Auth MCP Server** - MUST be used for:
+  - Authentication patterns
+  - JWT token management
+  - Better Auth configuration
 
 ---
 
-### Article III: Architectural Principles
+### Article III: Core Principles (NON-NEGOTIABLE)
 
-**Section 3.1 - Evolution Stages**
+**Section 3.1 - Immutable Principles**
 
-| Phase | Architecture | Complexity | Points |
-|-------|-------------|-----------|--------|
-| I | Monolithic (In-Memory) | Simple | 100 |
-| II | Layered (Web App) | Moderate | 150 |
-| III | AI-Augmented (Chatbot) | Complex | 200 |
-| IV | Microservices (Local K8s) | Advanced | 250 |
-| V | Distributed (Cloud) | Expert | 300 |
+These principles apply to ALL phases and are NON-NEGOTIABLE:
 
-**Section 3.2 - Separation of Concerns**
+1. **Persistent Database Storage** - All data MUST be stored in Neon Serverless PostgreSQL
+2. **Web-First Multi-User Application** - All functionality MUST be accessible via web browser
+3. **Clean Code Practices** - Small functions, clear names, single responsibility
+4. **Modular Monorepo Structure** - Clear separation: /frontend, /backend, /specs
+5. **Spec-Driven Development** - ALL work MUST start from Spec-Kit Plus commands
+6. **Automated Testing** - Tests MUST pass before merging
+7. **Clarity & Maintainability** - Prioritize readability over cleverness
 
-Each phase MUST maintain clear boundaries:
+**Section 3.2 - Multi-User Architecture**
 
-**Phase I:**
-```
-src/
-├── models.py          # Data models (Todo dataclass)
-├── todo_manager.py    # Business logic (CRUD)
-├── ui.py              # Console interface
-└── main.py            # Entry point
-```
-
-**Phase II:**
-```
-frontend/              # Next.js (UI layer)
-backend/               # FastAPI (Business logic)
-└── models.py          # SQLModel (Data layer)
-```
-
-**Phase III-V:**
-```
-frontend/              # ChatKit UI
-backend/
-├── api/               # REST endpoints
-├── agents/            # OpenAI Agents SDK
-├── mcp/               # MCP server & tools
-└── models/            # Database models
-```
-
-**Section 3.3 - Clean Code Mandates**
-
-- **SOLID Principles** - Single responsibility, Open/closed, etc.
-- **DRY (Don't Repeat Yourself)** - No code duplication
-- **Type Safety** - 100% type hints in Python, TypeScript in frontend
-- **Error Handling** - Comprehensive try/catch, validation
-- **Logging** - Structured logs (JSON format in production)
+- ALL data MUST be user-scoped
+- Every task MUST be associated with authenticated user
+- User isolation MUST be enforced at API AND database levels
+- NO user can access another user's data
+- ALL API endpoints MUST verify authentication before processing
 
 ---
 
-### Article IV: Feature Progression
+## 🏛️ PART II: PHASE-SPECIFIC REQUIREMENTS
 
-**Section 4.1 - Basic Level Features** (Required: All Phases)
+### Article IV: Phase I - Foundation (100 Points)
 
-1. **Add Task** - Create new todo items
-2. **Delete Task** - Remove tasks from list
-3. **Update Task** - Modify existing task details
-4. **View Task List** - Display all tasks
-5. **Mark as Complete** - Toggle completion status
-
-**Section 4.2 - Intermediate Level Features** (Required: Phase V)
-
-6. **Priorities & Tags** - Assign levels (high/medium/low) or labels (work/home)
-7. **Search & Filter** - Search by keyword; filter by status, priority, or date
-8. **Sort Tasks** - Reorder by due date, priority, or alphabetically
-
-**Section 4.3 - Advanced Level Features** (Required: Phase V)
-
-9. **Recurring Tasks** - Auto-reschedule repeating tasks (e.g., "weekly meeting")
-10. **Due Dates & Time Reminders** - Set deadlines with date/time pickers; browser notifications
-
-**Section 4.4 - Progressive Implementation**
-
-| Phase | Features Required |
-|-------|------------------|
-| I | Basic (1-5) |
-| II | Basic (1-5) + User Auth |
-| III | Basic (1-5) + User Auth + AI Chatbot |
-| IV | Basic (1-5) + User Auth + AI Chatbot + K8s Deployment |
-| V | All Basic + Intermediate + Advanced + Event-Driven |
-
----
-
-## 🏛️ PART II: PHASE-SPECIFIC GOVERNANCE
-
-### Article V: Phase I - Foundation (100 Points)
-
-**Section 5.1 - Objective**
+**Section 4.1 - Objective**
 
 Build a command-line todo application storing tasks in memory using spec-driven development.
 
-**Section 5.2 - Technology Stack**
+**Section 4.2 - Technology Stack**
 
 | Component | Technology | Version |
 |-----------|-----------|---------|
@@ -206,48 +193,31 @@ Build a command-line todo application storing tasks in memory using spec-driven 
 | Methodology | Spec-Kit Plus | v1.0+ |
 | Storage | In-Memory | Python list |
 
-**Section 5.3 - Required Deliverables**
+**Section 4.3 - Basic Level Features (ALL 5 MANDATORY)**
 
-✅ **GitHub Repository:**
-- `CONSTITUTION.md` - This document
-- `/specs/` - All specification files
-- `/src/` - Python source code
-- `README.md` - Setup instructions
-- `CLAUDE.md` - Claude Code instructions
-- `.gitignore` - Exclude `.venv/`, `__pycache__/`
+1. **Add Task** - Create new tasks with title and description
+2. **List Tasks** - View all tasks with status indicators
+3. **Update Task** - Modify task details
+4. **Delete Task** - Remove tasks permanently
+5. **Mark Complete/Incomplete** - Toggle task completion status
 
-✅ **Working Application:**
-- Add tasks with title and description
-- List all tasks with status indicators (`[✓]` / `[✗]`)
-- Update task details
-- Delete tasks by ID
-- Mark tasks as complete/incomplete
-
-**Section 5.4 - Quality Standards**
-
-- **Code Coverage** - All functions documented
-- **Type Hints** - 100% coverage
-- **Error Handling** - Validate all inputs
-- **User Experience** - Clear prompts, feedback messages
-
-**Section 5.5 - Validation Checklist**
+**Section 4.4 - Validation Checklist**
 
 - [ ] All 5 basic features implemented
 - [ ] Spec files created for each feature
 - [ ] Code generated via Claude Code
-- [ ] No manual coding violations
-- [ ] README with clear setup instructions
+- [ ] README with setup instructions
 - [ ] Application runs without errors
 
 ---
 
-### Article VI: Phase II - Full-Stack Web App (150 Points)
+### Article V: Phase II - Full-Stack Web App (150 Points)
 
-**Section 6.1 - Objective**
+**Section 5.1 - Objective**
 
 Transform the console app into a modern multi-user web application with persistent storage.
 
-**Section 6.2 - Technology Stack**
+**Section 5.2 - Technology Stack (MANDATORY)**
 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
@@ -256,65 +226,87 @@ Transform the console app into a modern multi-user web application with persiste
 | ORM | SQLModel | Data access |
 | Database | Neon Serverless PostgreSQL | Persistent storage |
 | Authentication | Better Auth | User management |
+| Styling | Tailwind CSS | Frontend styling |
 
-**Section 6.3 - Monorepo Structure**
+**Section 5.3 - Monorepo Structure (MANDATORY)**
 
 ```
 hackathon-todo/
 ├── .spec-kit/
-│   └── config.yaml
-├── specs/
+│   └── config.yaml              # Spec-Kit Plus configuration
+├── .specify/
+│   └── memory/
+│       └── constitution.md      # This document
+├── specs/                       # All specifications
 │   ├── overview.md
-│   ├── architecture.md
+│   ├── architecture.md          # MANDATORY
 │   ├── features/
 │   ├── api/
 │   ├── database/
 │   └── ui/
-├── CLAUDE.md             # Root instructions
+├── CLAUDE.md                    # Root instructions
 ├── frontend/
-│   ├── CLAUDE.md
-│   ├── app/              # Next.js pages
-│   ├── components/       # React components
-│   └── lib/              # API client
+│   ├── CLAUDE.md                # Frontend guidelines
+│   ├── app/                     # Next.js App Router
+│   ├── components/              # React components
+│   ├── lib/
+│   │   └── api.ts               # Centralized API client
+│   └── package.json
 ├── backend/
-│   ├── CLAUDE.md
-│   ├── main.py           # FastAPI app
-│   ├── models.py         # SQLModel
-│   ├── routes/           # API endpoints
-│   └── db.py             # Database connection
-├── docker-compose.yml
+│   ├── CLAUDE.md                # Backend guidelines
+│   ├── main.py                  # FastAPI entry point
+│   ├── models.py                # SQLModel database models
+│   ├── routes/                  # API route handlers
+│   ├── db.py                    # Database connection
+│   ├── middleware/              # JWT verification, CORS
+│   ├── schemas/                 # Pydantic models
+│   ├── services/                # Business logic layer
+│   └── tests/                   # Test files
+├── docker-compose.yml           # MANDATORY
 └── README.md
 ```
 
-**Section 6.4 - REST API Specification**
+**Section 5.4 - RESTful API Specification (ALL MANDATORY)**
 
-All endpoints MUST follow this pattern:
+All endpoints MUST be implemented:
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/api/{user_id}/tasks` | List all tasks for user |
+| GET | `/api/{user_id}/tasks` | List all tasks (with filtering/sorting/pagination) |
 | POST | `/api/{user_id}/tasks` | Create new task |
 | GET | `/api/{user_id}/tasks/{id}` | Get task details |
 | PUT | `/api/{user_id}/tasks/{id}` | Update task |
 | DELETE | `/api/{user_id}/tasks/{id}` | Delete task |
-| PATCH | `/api/{user_id}/tasks/{id}/complete` | Toggle completion |
+| PATCH | `/api/{user_id}/tasks/{id}/complete` | Toggle completion status |
 
-**Section 6.5 - Authentication Requirements**
+**Query Parameters (MANDATORY):**
+- `?status=all|pending|completed` - Filter by status
+- `?sort=created|title|updated|priority|due_date` - Sort tasks
+- `?search=keyword` - Search by title or description
+- `?page=1&limit=20` - Pagination
+
+**Section 5.5 - JWT Authentication (MANDATORY)**
 
 **Better Auth + JWT Integration:**
 
-1. **Frontend** - Better Auth issues JWT tokens on login
-2. **API Requests** - Include JWT in `Authorization: Bearer <token>` header
-3. **Backend** - Verify JWT signature using shared secret (`BETTER_AUTH_SECRET`)
-4. **Data Isolation** - Filter all queries by authenticated user's ID
+1. **Frontend:**
+   - Better Auth MUST be configured with JWT plugin
+   - JWT tokens MUST be issued on login (signup/signin)
+   - API client MUST attach JWT token to EVERY request automatically
 
-**Security Mandates:**
+2. **Backend:**
+   - JWT verification middleware MUST run on EVERY API request
+   - Shared secret `BETTER_AUTH_SECRET` MUST be used for verification
+   - User ID from JWT MUST match `user_id` in URL path
+   - Requests without valid token MUST receive `401 Unauthorized`
+
+**Security Mandates (NON-NEGOTIABLE):**
 - ✅ All endpoints require valid JWT token
-- ✅ Requests without token receive `401 Unauthorized`
-- ✅ Each user only sees/modifies their own tasks
-- ✅ Token expiry enforced (default: 7 days)
+- ✅ User isolation enforced at database level
+- ✅ No hardcoded secrets in code
+- ✅ Token expiry enforced (7 days default)
 
-**Section 6.6 - Database Schema**
+**Section 5.6 - Database Schema (MANDATORY)**
 
 ```sql
 -- Users table (managed by Better Auth)
@@ -329,50 +321,108 @@ CREATE TABLE users (
 CREATE TABLE tasks (
     id SERIAL PRIMARY KEY,
     user_id TEXT NOT NULL REFERENCES users(id),
-    title TEXT NOT NULL,
-    description TEXT,
+    title TEXT NOT NULL CHECK (LENGTH(title) <= 200),
+    description TEXT CHECK (LENGTH(description) <= 1000),
+    priority TEXT DEFAULT 'medium' CHECK (priority IN ('low', 'medium', 'high')),
+    due_date TIMESTAMP,
+    tags TEXT[],
     completed BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );
 
--- Indexes
+-- Indexes (MANDATORY)
 CREATE INDEX idx_tasks_user_id ON tasks(user_id);
 CREATE INDEX idx_tasks_completed ON tasks(completed);
+CREATE INDEX idx_tasks_priority ON tasks(priority);
+CREATE INDEX idx_tasks_due_date ON tasks(due_date);
+CREATE UNIQUE INDEX idx_users_email ON users(email);
 ```
 
-**Section 6.7 - Validation Checklist**
+**Section 5.7 - Advanced Features (ALL MANDATORY)**
 
-- [ ] Frontend deployed to Vercel
+**Enhanced Task Management:**
+- ✅ Task filtering by status, priority, due date, tags
+- ✅ Task sorting by date, title, priority, update time
+- ✅ Task search by title or description
+- ✅ Task pagination for large lists
+- ✅ Multiple view modes (list, grid, kanban)
+- ✅ Drag-and-drop reordering
+- ✅ Inline editing
+- ✅ Undo/redo functionality
+- ✅ Export to CSV and JSON
+- ✅ Import from CSV and JSON
+- ✅ Task statistics dashboard
+- ✅ Bulk operations (delete, complete, priority change)
+- ✅ Real-time updates with polling
+- ✅ Keyboard shortcuts
+- ✅ Dark mode toggle
+
+**User Experience:**
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Loading states for async operations
+- ✅ Error handling with user-friendly messages
+- ✅ Toast notifications
+- ✅ Optimistic UI updates
+- ✅ Touch-friendly mobile interactions
+
+**Section 5.8 - Docker and CI/CD (MANDATORY)**
+
+**Docker Configuration:**
+- Backend Dockerfile MUST exist in `/backend`
+- Frontend Dockerfile MUST exist in `/frontend`
+- docker-compose.yml MUST exist at root
+
+**GitHub Actions CI/CD:**
+- Backend pipeline MUST run on `api.phase_2` branch
+- Frontend pipeline MUST run on `phase_2` branch
+- Pipelines MUST include: linting, testing, building, deployment
+
+**Section 5.9 - Branch Strategy (MANDATORY)**
+
+- **Main Development Branch** (`phase_2`):
+  - Contains: /frontend, /backend, /specs, root files
+  - Used for full-stack development
+
+- **Backend Deployment Branch** (`api.phase_2`):
+  - Contains: ONLY /backend files
+  - NO frontend, NO specs
+  - Used for backend API deployment
+
+**Section 5.10 - Validation Checklist**
+
+- [ ] Frontend deployed (Vercel recommended)
 - [ ] Backend API accessible
-- [ ] User signup/signin working (Better Auth)
+- [ ] User signup/signin working
 - [ ] JWT authentication implemented
 - [ ] All CRUD operations functional
+- [ ] All advanced features implemented
 - [ ] Data persists in Neon DB
 - [ ] Multi-user isolation verified
-- [ ] Responsive UI (mobile + desktop)
+- [ ] Responsive UI working
+- [ ] Docker files created
+- [ ] CI/CD pipelines configured
 
 ---
 
-### Article VII: Phase III - AI Chatbot (200 Points)
+### Article VI: Phase III - AI Chatbot (200 Points)
 
-**Section 7.1 - Objective**
+**Section 6.1 - Objective**
 
 Create an AI-powered chatbot interface for managing todos through natural language using MCP architecture.
 
-**Section 7.2 - Technology Stack**
+**Section 6.2 - Technology Stack (MANDATORY)**
 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
-| Frontend | OpenAI ChatKit | Chat UI |
-| Backend | Python FastAPI | API server |
-| AI Framework | OpenAI Agents SDK | AI logic |
-| MCP Server | Official MCP SDK | Tool interface |
-| ORM | SQLModel | Data access |
-| Database | Neon PostgreSQL | Persistent storage |
-| Auth | Better Auth | User management |
+| Frontend Chat UI | OpenAI ChatKit | Conversational interface |
+| Backend AI Framework | OpenAI Agents SDK | AI logic and orchestration |
+| MCP Server | Official MCP SDK | Task operations as tools |
+| Database Models | SQLModel | Conversation + Message models |
+| Streaming | Server-Sent Events (SSE) | Real-time response streaming |
+| Architecture | Stateless | All state in database |
 
-**Section 7.3 - Architecture: Stateless Chat with MCP**
+**Section 6.3 - Architecture: Stateless Chat with MCP**
 
 ```
 ┌─────────────┐     ┌────────────────────────────────────┐     ┌─────────────┐
@@ -386,15 +436,15 @@ Create an AI-powered chatbot interface for managing todos through natural langua
 │             │◀────│              │                     │◀────│             │
 │             │     │  ┌───────────▼───────────────┐    │     │             │
 │             │     │  │  MCP Server               │    │     │             │
-│             │     │  │  (Task Operation Tools)   │    │     │             │
+│             │     │  │  (5 Task Operation Tools) │    │     │             │
 │             │     │  └───────────────────────────┘    │     │             │
 └─────────────┘     └────────────────────────────────────┘     └─────────────┘
 ```
 
-**Section 7.4 - Database Models**
+**Section 6.4 - Database Models (MANDATORY)**
 
 ```python
-# Existing
+# Existing from Phase II
 class Task(SQLModel, table=True):
     user_id: str
     id: int
@@ -404,7 +454,7 @@ class Task(SQLModel, table=True):
     created_at: datetime
     updated_at: datetime
 
-# New for Phase III
+# New for Phase III (MANDATORY)
 class Conversation(SQLModel, table=True):
     user_id: str
     id: int
@@ -417,14 +467,15 @@ class Message(SQLModel, table=True):
     conversation_id: int
     role: str  # "user" or "assistant"
     content: str
+    tool_calls: Optional[str]  # JSON string
     created_at: datetime
 ```
 
-**Section 7.5 - MCP Tools Specification**
+**Section 6.5 - MCP Tools Specification (ALL 5 MANDATORY)**
 
-The MCP server MUST expose these tools:
+The MCP server MUST expose exactly these 5 tools:
 
-**1. add_task**
+**1. add_task (MANDATORY)**
 ```json
 {
   "name": "add_task",
@@ -442,7 +493,7 @@ The MCP server MUST expose these tools:
 }
 ```
 
-**2. list_tasks**
+**2. list_tasks (MANDATORY)**
 ```json
 {
   "name": "list_tasks",
@@ -455,7 +506,7 @@ The MCP server MUST expose these tools:
 }
 ```
 
-**3. complete_task**
+**3. complete_task (MANDATORY)**
 ```json
 {
   "name": "complete_task",
@@ -467,7 +518,7 @@ The MCP server MUST expose these tools:
 }
 ```
 
-**4. delete_task**
+**4. delete_task (MANDATORY)**
 ```json
 {
   "name": "delete_task",
@@ -479,7 +530,7 @@ The MCP server MUST expose these tools:
 }
 ```
 
-**5. update_task**
+**5. update_task (MANDATORY)**
 ```json
 {
   "name": "update_task",
@@ -493,7 +544,7 @@ The MCP server MUST expose these tools:
 }
 ```
 
-**Section 7.6 - Chat API Endpoint**
+**Section 6.6 - Chat API Endpoint (MANDATORY)**
 
 ```
 POST /api/{user_id}/chat
@@ -507,7 +558,7 @@ POST /api/{user_id}/chat
 }
 ```
 
-**Response:**
+**Response (Streamed via SSE):**
 ```json
 {
   "conversation_id": 123,
@@ -518,7 +569,9 @@ POST /api/{user_id}/chat
 }
 ```
 
-**Section 7.7 - Stateless Conversation Flow**
+**Section 6.7 - Stateless Conversation Flow (MANDATORY)**
+
+Every chat request MUST follow this flow:
 
 1. **Receive** user message
 2. **Fetch** conversation history from database
@@ -527,12 +580,12 @@ POST /api/{user_id}/chat
 5. **Run** agent with MCP tools
 6. **Agent** invokes appropriate MCP tool(s)
 7. **Store** assistant response in database
-8. **Return** response to client
+8. **Return** response to client via SSE
 9. **Server** holds NO state (ready for next request)
 
-**Section 7.8 - Natural Language Commands**
+**Section 6.8 - Natural Language Commands (MANDATORY)**
 
-The agent MUST understand:
+The agent MUST understand these patterns:
 
 | User Says | Agent Should |
 |-----------|-------------|
@@ -545,37 +598,137 @@ The agent MUST understand:
 | "I need to remember to pay bills" | Call `add_task` with title "Pay bills" |
 | "What have I completed?" | Call `list_tasks` with status "completed" |
 
-**Section 7.9 - OpenAI ChatKit Domain Allowlist**
+**Section 6.9 - Service Layer (MANDATORY)**
 
-Before deploying:
+Business logic MUST be extracted into service layer:
 
-1. Deploy frontend to get production URL (Vercel/GitHub Pages)
-2. Add domain to OpenAI allowlist: https://platform.openai.com/settings/organization/security/domain-allowlist
-3. Get domain key from OpenAI
-4. Set `NEXT_PUBLIC_OPENAI_DOMAIN_KEY` in frontend
+```
+/backend/services/
+├── task_service.py          # Task CRUD operations
+└── conversation_service.py  # Conversation management
+```
 
-**Section 7.10 - Validation Checklist**
+All task operations MUST go through service layer (shared by REST API and MCP tools).
 
-- [ ] ChatKit UI deployed and accessible
-- [ ] Chat endpoint accepts messages
-- [ ] Conversation state persists to database
+**Section 6.10 - Agent Integration (MANDATORY)**
+
+```
+/backend/agents/
+├── factory.py      # Model factory for AI provider abstraction
+└── todo_agent.py   # TodoAgent with MCP tools
+```
+
+**Section 6.11 - Environment Variables (MANDATORY)**
+
+Backend `.env`:
+```bash
+# Existing
+DATABASE_URL=postgresql://...
+BETTER_AUTH_SECRET=...
+
+# New for Phase III (MANDATORY)
+LLM_PROVIDER=openai  # or gemini
+OPENAI_API_KEY=sk-...
+OPENAI_DEFAULT_MODEL=gpt-4o-mini
+GEMINI_API_KEY=...  # if using Gemini
+GEMINI_DEFAULT_MODEL=gemini-2.0-flash
+```
+
+Frontend `.env.local`:
+```bash
+# New for Phase III
+NEXT_PUBLIC_CHATKIT_API_URL=/api/chat
+NEXT_PUBLIC_OPENAI_DOMAIN_KEY=...  # For production
+```
+
+**Section 6.12 - Project Structure Updates (MANDATORY)**
+
+```
+/backend/src/
+├── agents/                   # NEW
+│   ├── factory.py
+│   └── todo_agent.py
+├── mcp/                      # NEW
+│   ├── __init__.py
+│   ├── config.py
+│   ├── server.py
+│   └── tools.py
+├── services/                 # NEW
+│   ├── task_service.py
+│   └── conversation_service.py
+├── models/
+│   ├── task.py              # Existing
+│   ├── conversation.py      # NEW
+│   └── message.py           # NEW
+├── routers/
+│   ├── tasks.py             # Existing
+│   └── chat.py              # NEW
+└── schemas/
+    ├── task.py              # Existing
+    └── chat.py              # NEW
+
+/frontend/src/
+├── components/
+│   └── chatkit/             # NEW - ChatKit components
+├── app/
+│   ├── tasks/               # Existing
+│   └── chat/                # NEW - Chat page
+└── lib/
+    ├── api.ts               # Existing
+    └── chat-api.ts          # NEW
+```
+
+**Section 6.13 - Dependencies (MANDATORY)**
+
+Backend `requirements.txt`:
+```
+# Existing
+fastapi>=0.104.0
+uvicorn>=0.24.0
+sqlmodel>=0.0.14
+psycopg2-binary>=2.9.9
+python-jose>=3.3.0
+
+# New for Phase III (MANDATORY)
+openai>=1.0.0
+mcp>=1.0.0
+```
+
+Frontend `package.json`:
+```json
+{
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "@openai/chatkit": ">=0.1.0"
+  }
+}
+```
+
+**Section 6.14 - Validation Checklist**
+
+- [ ] ChatKit UI implemented
+- [ ] Chat endpoint created (POST /api/{user_id}/chat)
+- [ ] Conversation + Message models created
 - [ ] MCP server with all 5 tools implemented
-- [ ] Agent correctly interprets natural language
-- [ ] All basic CRUD operations via chat
-- [ ] Multi-turn conversations work
-- [ ] Server restart doesn't lose history
-- [ ] Error handling graceful
-- [ ] User authentication integrated
+- [ ] Service layer extracted
+- [ ] Agent integration complete
+- [ ] Streaming responses working (SSE)
+- [ ] Conversation persistence working
+- [ ] Natural language commands working
+- [ ] Error handling comprehensive
+- [ ] Authentication integrated
+- [ ] User isolation enforced
 
 ---
 
-### Article VIII: Phase IV - Local Kubernetes (250 Points)
+### Article VII: Phase IV - Local Kubernetes (250 Points)
 
-**Section 8.1 - Objective**
+**Section 7.1 - Objective**
 
 Deploy the Todo Chatbot on a local Kubernetes cluster using Docker, Minikube, and Helm Charts.
 
-**Section 8.2 - Technology Stack**
+**Section 7.2 - Technology Stack**
 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
@@ -585,7 +738,7 @@ Deploy the Todo Chatbot on a local Kubernetes cluster using Docker, Minikube, an
 | Package Manager | Helm Charts | K8s deployments |
 | AI DevOps | kubectl-ai, kagent | AI-assisted K8s ops |
 
-**Section 8.3 - Containerization Requirements**
+**Section 7.3 - Containerization Requirements**
 
 **Frontend Dockerfile:**
 ```dockerfile
@@ -610,7 +763,7 @@ EXPOSE 8000
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
 
-**Section 8.4 - Helm Chart Structure**
+**Section 7.4 - Helm Chart Structure**
 
 ```
 helm-charts/
@@ -627,7 +780,7 @@ helm-charts/
 │   └── README.md
 ```
 
-**Section 8.5 - Kubernetes Resources**
+**Section 7.5 - Kubernetes Resources**
 
 **Deployments:**
 - `frontend-deployment` - 2 replicas
@@ -646,97 +799,30 @@ helm-charts/
 - `backend-config` - API configuration
 
 **Secrets:**
-- `database-credentials` - Neon DB connection string
+- `database-credentials` - Neon DB connection
 - `auth-secrets` - Better Auth secret, OpenAI API key
 
-**Section 8.6 - AIOps Tools Usage**
+**Section 7.6 - Validation Checklist**
 
-**Docker AI (Gordon):**
-```bash
-# Query capabilities
-docker ai "What can you do?"
-
-# Build optimized images
-docker ai "Build a minimal Python image for FastAPI"
-
-# Troubleshoot
-docker ai "Why is my container failing?"
-```
-
-**kubectl-ai:**
-```bash
-# Deploy
-kubectl-ai "deploy the todo frontend with 2 replicas"
-
-# Scale
-kubectl-ai "scale the backend to handle more load"
-
-# Debug
-kubectl-ai "check why the pods are failing"
-```
-
-**kagent:**
-```bash
-# Analyze
-kagent "analyze the cluster health"
-
-# Optimize
-kagent "optimize resource allocation"
-```
-
-**Section 8.7 - Deployment Steps**
-
-1. **Start Minikube:**
-   ```bash
-   minikube start --cpus=4 --memory=8192
-   ```
-
-2. **Build Docker Images:**
-   ```bash
-   eval $(minikube docker-env)
-   docker build -t todo-frontend:v1 ./frontend
-   docker build -t todo-backend:v1 ./backend
-   ```
-
-3. **Deploy with Helm:**
-   ```bash
-   helm install todo-app ./helm-charts/todo-app
-   ```
-
-4. **Verify Deployment:**
-   ```bash
-   kubectl get pods
-   kubectl get services
-   kubectl logs <pod-name>
-   ```
-
-5. **Access Application:**
-   ```bash
-   minikube service frontend-service --url
-   ```
-
-**Section 8.8 - Validation Checklist**
-
-- [ ] Dockerfiles created for frontend and backend
+- [ ] Dockerfiles created
 - [ ] Images build successfully
-- [ ] Helm charts created with all resources
+- [ ] Helm charts created
 - [ ] Minikube cluster running
 - [ ] Pods running (2 frontend, 2 backend)
 - [ ] Services accessible
-- [ ] Application works via Minikube URL
-- [ ] kubectl-ai/kagent used for deployment
+- [ ] Application accessible via Minikube URL
+- [ ] kubectl-ai/kagent used
 - [ ] Health checks passing
-- [ ] Logs accessible
 
 ---
 
-### Article IX: Phase V - Advanced Cloud Deployment (300 Points)
+### Article VIII: Phase V - Cloud Deployment (300 Points)
 
-**Section 9.1 - Objective**
+**Section 8.1 - Objective**
 
-Implement advanced features and deploy to production-grade Kubernetes with event-driven architecture.
+Implement advanced features and deploy to production Kubernetes with event-driven architecture.
 
-**Section 9.2 - Technology Stack**
+**Section 8.2 - Technology Stack**
 
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
@@ -746,421 +832,143 @@ Implement advanced features and deploy to production-grade Kubernetes with event
 | CI/CD | GitHub Actions | Automated deployment |
 | Monitoring | Prometheus + Grafana | Observability |
 
-**Section 9.3 - Feature Requirements**
+**Section 8.3 - Feature Requirements**
 
-**Intermediate Level (Required):**
+**Intermediate Level (MANDATORY):**
 - ✅ Priorities & Tags/Categories
 - ✅ Search & Filter
 - ✅ Sort Tasks
 
-**Advanced Level (Required):**
+**Advanced Level (MANDATORY):**
 - ✅ Recurring Tasks (auto-reschedule)
 - ✅ Due Dates & Time Reminders
 
-**Section 9.4 - Event-Driven Architecture**
+**Section 8.4 - Event-Driven Architecture**
 
 **Kafka Topics:**
 
 | Topic | Producer | Consumer | Purpose |
 |-------|----------|----------|---------|
-| `task-events` | Chat API (MCP Tools) | Recurring Task Service, Audit Service | All task CRUD operations |
-| `reminders` | Chat API (when due date set) | Notification Service | Scheduled reminder triggers |
-| `task-updates` | Chat API | WebSocket Service | Real-time client sync |
+| `task-events` | Chat API (MCP Tools) | Recurring Task Service, Audit | All CRUD operations |
+| `reminders` | Chat API | Notification Service | Scheduled reminders |
+| `task-updates` | Chat API | WebSocket Service | Real-time sync |
 
-**Event Schema - Task Event:**
-```json
-{
-  "event_type": "created | updated | completed | deleted",
-  "task_id": 123,
-  "task_data": {
-    "title": "Buy groceries",
-    "description": "Milk, eggs, bread",
-    "completed": false,
-    "due_at": "2026-01-20T10:00:00Z",
-    "recurring": "weekly"
-  },
-  "user_id": "user123",
-  "timestamp": "2026-01-15T14:30:00Z"
-}
-```
+**Section 8.5 - Cloud Deployment Options**
 
-**Event Schema - Reminder Event:**
-```json
-{
-  "task_id": 123,
-  "title": "Buy groceries",
-  "due_at": "2026-01-20T10:00:00Z",
-  "remind_at": "2026-01-20T09:00:00Z",
-  "user_id": "user123"
-}
-```
+**Recommended: DigitalOcean DOKS**
+- Free Credit: $200 for 60 days
+- Cost after: ~$20-40/month
+- Sign up: https://digitalocean.com
 
-**Section 9.5 - Microservices Architecture**
+**Alternative: Google Kubernetes Engine (GKE)**
+- Free Credit: $300 for 90 days
+- Sign up: https://cloud.google.com/free
 
-```
-┌──────────────────────────────────────────────────────────────────┐
-│                    KUBERNETES CLUSTER (DOKS/GKE/AKS)             │
-│                                                                   │
-│  ┌─────────────┐   ┌─────────────┐   ┌────────────────────────┐ │
-│  │  Frontend   │   │  Chat API   │   │    KAFKA CLUSTER       │ │
-│  │  Service    │──▶│  + MCP      │──▶│  ┌──────────────────┐  │ │
-│  └─────────────┘   │  Tools      │   │  │ task-events      │  │ │
-│                    └──────┬──────┘   │  │ reminders        │  │ │
-│                           │          │  │ task-updates     │  │ │
-│                           │          └──┴──────────────────┴──┘ │
-│                           ▼                     │        │       │
-│                    ┌─────────────┐   ┌─────────▼───┐  ┌─▼─────┐ │
-│                    │   Neon DB   │   │ Recurring   │  │ Notif  │ │
-│                    │  (External) │   │ Task Svc    │  │  Svc   │ │
-│                    └─────────────┘   └─────────────┘  └────────┘ │
-└──────────────────────────────────────────────────────────────────┘
-```
+**Alternative: Azure Kubernetes Service (AKS)**
+- Free Credit: $200 for 30 days
+- Sign up: https://azure.microsoft.com/free
 
-**Services:**
+**Section 8.6 - Kafka Service: Redpanda Cloud**
 
-1. **Frontend Service** - Next.js ChatKit UI
-2. **Chat API Service** - FastAPI + OpenAI Agents + MCP
-3. **Recurring Task Service** - Consumes `task-events`, creates next occurrence
-4. **Notification Service** - Consumes `reminders`, sends push/email
-5. **Audit Service** - Consumes `task-events`, maintains history
-6. **WebSocket Service** - Consumes `task-updates`, broadcasts to clients
+- Free Serverless tier (no credit card)
+- Kafka-compatible
+- Sign up: https://redpanda.com/cloud
 
-**Section 9.6 - Dapr Integration**
+**Section 8.7 - Validation Checklist**
 
-**Dapr Building Blocks Used:**
-
-1. **Pub/Sub** - Kafka abstraction (no kafka-python needed)
-2. **State Management** - Conversation state storage
-3. **Service Invocation** - Inter-service communication with retries
-4. **Bindings** - Cron triggers for scheduled reminders
-5. **Secrets Management** - API keys, DB credentials
-
-**Dapr Components:**
-
-```yaml
-# kafka-pubsub.yaml
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: kafka-pubsub
-spec:
-  type: pubsub.kafka
-  version: v1
-  metadata:
-    - name: brokers
-      value: "your-redpanda-cluster.cloud:9092"
-    - name: authType
-      value: "password"
-    - name: saslUsername
-      value: "your-username"
-    - name: saslPassword
-      secretKeyRef:
-        name: kafka-secrets
-        key: password
-
----
-
-# statestore.yaml
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: statestore
-spec:
-  type: state.postgresql
-  version: v1
-  metadata:
-    - name: connectionString
-      secretKeyRef:
-        name: neon-secrets
-        key: connection-string
-
----
-
-# reminder-cron.yaml
-apiVersion: dapr.io/v1alpha1
-kind: Component
-metadata:
-  name: reminder-cron
-spec:
-  type: bindings.cron
-  version: v1
-  metadata:
-    - name: schedule
-      value: "*/5 * * * *"  # Every 5 minutes
-```
-
-**Publishing Events via Dapr:**
-```python
-import httpx
-
-# Publish task event (no Kafka library needed!)
-await httpx.post(
-    "http://localhost:3500/v1.0/publish/kafka-pubsub/task-events",
-    json={"event_type": "created", "task_id": 123, ...}
-)
-```
-
-**Section 9.7 - Cloud Deployment Options**
-
-**Option 1: DigitalOcean Kubernetes (DOKS)** ⭐ Recommended
-- **Free Credit:** $200 for 60 days
-- **Sign Up:** https://digitalocean.com
-- **Cost:** ~$20-40/month after credit expires
-- **Features:** Managed K8s, Load Balancer, Block Storage
-
-**Option 2: Google Kubernetes Engine (GKE)**
-- **Free Credit:** $300 for 90 days
-- **Sign Up:** https://cloud.google.com/free
-- **Cost:** Pay-as-you-go after credit
-- **Features:** Auto-scaling, Multi-zone clusters
-
-**Option 3: Azure Kubernetes Service (AKS)**
-- **Free Credit:** $200 for 30 days + 12 months free services
-- **Sign Up:** https://azure.microsoft.com/free
-- **Cost:** Pay-as-you-go after credit
-- **Features:** Azure integration, Managed identity
-
-**Section 9.8 - Kafka Service: Redpanda Cloud**
-
-**Why Redpanda:**
-- ✅ Free Serverless tier (no credit card)
-- ✅ Kafka-compatible (same APIs)
-- ✅ No Zookeeper (simpler)
-- ✅ Fast setup (< 5 minutes)
-
-**Setup Steps:**
-1. Sign up: https://redpanda.com/cloud
-2. Create Serverless cluster
-3. Create topics: `task-events`, `reminders`, `task-updates`
-4. Copy bootstrap server URL and credentials
-5. Use standard kafka-python client
-
-**Section 9.9 - CI/CD Pipeline (GitHub Actions)**
-
-```.github/workflows/deploy.yml
-name: Deploy to DOKS
-
-on:
-  push:
-    branches: [main]
-
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Build Docker Images
-        run: |
-          docker build -t registry.digitalocean.com/your-registry/frontend:${{ github.sha }} ./frontend
-          docker build -t registry.digitalocean.com/your-registry/backend:${{ github.sha }} ./backend
-
-      - name: Push to Registry
-        run: |
-          docker push registry.digitalocean.com/your-registry/frontend:${{ github.sha }}
-          docker push registry.digitalocean.com/your-registry/backend:${{ github.sha }}
-
-      - name: Deploy to Kubernetes
-        run: |
-          helm upgrade --install todo-app ./helm-charts/todo-app \
-            --set frontend.image.tag=${{ github.sha }} \
-            --set backend.image.tag=${{ github.sha }}
-```
-
-**Section 9.10 - Database Schema Updates**
-
-```sql
--- Add new columns for advanced features
-ALTER TABLE tasks ADD COLUMN priority TEXT DEFAULT 'medium';
-ALTER TABLE tasks ADD COLUMN tags TEXT[];
-ALTER TABLE tasks ADD COLUMN due_at TIMESTAMP;
-ALTER TABLE tasks ADD COLUMN recurring TEXT;  -- 'daily', 'weekly', 'monthly'
-ALTER TABLE tasks ADD COLUMN parent_task_id INTEGER REFERENCES tasks(id);
-
--- Create indexes
-CREATE INDEX idx_tasks_due_at ON tasks(due_at);
-CREATE INDEX idx_tasks_priority ON tasks(priority);
-CREATE INDEX idx_tasks_tags ON tasks USING GIN(tags);
-```
-
-**Section 9.11 - Monitoring & Observability**
-
-**Prometheus + Grafana Stack:**
-
-```yaml
-# Install with Helm
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm install prometheus prometheus-community/kube-prometheus-stack
-```
-
-**Metrics to Track:**
-- Request latency (p50, p95, p99)
-- Error rates
-- Task creation/completion rates
-- Kafka lag
-- Pod CPU/memory usage
-- Database connection pool
-
-**Section 9.12 - Deployment Steps**
-
-**Local (Minikube) First:**
-1. Deploy to Minikube with Dapr
-2. Install Redpanda locally (Docker)
-3. Test all features
-4. Verify Dapr pub/sub, state, bindings, secrets
-
-**Cloud Deployment:**
-1. Create DOKS/GKE/AKS cluster
-2. Configure kubectl context
-3. Install Dapr on cluster: `dapr init -k`
-4. Deploy Dapr components (Kafka, State, Secrets)
-5. Create Docker registry
-6. Build and push images
-7. Deploy via Helm: `helm install todo-app ./helm-charts/todo-app`
-8. Configure Ingress/LoadBalancer
-9. Set up GitHub Actions CI/CD
-10. Configure monitoring
-
-**Section 9.13 - Validation Checklist**
-
-**Features:**
-- [ ] All Basic + Intermediate + Advanced features implemented
-- [ ] Priorities (high/medium/low) working
-- [ ] Tags/categories functional
-- [ ] Search and filter working
-- [ ] Sort by due date, priority, title
-- [ ] Recurring tasks auto-create
-- [ ] Due date reminders trigger
-
-**Architecture:**
-- [ ] Kafka topics created (task-events, reminders, task-updates)
-- [ ] Events published to Kafka on all operations
-- [ ] Recurring Task Service consuming events
-- [ ] Notification Service sending reminders
-- [ ] Audit Service logging all operations
-- [ ] Dapr components deployed (Pub/Sub, State, Bindings, Secrets)
-
-**Deployment:**
+- [ ] All advanced features implemented
+- [ ] Kafka topics created
+- [ ] Event-driven services deployed
 - [ ] Deployed to DOKS/GKE/AKS
-- [ ] Multiple pods running (HA)
-- [ ] Ingress/LoadBalancer configured
 - [ ] HTTPS enabled
 - [ ] CI/CD pipeline working
-- [ ] Monitoring dashboards active
-- [ ] Logs accessible
+- [ ] Monitoring active
+- [ ] Dapr components deployed
 
 ---
 
 ## 🏛️ PART III: UNIVERSAL STANDARDS
 
-### Article X: Quality Assurance
+### Article IX: Quality Assurance (NON-NEGOTIABLE)
 
-**Section 10.1 - Code Quality Metrics**
+**Section 9.1 - Code Quality Metrics**
 
 | Metric | Minimum Standard |
 |--------|-----------------|
 | Type Coverage | 100% (Python type hints, TypeScript) |
 | Documentation | All public APIs documented |
 | Error Handling | All edge cases handled |
-| Security | No hardcoded secrets, input validation |
+| Security | No hardcoded secrets |
 | Performance | API response < 200ms (p95) |
 
-**Section 10.2 - Testing Requirements**
+**Section 9.2 - Clean Code Mandates**
 
-Phase II-V MUST include:
-- Unit tests for business logic
-- Integration tests for API endpoints
-- End-to-end tests for critical flows
-
-**Section 10.3 - Security Standards**
-
-1. **Authentication** - JWT tokens, secure session management
-2. **Authorization** - User-scoped data access only
-3. **Input Validation** - Sanitize all user inputs
-4. **Secrets Management** - Environment variables, never in code
-5. **HTTPS** - Enforce encrypted connections in production
-6. **Rate Limiting** - Prevent abuse (100 req/min/user)
+- **SOLID Principles** - Single responsibility, Open/closed, etc.
+- **DRY** - No code duplication
+- **Type Safety** - 100% type hints
+- **Error Handling** - Comprehensive try/catch
+- **Logging** - Structured logs (JSON in production)
 
 ---
 
-### Article XI: Documentation Standards
+### Article X: Security Standards (NON-NEGOTIABLE)
+
+**Section 10.1 - Security Requirements**
+
+1. **Authentication** - JWT tokens, Better Auth
+2. **Authorization** - User-scoped data only
+3. **Input Validation** - Sanitize ALL user inputs
+4. **Secrets Management** - Environment variables only
+5. **HTTPS** - Enforce in production
+6. **Rate Limiting** - 100 req/min/user
+
+---
+
+### Article XI: Documentation Standards (MANDATORY)
 
 **Section 11.1 - Required Documentation**
 
 Every phase MUST include:
 
-1. **README.md** - Project overview, setup, usage
-2. **CLAUDE.md** - AI assistant instructions
+1. **README.md** - Setup, usage, features
+2. **CLAUDE.md** (Root + Subfolders) - AI instructions
 3. **CONSTITUTION.md** - This document
-4. **/specs/** - All feature specifications
+4. **/specs/** - All specifications
 5. **API.md** - API documentation (Phase II+)
 6. **DEPLOYMENT.md** - Deployment guide (Phase IV+)
 
-**Section 11.2 - Spec Template**
+**Section 11.2 - OpenAPI Documentation**
 
-```markdown
-# Feature: [Feature Name]
-
-## User Stories
-- As a [role], I want [goal] so that [benefit]
-
-## Acceptance Criteria
-- [ ] Criterion 1
-- [ ] Criterion 2
-
-## Technical Requirements
-- Stack: [technologies]
-- Dependencies: [libraries]
-
-## Data Models
-```json
-{schema}
-```
-
-## API Contracts
-**Endpoint:** POST /api/endpoint
-**Request:**
-**Response:**
-
-## UI/UX Behavior
-- State 1
-- State 2
-
-## Error Handling
-- Case 1: [handling]
-- Case 2: [handling]
-
-## Security Considerations
-- Auth required: Yes/No
-- Input validation: [rules]
-```
+FastAPI MUST automatically generate:
+- Swagger UI at `/docs`
+- ReDoc at `/redoc`
+- All endpoints documented
+- Request/response schemas
+- Authentication requirements
 
 ---
 
-### Article XII: Bonus Points
+## 🏛️ PART IV: BONUS POINTS
+
+### Article XII: Bonus Opportunities (+600 Points)
 
 **Section 12.1 - Reusable Intelligence (+200 points)**
 
-Create and use **Claude Code Subagents** and **Agent Skills**:
+Create **Claude Code Subagents** and **Skills**:
 
 **Subagents:**
+- MCP Tool Builder (95/100 reusability)
+- Chat Endpoint Builder (98/100 reusability)
 - Spec-Writer Agent
-- Python-Developer Agent
-- Frontend-Developer Agent
 - DevOps Agent
-- Code-Reviewer Agent
 
 **Skills:**
-- Spec-Validation Skill
-- Python-Development Skill
-- FastAPI-Development Skill
-- Next.js-Development Skill
-- Kubernetes-Deployment Skill
-- Dapr-Integration Skill
+- Spec-Driven Workflow (100/100 reusability)
+- Database Migration Builder (95/100 reusability)
 
 **Section 12.2 - Cloud-Native Blueprints (+200 points)**
 
-Create **reusable deployment blueprints** via Agent Skills:
+Create reusable deployment blueprints:
 - Kubernetes Deployment Blueprint
 - Helm Chart Blueprint
 - Dapr Configuration Blueprint
@@ -1169,122 +977,64 @@ Create **reusable deployment blueprints** via Agent Skills:
 
 **Section 12.3 - Multi-language Support (+100 points)**
 
-Add **Urdu language support** in chatbot:
+Add Urdu language support:
 - Urdu prompts and responses
-- Bidirectional text (RTL)
+- RTL text support
 - Urdu date/time formatting
 
-**Section 12.4 - Voice Commands (+200 points)**
+**Section 12.4 - Voice Commands (+100 points)**
 
-Add **voice input** for todo commands:
-- Web Speech API integration
+Add voice input:
+- Web Speech API
 - Voice-to-text conversion
 - Natural language processing
 
 ---
 
-## 🏛️ PART IV: GOVERNANCE & ENFORCEMENT
+## 🏛️ PART V: GOVERNANCE & TIMELINE
 
-### Article XIII: Spec-Driven Enforcement
+### Article XIII: Enforcement (NON-NEGOTIABLE)
 
 **Section 13.1 - Violations**
 
-The following are VIOLATIONS of this Constitution:
+These are VIOLATIONS:
 
 1. ❌ Writing code before specifications
-2. ❌ Manual coding without Claude Code generation
-3. ❌ Committing code without corresponding spec
-4. ❌ Hardcoded secrets in source code
-5. ❌ Missing documentation
-6. ❌ Skipping phases or features
+2. ❌ Manual coding without Claude Code
+3. ❌ Hardcoded secrets in code
+4. ❌ Missing documentation
+5. ❌ Skipping mandatory features
+6. ❌ Not using MCP servers for git operations
 
-**Section 13.2 - Review Process**
+**Section 13.2 - Constitutional Compliance**
 
-Before each phase submission:
-
-1. **Spec Review** - All features have specifications
-2. **Code Review** - Code matches specifications
-3. **Quality Review** - Standards met (types, docs, tests)
-4. **Security Review** - No vulnerabilities
-5. **Deployment Review** - Application accessible and functional
-
-**Section 13.3 - Self-Certification**
-
-Before submitting each phase, developers MUST self-certify:
-
-> "I certify that this submission was built using spec-driven development with Claude Code, meets all requirements of this Constitution, and adheres to the quality standards outlined herein."
-
----
-
-### Article XIV: Amendment Process
-
-**Section 14.1 - Immutable Articles**
-
-The following articles are **IMMUTABLE** and cannot be changed:
-
+All phases MUST comply with:
 - Article I: Specification Supremacy
 - Article II: Claude Code Governance
-- Article III: Architectural Principles
-
-**Section 14.2 - Amendable Articles**
-
-Phase-specific articles (V-IX) may be updated if:
-- Hackathon organizers issue clarifications
-- Technology requirements change
-- Security vulnerabilities discovered
-
-**Section 14.3 - Amendment Procedure**
-
-1. Propose amendment with justification
-2. Update `/specs/constitution-amendments.md`
-3. Review with Claude Code agents
-4. Implement if approved
-5. Document in version history
+- Article III: Core Principles
+- Phase-specific mandatory requirements
 
 ---
 
-## 📅 TIMELINE & MILESTONES
+### Article XIV: Timeline & Milestones
 
-### Submission Schedule
+**Section 14.1 - Submission Schedule**
 
-| Milestone | Date | Phase | Points | Deliverables |
-|-----------|------|-------|--------|-------------|
-| Phase I Due | Dec 7, 2025 | Console App | 100 | GitHub repo, working app |
-| Phase II Due | Dec 14, 2025 | Web App | 150 | Vercel deploy, API, DB |
-| Phase III Due | Dec 21, 2025 | AI Chatbot | 200 | ChatKit UI, MCP server |
-| Phase IV Due | Jan 4, 2026 | Local K8s | 250 | Minikube deploy, Helm |
-| Phase V Due | Jan 18, 2026 | Cloud Deploy | 300 | DOKS/GKE/AKS, Kafka, Dapr |
+| Milestone | Date | Phase | Points | Status |
+|-----------|------|-------|--------|--------|
+| Phase I | Dec 7, 2025 | Console App | 100 | Complete ✅ |
+| Phase II | Dec 14, 2025 | Web App | 150 | Complete ✅ |
+| Phase III | Dec 21, 2025 | AI Chatbot | 200 | In Progress 🔄 |
+| Phase IV | Jan 4, 2026 | Local K8s | 250 | Pending ⏳ |
+| Phase V | Jan 18, 2026 | Cloud Deploy | 300 | Pending ⏳ |
 
 **Total:** 1,000 points (+ 600 bonus)
 
-### Live Presentations
+**Section 14.2 - Live Presentations**
 
-**When:** Sundays at 8:00 PM on Dec 7, 14, 21 and Jan 4, 18
-**Where:** Zoom (Meeting ID: 849 7684 7088, Passcode: 305850)
-**Who:** Top submissions invited via WhatsApp
-
----
-
-## 🎯 SUCCESS CRITERIA
-
-### Hackathon Excellence
-
-To excel in this hackathon and potentially join the **Panaversity core team**:
-
-1. ✅ **Complete all 5 phases** on time
-2. ✅ **Follow spec-driven development** rigorously
-3. ✅ **Achieve high code quality** (clean, documented, tested)
-4. ✅ **Implement bonus features** for extra points
-5. ✅ **Present clearly** if selected for live demo
-6. ✅ **Document thoroughly** for reproducibility
-
-### Potential Outcomes
-
-**Top Performers May:**
-- Be invited for **Panaversity core team** interview
-- Step into role as **AI Startup Founder**
-- Opportunity to **teach at Panaversity, PIAIC, GIAIC**
-- Work with founders: **Zia, Rehan, Junaid, Wania**
+- **When:** Sundays at 8:00 PM (Dec 7, 14, 21, Jan 4, 18)
+- **Where:** Zoom (Meeting ID: 849 7684 7088, Passcode: 305850)
+- **Who:** Top submissions invited via WhatsApp
 
 ---
 
@@ -1304,54 +1054,36 @@ To excel in this hackathon and potentially join the **Panaversity core team**:
 | Neon | https://neon.tech/docs |
 | Dapr | https://docs.dapr.io |
 | Redpanda | https://docs.redpanda.com |
-| Kubernetes | https://kubernetes.io/docs |
-| Helm | https://helm.sh/docs |
 
 ### Cloud Services
 
 | Service | Free Tier | Link |
 |---------|-----------|------|
-| Neon DB | Free tier available | https://neon.tech |
-| Vercel | Free frontend hosting | https://vercel.com |
+| Neon DB | Free tier | https://neon.tech |
+| Vercel | Free hosting | https://vercel.com |
 | DigitalOcean | $200 credit (60 days) | https://digitalocean.com |
-| Google Cloud | $300 credit (90 days) | https://cloud.google.com/free |
-| Azure | $200 credit (30 days) | https://azure.microsoft.com/free |
-| Redpanda Cloud | Free serverless tier | https://redpanda.com/cloud |
+| Redpanda Cloud | Free serverless | https://redpanda.com/cloud |
 
 ---
 
-## 📝 SIGNATURE & ADOPTION
+## 📝 FINAL DECLARATION
 
-**This Constitution is hereby adopted and shall govern all development activities for "The Evolution of Todo" project across all five phases.**
+**This Merged Constitution (Version 4.0) combines:**
+- ✅ Technical depth of Version 3.0.0 (Phase II & III details)
+- ✅ Comprehensive scope of 5-Phase Constitution
+- ✅ Best practices from both documents
+- ✅ All mandatory requirements clearly marked
+- ✅ Complete governance framework
 
-**Effective Date:** December 1, 2025
-**Version:** 1.0
-**Status:** Active
-
-**Governed By:**
-- Spec-Kit Plus Methodology
-- Claude Code AI Assistance
-- Panaversity Hackathon II Guidelines
-
----
-
-**Nine Pillars of AI-Driven Development:**
-
-1. 🏛️ **Specification Supremacy** - Specs before code
-2. 🤖 **AI-Native Development** - Claude Code as primary developer
-3. 🏗️ **Architectural Thinking** - System design over syntax
-4. 📐 **Progressive Evolution** - Iterate from simple to complex
-5. ☁️ **Cloud-Native Mindset** - Build for distributed systems
-6. 🔄 **Event-Driven Architecture** - Loose coupling via events
-7. 🧠 **Reusable Intelligence** - Agents, skills, blueprints
-8. 🔒 **Security First** - Auth, validation, secrets management
-9. 📊 **Observable Systems** - Logging, metrics, tracing
+**Effective Date:** December 20, 2025
+**Version:** 4.0 (Merged)
+**Status:** Active & Enforced
 
 ---
 
-**The future of software development is AI-native and spec-driven.
-Engineers are architects. AI agents are builders.
-Specifications are the constitution.**
+**The future of software development is AI-native and spec-driven.**
+**Engineers are architects. AI agents are builders.**
+**Specifications are the constitution.**
 
 **Master the architecture. Command the intelligence.**
 
@@ -1359,6 +1091,7 @@ Specifications are the constitution.**
 
 ---
 
-*Constitution authored with Claude Code*
+*Constitution Version 4.0 - Merged Edition*
+*Combining technical precision with comprehensive scope*
 *Panaversity Hackathon II - The Evolution of Todo*
 *December 2025 - January 2026*

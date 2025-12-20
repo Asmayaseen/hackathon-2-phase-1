@@ -20,7 +20,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                const theme = localStorage.getItem('theme') || 'system'
+                const theme = localStorage.getItem('theme') || 'dark'
                 const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
                 const effectiveTheme = theme === 'system' ? systemTheme : theme
                 document.documentElement.classList.add(effectiveTheme)
