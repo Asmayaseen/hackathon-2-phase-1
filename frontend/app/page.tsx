@@ -65,7 +65,8 @@ export default function HomePage() {
             </a>
             <a
               href="#features"
-              className="px-8 py-4 bg-white border-2 border-border rounded-xl font-semibold text-lg hover:border-gray-300 hover:shadow-lg transition-all duration-200"
+              className="px-8 py-4 bg-white text-blue-600 hover:text-blue-700 border-2 border-border rounded-xl font-semibold text-lg hover:border-gray-300 hover:shadow-lg transition-all duration-200"
+
             >
               See Features
             </a>

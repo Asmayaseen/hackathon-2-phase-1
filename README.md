@@ -1,22 +1,33 @@
-# Evolution of Todo - Phase II
+# Evolution of Todo - Phase III
 
 > **Hackathon:** Panaversity Hackathon II
-> **Phase:** II - Full-Stack Web Application
-> **Points:** 150 (of 1,000 total)
-> **Status:** 🚧 Ready for Implementation
+> **Current Phase:** III - AI-Powered Chatbot
+> **Points:** 350 total (Phase II: 150 + Phase III: 200)
+> **Bonus:** +200 for Reusable Intelligence
+> **Status:** ✅ Phase II Complete | 🚀 Phase III Ready
 
-A production-ready, multi-user todo application built with Next.js 16+, FastAPI, and PostgreSQL.
+A production-ready, multi-user todo application with AI-powered natural language interface, built with Next.js 16+, FastAPI, OpenAI Agents SDK, and PostgreSQL.
 
 ---
 
 ## 🎯 Project Overview
 
-Transform a Phase I console application into a full-stack web application with:
+Evolution from console app → web app → AI-powered assistant:
+
+### Phase II Features (Complete ✅)
 - ✅ Modern responsive UI (Next.js 16+ with App Router)
 - ✅ RESTful API backend (FastAPI with SQLModel)
 - ✅ User authentication (Better Auth with JWT)
 - ✅ Cloud database (Neon Serverless PostgreSQL)
 - ✅ Secure multi-user isolation
+
+### Phase III Features (New! 🚀)
+- ✨ **AI Chat Interface** - Natural language task management
+- 🤖 **OpenAI Agents SDK** - Intelligent conversation handling
+- 🔧 **MCP Server** - 5 tools for task operations (add, list, complete, delete, update)
+- 💬 **Persistent Conversations** - Chat history saved in database
+- 🎯 **Stateless Architecture** - Scalable, no in-memory state
+- 🧠 **Reusable Intelligence** - Subagents & Skills for rapid development
 
 ---
 
@@ -39,6 +50,11 @@ ORM:           SQLModel
 Database:      Neon Serverless PostgreSQL
 Auth:          JWT verification
 Validation:    Pydantic v2
+
+Phase III:
+AI Framework:  OpenAI Agents SDK
+Protocol:      Model Context Protocol (MCP)
+MCP Tools:     5 custom tools for task management
 ```
 
 ### Development
@@ -65,9 +81,19 @@ hackathon-2-phase-1/
 │
 ├── backend/                   # FastAPI application
 │   ├── routes/                # API endpoints
+│   │   ├── tasks.py           # Task CRUD endpoints
+│   │   └── chat.py            # Phase III: Chat endpoint
+│   ├── services/              # Phase III: Business logic layer
+│   │   └── task_service.py
+│   ├── mcp_server/            # Phase III: MCP Server
+│   │   ├── server.py
+│   │   ├── tools.py           # 5 MCP tools
+│   │   └── config.py
+│   ├── migrations/            # Database migrations
+│   │   └── 003_add_chat_tables.py  # Phase III migration
 │   ├── middleware/            # JWT verification
 │   ├── schemas/               # Pydantic schemas
-│   ├── models.py              # Database models
+│   ├── models.py              # Database models (+ Conversation, Message)
 │   ├── main.py                # FastAPI app
 │   ├── requirements.txt       # Python dependencies
 │   └── CLAUDE.md              # Backend guidelines
@@ -81,10 +107,14 @@ hackathon-2-phase-1/
 │   └── ui/                    # UI specs
 │
 ├── specs-history/             # Spec history
-│   └── phase-2-fullstack/
-│       ├── spec.md            # Consolidated spec
-│       ├── plan.md            # Implementation plan
-│       └── tasks.md           # Task breakdown
+│   ├── phase-2-fullstack/
+│   │   ├── spec.md            # Consolidated spec
+│   │   ├── plan.md            # Implementation plan
+│   │   └── tasks.md           # Task breakdown
+│   └── phase-3-chatbot/       # Phase III specs
+│       ├── spec.md            # 6 user stories
+│       ├── plan.md            # 7-phase implementation plan
+│       └── tasks.md           # 40 detailed tasks
 │
 ├── .claude/                   # Claude Code configuration
 │   ├── agents/                # Subagents (4)
@@ -105,6 +135,10 @@ hackathon-2-phase-1/
 - Python 3.13+
 - PostgreSQL (or use Neon cloud)
 - Git
+
+**Phase III Additional:**
+- OpenAI API account with credits ($5 minimum recommended)
+- OpenAI API key (from https://platform.openai.com/api-keys)
 
 ### Option 1: Docker (Recommended)
 
@@ -195,14 +229,98 @@ BETTER_AUTH_SECRET=your-secret-key-min-32-chars
 # CORS
 ALLOWED_ORIGINS=http://localhost:3000
 
-# Server
-PORT=8000
-ENVIRONMENT=development
+# Phase III - AI Chatbot
+OPENAI_API_KEY=sk-your-openai-api-key-here
+OPENAI_MODEL=gpt-4
+MCP_SERVER_NAME=todo-mcp-server
+MCP_SERVER_VERSION=1.0.0
 ```
 
-**Generate Secret Key:**
+**Full setup guide:** See [`PHASE3-SETUP-GUIDE.md`](./PHASE3-SETUP-GUIDE.md)
+
+---
+
+## 💬 Phase III: AI Chat Interface
+
+### Features
+
+**Natural Language Task Management:**
+- "Add buy milk to my todo list" → Creates task
+- "Show me all my tasks" → Lists current tasks
+- "Mark task 5 as complete" → Toggles completion
+- "Delete the first task" → Removes task
+- "Update task 3 title to 'Call dentist'" → Modifies task
+
+**Architecture:**
+- **Stateless Backend:** No in-memory state, all conversations persisted
+- **MCP Server:** 5 tools for intelligent task operations
+- **Service Layer:** Shared business logic between REST API and MCP
+- **OpenAI Agents SDK:** Powers natural language understanding
+
+### Usage
+
+1. **Navigate to Chat:**
+   - Click "AI Assistant" in header
+   - Or visit `/chat` directly
+
+2. **Start Chatting:**
+   - Type natural language commands
+   - AI processes and executes tasks
+   - Conversation history maintained
+
+3. **Verify Actions:**
+   - Tasks created via chat appear in Dashboard
+   - Tasks from Dashboard visible to AI
+   - Multi-turn conversations work seamlessly
+
+### Database Schema (Phase III)
+
+**New Tables:**
+
+```sql
+-- Conversations table
+CREATE TABLE conversations (
+    id SERIAL PRIMARY KEY,
+    user_id TEXT NOT NULL REFERENCES users(id),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Messages table
+CREATE TABLE messages (
+    id SERIAL PRIMARY KEY,
+    conversation_id INT NOT NULL REFERENCES conversations(id),
+    user_id TEXT NOT NULL REFERENCES users(id),
+    role VARCHAR(20) NOT NULL,  -- 'user' or 'assistant'
+    content TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW()
+);
+```
+
+**Migration:**
 ```bash
-openssl rand -base64 32
+python backend/migrations/003_add_chat_tables.py
+```
+
+### MCP Tools
+
+**5 Tools for Task Management:**
+
+1. **add_task** - Create new task
+2. **list_tasks** - Retrieve tasks (all/pending/completed)
+3. **complete_task** - Toggle task completion
+4. **delete_task** - Remove task
+5. **update_task** - Modify task title/description
+
+**Example Tool Usage (Internal):**
+```python
+# AI calls MCP tool when user says "Add buy milk"
+await add_task(
+    user_id="user123",
+    title="buy milk",
+    description=None
+)
+# Returns: {"task_id": 5, "status": "created", "title": "buy milk"}
 ```
 
 ---

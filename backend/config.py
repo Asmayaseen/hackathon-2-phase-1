@@ -3,6 +3,7 @@
 import os
 from pydantic_settings import BaseSettings
 from typing import List
+from pydantic import field_validator
 
 
 class Settings(BaseSettings):
@@ -22,11 +23,17 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRY: int = 604800  # 7 days in seconds
 
-    # CORS
-    ALLOWED_ORIGINS: List[str] = [
-        "http://localhost:3000",
-        "https://your-app.vercel.app"
-    ]
+    # CORS - accepts comma-separated string or list
+    ALLOWED_ORIGINS: str | List[str] = "http://localhost:3000,https://your-app.vercel.app"
+
+    @field_validator('ALLOWED_ORIGINS', mode='before')
+    @classmethod
+    def parse_origins(cls, v):
+        """Parse ALLOWED_ORIGINS from comma-separated string or list."""
+        if isinstance(v, str):
+            # Split by comma and strip whitespace
+            return [origin.strip() for origin in v.split(',') if origin.strip()]
+        return v
 
     # Server
     HOST: str = "0.0.0.0"
@@ -39,6 +46,16 @@ class Settings(BaseSettings):
 
     # Logging
     LOG_LEVEL: str = "INFO"
+
+    # Phase III - AI Chatbot
+    OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
+    OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4")
+    MCP_SERVER_NAME: str = os.getenv("MCP_SERVER_NAME", "todo-mcp-server")
+    MCP_SERVER_VERSION: str = os.getenv("MCP_SERVER_VERSION", "1.0.0")
+    MCP_SERVER_DESCRIPTION: str = os.getenv(
+        "MCP_SERVER_DESCRIPTION",
+        "MCP tools for Evolution of Todo task management"
+    )
 
     class Config:
         env_file = ".env"

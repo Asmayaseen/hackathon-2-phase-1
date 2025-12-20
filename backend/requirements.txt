@@ -21,3 +21,7 @@ python-dotenv>=1.0.1
 
 # Development
 ruff>=0.8.0
+
+# Phase III - AI Chatbot Dependencies
+openai>=1.0.0
+mcp>=0.1.0

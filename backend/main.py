@@ -52,4 +52,11 @@ async def root():
 
 
 # Register routers
-app.include_router(tasks.router)
+app.include_router(tasks.router)  # Phase II - REST API
+
+# Phase III - Chat endpoint
+try:
+    from routes import chat
+    app.include_router(chat.router)  # Phase III - Chat endpoint
+except ImportError:
+    pass  # Chat router not available yet
