@@ -4,6 +4,9 @@ from sqlmodel import Session, select, or_, func
 from models import Task
 from datetime import datetime
 from typing import List, Optional
+import csv
+import json
+from io import StringIO
 
 
 class TaskService:
@@ -17,14 +20,16 @@ class TaskService:
         description: Optional[str] = None,
         priority: str = "medium",
         due_date: Optional[datetime] = None,
+        tags: Optional[List[str]] = None,
     ) -> Task:
-        """Create a new task."""
+        """Create a new task with optional tags."""
         task = Task(
             user_id=user_id,
             title=title,
             description=description,
             priority=priority,
             due_date=due_date,
+            tags=tags,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow(),
         )
@@ -103,8 +108,9 @@ class TaskService:
         description: Optional[str] = None,
         priority: Optional[str] = None,
         due_date: Optional[datetime] = None,
+        tags: Optional[List[str]] = None,
     ) -> Optional[Task]:
-        """Update a task."""
+        """Update a task with optional tags."""
         task = TaskService.get_task(db, user_id, task_id)
         if not task:
             return None
@@ -117,6 +123,8 @@ class TaskService:
             task.priority = priority
         if due_date is not None:
             task.due_date = due_date
+        if tags is not None:
+            task.tags = tags
 
         task.updated_at = datetime.utcnow()
         db.add(task)
@@ -198,3 +206,52 @@ class TaskService:
             "pending": pending,
             "completionRate": completion_rate,
         }
+
+    @staticmethod
+    def export_to_csv(db: Session, user_id: str) -> str:
+        """Export tasks to CSV format."""
+        tasks, _ = TaskService.list_tasks(db, user_id, status="all", limit=1000)
+        
+        output = StringIO()
+        writer = csv.DictWriter(output, fieldnames=[
+            'id', 'title', 'description', 'priority', 'due_date', 
+            'tags', 'completed', 'created_at', 'updated_at'
+        ])
+        writer.writeheader()
+        
+        for task in tasks:
+            writer.writerow({
+                'id': task.id,
+                'title': task.title,
+                'description': task.description or '',
+                'priority': task.priority,
+                'due_date': task.due_date.isoformat() if task.due_date else '',
+                'tags': ','.join(task.tags) if task.tags else '',
+                'completed': task.completed,
+                'created_at': task.created_at.isoformat(),
+                'updated_at': task.updated_at.isoformat(),
+            })
+        
+        return output.getvalue()
+
+    @staticmethod
+    def export_to_json(db: Session, user_id: str) -> str:
+        """Export tasks to JSON format."""
+        tasks, _ = TaskService.list_tasks(db, user_id, status="all", limit=1000)
+        
+        tasks_data = [
+            {
+                'id': task.id,
+                'title': task.title,
+                'description': task.description,
+                'priority': task.priority,
+                'due_date': task.due_date.isoformat() if task.due_date else None,
+                'tags': task.tags or [],
+                'completed': task.completed,
+                'created_at': task.created_at.isoformat(),
+                'updated_at': task.updated_at.isoformat(),
+            }
+            for task in tasks
+        ]
+        
+        return json.dumps(tasks_data, indent=2)
