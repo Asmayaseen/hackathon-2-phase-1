@@ -5,52 +5,51 @@ import ThemeToggle from '@/components/ThemeToggle'
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:bg-black relative overflow-hidden">
-      {/* Animated background grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#0a0a0a_1px,transparent_1px),linear-gradient(to_bottom,#0a0a0a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Cyber grid background */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff10_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff10_1px,transparent_1px)] bg-[size:50px_50px]" />
 
-      {/* Neon glow orbs */}
-      <div className="absolute top-0 -left-4 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 dark:opacity-20 animate-pulse" />
-      <div className="absolute -bottom-8 right-0 w-96 h-96 bg-fuchsia-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-10 dark:opacity-20 animate-pulse [animation-delay:1s]" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-5 dark:opacity-10 animate-pulse [animation-delay:2s]" />
+      {/* Neon glow effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full filter blur-[120px] animate-pulse" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-fuchsia-500/20 rounded-full filter blur-[120px] animate-pulse [animation-delay:1s]" />
 
       {/* Navigation */}
       <nav className="container mx-auto px-6 py-6 relative z-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="relative w-12 h-12">
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 via-fuchsia-400 to-purple-400 rounded-xl blur-lg opacity-40 animate-pulse" />
-              <div className="relative w-full h-full bg-gradient-to-br from-cyan-500 via-fuchsia-500 to-purple-500 rounded-xl flex items-center justify-center border border-cyan-400/30">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-400 to-fuchsia-500 rounded-2xl blur-md opacity-60 animate-pulse" />
+              <div className="relative w-full h-full bg-gradient-to-br from-cyan-500 to-fuchsia-500 rounded-2xl flex items-center justify-center border-2 border-cyan-400/50 shadow-[0_0_20px_rgba(0,217,255,0.3)]">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
-              TaskFlow
+            <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-fuchsia-400 bg-clip-text text-transparent tracking-wider">
+              NEURAL TASKS
             </span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-6">
             <ThemeToggle />
             <Link
               href="/dashboard"
-              className="text-gray-400 dark:text-gray-400 hover:text-cyan-400 font-medium transition-colors"
+              className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors tracking-wide uppercase text-sm"
             >
               Dashboard
             </Link>
             <Link
               href="/chat"
-              className="text-gray-400 dark:text-gray-400 hover:text-fuchsia-400 font-medium transition-colors"
+              className="text-cyan-400 hover:text-fuchsia-400 font-medium transition-colors tracking-wide uppercase text-sm"
             >
-              AI Chat
+              AI Neural
             </Link>
             <Link
               href="/signup"
               className="relative group"
             >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-purple-500 rounded-lg blur opacity-40 group-hover:opacity-70 transition duration-300" />
-              <div className="relative px-6 py-2.5 bg-gradient-to-r from-cyan-600 via-fuchsia-600 to-purple-600 rounded-lg text-white font-medium">
-                Get Started Free
+              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-300" />
+              <div className="relative px-6 py-3 bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-xl text-white font-bold uppercase text-sm tracking-wider border border-cyan-400/30 shadow-[0_0_30px_rgba(0,217,255,0.4)]">
+                Initialize
               </div>
             </Link>
           </div>
@@ -61,22 +60,22 @@ export default function HomePage() {
       <section className="container mx-auto px-6 py-20 relative z-10">
         <div className="max-w-4xl mx-auto text-center space-y-8">
           <div className="inline-block">
-            <div className="px-4 py-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full text-sm font-semibold text-cyan-400 backdrop-blur-sm">
-              ✨ The Future of Task Management
+            <div className="px-6 py-2 bg-black border-2 border-cyan-500/50 rounded-full text-sm font-bold text-cyan-400 backdrop-blur-sm shadow-[0_0_20px_rgba(0,217,255,0.3)] uppercase tracking-wider">
+              ⚡ Neural Task Management System
             </div>
           </div>
 
-          <h1 className="text-6xl md:text-7xl font-extrabold text-white leading-tight">
-            Organize Your Life,
+          <h1 className="text-6xl md:text-7xl font-extrabold leading-tight">
+            <span className="text-white">Join The</span>
             <br />
-            <span className="bg-gradient-to-r from-cyan-400 via-fuchsia-400 to-purple-400 bg-clip-text text-transparent">
-              One Task at a Time
+            <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">
+              Neural Network
             </span>
           </h1>
 
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Experience the most intuitive task management platform. Stay organized,
-            boost productivity, and achieve your goals with powerful features designed for modern workflows.
+          <p className="text-xl text-cyan-100/70 max-w-2xl mx-auto leading-relaxed">
+            Initialize your neural task management account. Harness AI-powered organization
+            with cybernetic precision and real-time synchronization.
           </p>
 
           <div className="flex gap-4 justify-center mt-8">
@@ -84,16 +83,19 @@ export default function HomePage() {
               href="/signup"
               className="relative group"
             >
-              <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-purple-500 rounded-xl blur opacity-40 group-hover:opacity-70 transition duration-300" />
-              <div className="relative px-8 py-4 bg-gradient-to-r from-cyan-600 via-fuchsia-600 to-purple-600 rounded-xl text-white font-semibold text-lg flex items-center gap-2">
-                Start Free Trial →
+              <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition duration-300" />
+              <div className="relative px-10 py-4 bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-2xl text-white font-bold text-lg flex items-center gap-2 uppercase tracking-wider border-2 border-cyan-400/50 shadow-[0_0_30px_rgba(0,217,255,0.4)]">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Initialize Account
               </div>
             </Link>
             <a
               href="#features"
-              className="px-8 py-4 bg-black/50 border border-cyan-500/30 text-cyan-400 rounded-xl font-semibold text-lg hover:border-cyan-400/50 hover:bg-black/70 backdrop-blur-sm transition-all duration-200"
+              className="px-10 py-4 bg-black border-2 border-cyan-500/50 text-cyan-400 rounded-2xl font-bold text-lg hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(0,217,255,0.3)] backdrop-blur-sm transition-all duration-300 uppercase tracking-wider"
             >
-              See Features
+              System Features
             </a>
           </div>
 
@@ -123,107 +125,102 @@ export default function HomePage() {
       {/* Features Section */}
       <section id="features" className="container mx-auto px-6 py-20 relative z-10">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Everything You Need to Stay Productive
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="text-white">Neural System</span>{' '}
+            <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">Features</span>
           </h2>
-          <p className="text-xl text-gray-400">
-            Powerful features that help you manage tasks like a pro
+          <p className="text-xl text-cyan-100/70">
+            Advanced cybernetic task management protocols
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {/* Feature 1 */}
-          <div className="group relative bg-black/50 border border-cyan-500/20 p-8 rounded-2xl hover:border-cyan-400/40 backdrop-blur-sm transition-all duration-300">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-300" />
+          <div className="group relative bg-black/80 backdrop-blur-sm p-8 rounded-2xl transition-all duration-500 border-2 border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_40px_rgba(0,217,255,0.3)]">
             <div className="relative">
-              <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-cyan-600 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-cyan-500/50">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-fuchsia-500 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,217,255,0.5)]">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-cyan-400 mb-3">Secure Authentication</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Enterprise-grade JWT authentication with encrypted tokens. Your data is protected with industry-standard security protocols.
+              <h3 className="text-xl font-bold text-cyan-400 mb-3 uppercase tracking-wide">Neural Security</h3>
+              <p className="text-cyan-100/60 leading-relaxed text-sm">
+                Enterprise-grade quantum encryption with neural authentication protocols. Maximum security for your data stream.
               </p>
             </div>
           </div>
 
           {/* Feature 2 */}
-          <div className="group relative bg-black/50 border border-fuchsia-500/20 p-8 rounded-2xl hover:border-fuchsia-400/40 backdrop-blur-sm transition-all duration-300">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-fuchsia-500 to-purple-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-300" />
+          <div className="group relative bg-black/80 backdrop-blur-sm p-8 rounded-2xl transition-all duration-500 border-2 border-fuchsia-500/30 hover:border-fuchsia-400 hover:shadow-[0_0_40px_rgba(236,72,153,0.3)]">
             <div className="relative">
-              <div className="w-14 h-14 bg-gradient-to-br from-fuchsia-500 to-fuchsia-600 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-fuchsia-500/50">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(236,72,153,0.5)]">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-fuchsia-400 mb-3">Smart Organization</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Organize tasks with priorities, due dates, tags, and categories. Advanced filtering and search to find what you need instantly.
+              <h3 className="text-xl font-bold text-fuchsia-400 mb-3 uppercase tracking-wide">AI Organization</h3>
+              <p className="text-cyan-100/60 leading-relaxed text-sm">
+                Neural network-powered task categorization. Advanced filtering algorithms with real-time search capabilities.
               </p>
             </div>
           </div>
 
           {/* Feature 3 */}
-          <div className="group relative bg-black/50 border border-purple-500/20 p-8 rounded-2xl hover:border-purple-400/40 backdrop-blur-sm transition-all duration-300">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-300" />
+          <div className="group relative bg-black/80 backdrop-blur-sm p-8 rounded-2xl transition-all duration-500 border-2 border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_40px_rgba(0,217,255,0.3)]">
             <div className="relative">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-purple-500/50">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,217,255,0.5)]">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-purple-400 mb-3">Lightning Fast</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Built with Next.js 16 and optimized for performance. Real-time updates and instant sync across all your devices.
+              <h3 className="text-xl font-bold text-cyan-400 mb-3 uppercase tracking-wide">Quantum Speed</h3>
+              <p className="text-cyan-100/60 leading-relaxed text-sm">
+                Lightning-fast neural processing. Real-time synchronization across all connected devices with zero latency.
               </p>
             </div>
           </div>
 
           {/* Feature 4 */}
-          <div className="group relative bg-black/50 border border-cyan-500/20 p-8 rounded-2xl hover:border-cyan-400/40 backdrop-blur-sm transition-all duration-300">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-300" />
+          <div className="group relative bg-black/80 backdrop-blur-sm p-8 rounded-2xl transition-all duration-500 border-2 border-fuchsia-500/30 hover:border-fuchsia-400 hover:shadow-[0_0_40px_rgba(236,72,153,0.3)]">
             <div className="relative">
-              <div className="w-14 h-14 bg-gradient-to-br from-cyan-500 to-purple-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-cyan-500/50">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-gradient-to-br from-fuchsia-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(236,72,153,0.5)]">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-cyan-400 mb-3">Task Analytics</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Track your productivity with detailed analytics. Visualize completion rates, trends, and insights to optimize your workflow.
+              <h3 className="text-xl font-bold text-fuchsia-400 mb-3 uppercase tracking-wide">Neural Analytics</h3>
+              <p className="text-cyan-100/60 leading-relaxed text-sm">
+                AI-powered productivity insights. Visualize patterns, track trends, and optimize your neural workflow efficiency.
               </p>
             </div>
           </div>
 
           {/* Feature 5 */}
-          <div className="group relative bg-black/50 border border-fuchsia-500/20 p-8 rounded-2xl hover:border-fuchsia-400/40 backdrop-blur-sm transition-all duration-300">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-fuchsia-500 to-purple-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-300" />
+          <div className="group relative bg-black/80 backdrop-blur-sm p-8 rounded-2xl transition-all duration-500 border-2 border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_40px_rgba(0,217,255,0.3)]">
             <div className="relative">
-              <div className="w-14 h-14 bg-gradient-to-br from-fuchsia-500 to-purple-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-fuchsia-500/50">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-16 h-16 bg-gradient-to-br from-cyan-500 to-fuchsia-500 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(0,217,255,0.5)]">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-fuchsia-400 mb-3">Export & Backup</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Export your tasks to CSV, JSON, or PDF. Automatic backups ensure your data is always safe and accessible.
+              <h3 className="text-xl font-bold text-cyan-400 mb-3 uppercase tracking-wide">Data Stream Export</h3>
+              <p className="text-cyan-100/60 leading-relaxed text-sm">
+                Multi-format data export protocols. Automated backup systems with quantum-encrypted cloud storage integration.
               </p>
             </div>
           </div>
 
           {/* Feature 6 */}
-          <div className="group relative bg-black/50 border border-purple-500/20 p-8 rounded-2xl hover:border-purple-400/40 backdrop-blur-sm transition-all duration-300">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-purple-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-20 transition duration-300" />
+          <div className="group relative bg-black/80 backdrop-blur-sm p-8 rounded-2xl transition-all duration-500 border-2 border-fuchsia-500/30 hover:border-fuchsia-400 hover:shadow-[0_0_40px_rgba(236,72,153,0.3)]">
             <div className="relative">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-fuchsia-500 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-purple-500/50">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+              <div className="w-16 h-16 bg-gradient-to-br from-fuchsia-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(236,72,153,0.5)]">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-purple-400 mb-3">Keyboard Shortcuts</h3>
-              <p className="text-gray-400 leading-relaxed">
-                Power user? Use keyboard shortcuts for lightning-fast task management. Create, complete, and navigate without touching your mouse.
+              <h3 className="text-xl font-bold text-fuchsia-400 mb-3 uppercase tracking-wide">AI Neural Chat</h3>
+              <p className="text-cyan-100/60 leading-relaxed text-sm">
+                Natural language task interface. Communicate with the neural network using voice or text commands seamlessly.
               </p>
             </div>
           </div>
@@ -232,8 +229,8 @@ export default function HomePage() {
 
       {/* How It Works Section */}
       <section className="container mx-auto px-6 py-20 relative z-10">
-        <div className="relative bg-black/50 border border-cyan-500/20 rounded-3xl p-12 backdrop-blur-sm">
-          <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-purple-500 rounded-3xl blur opacity-10" />
+        <div className="relative bg-slate-800/30 border border-purple-500/10 rounded-3xl p-12 backdrop-blur-2xl">
+          <div className="absolute -inset-[1px] bg-gradient-to-r from-cyan-500/10 via-fuchsia-500/10 to-purple-500/10 rounded-3xl blur" />
 
           <div className="relative">
             <div className="text-center mb-16">

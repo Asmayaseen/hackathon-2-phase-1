@@ -269,13 +269,13 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:bg-black relative overflow-hidden">
-      {/* Animated background grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px),linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#0a0a0a_1px,transparent_1px),linear-gradient(to_bottom,#0a0a0a_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Cyber grid background */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff10_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff10_1px,transparent_1px)] bg-[size:50px_50px]" />
 
-      {/* Neon glow orbs */}
-      <div className="absolute top-0 -left-4 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-5 dark:opacity-10 animate-pulse" />
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-fuchsia-500 rounded-full mix-blend-multiply filter blur-[128px] opacity-5 dark:opacity-10 animate-pulse [animation-delay:1s]" />
+      {/* Neon glow effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full filter blur-[120px] animate-pulse" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-fuchsia-500/20 rounded-full filter blur-[120px] animate-pulse [animation-delay:1s]" />
 
       <Header />
 
@@ -294,9 +294,12 @@ export default function DashboardPage() {
       <main className="container mx-auto px-6 py-8 relative z-10">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-purple-500 bg-clip-text text-transparent mb-2">My Tasks</h1>
-            <p className="text-gray-700 dark:text-gray-400">
-              Manage your tasks efficiently • Press <kbd className="px-2 py-1 text-xs bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 rounded">?</kbd> for shortcuts
+            <h1 className="text-4xl font-bold mb-2">
+              <span className="text-white">Neural</span>{' '}
+              <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">Task Stream</span>
+            </h1>
+            <p className="text-cyan-100/70">
+              Manage your tasks efficiently • Press <kbd className="px-2 py-1 text-xs bg-cyan-500/30 border-2 border-cyan-500/50 text-cyan-400 rounded shadow-[0_0_10px_rgba(0,217,255,0.3)]">?</kbd> for shortcuts
             </p>
           </div>
           <ExportImportMenu tasks={tasks} onImport={handleImport} />
@@ -309,19 +312,19 @@ export default function DashboardPage() {
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="Search tasks... (Ctrl+K)"
+              placeholder="Search neural stream... (Ctrl+K)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-2.5 bg-white/80 dark:bg-black/50 border border-cyan-400/40 dark:border-cyan-500/30 rounded-lg text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-cyan-500 focus:border-cyan-400 backdrop-blur-sm transition-all"
+              className="w-full px-4 py-3 bg-black/80 border-2 border-cyan-500/30 rounded-2xl text-white placeholder:text-cyan-100/40 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,217,255,0.3)] backdrop-blur-sm transition-all"
             />
-            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1 text-xs bg-cyan-500/20 border border-cyan-500/30 rounded text-cyan-400">
+            <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1 text-xs bg-cyan-500/30 border-2 border-cyan-500/50 rounded text-cyan-400 shadow-[0_0_10px_rgba(0,217,255,0.2)]">
               Ctrl+K
             </kbd>
           </div>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="px-4 py-2.5 bg-white/80 dark:bg-black/50 border border-fuchsia-400/40 dark:border-fuchsia-500/30 rounded-lg text-gray-900 dark:text-white backdrop-blur-sm focus:ring-2 focus:ring-fuchsia-500"
+            className="px-4 py-3 bg-black/80 border-2 border-fuchsia-500/30 rounded-2xl text-white backdrop-blur-sm focus:outline-none focus:border-fuchsia-400 focus:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all uppercase tracking-wider font-bold text-sm"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -330,7 +333,7 @@ export default function DashboardPage() {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value as any)}
-            className="px-4 py-2.5 bg-white/80 dark:bg-black/50 border border-purple-400/40 dark:border-purple-500/30 rounded-lg text-gray-900 dark:text-white backdrop-blur-sm focus:ring-2 focus:ring-purple-500"
+            className="px-4 py-3 bg-black/80 border-2 border-cyan-500/30 rounded-2xl text-white backdrop-blur-sm focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,217,255,0.3)] transition-all uppercase tracking-wider font-bold text-sm"
           >
             <option value="all">All Priorities</option>
             <option value="high">High</option>
@@ -339,10 +342,10 @@ export default function DashboardPage() {
           </select>
           <button
             onClick={() => setShowCreateForm(true)}
-            className="relative group px-6 py-2.5 rounded-lg font-medium flex items-center gap-2"
+            className="relative group"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-fuchsia-500 to-purple-500 rounded-lg blur opacity-40 group-hover:opacity-70 transition duration-300" />
-            <div className="relative flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-cyan-600 via-fuchsia-600 to-purple-600 rounded-lg text-white">
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-2xl blur-lg opacity-75 group-hover:opacity-100 transition duration-300" />
+            <div className="relative flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-500 to-fuchsia-500 rounded-2xl text-white font-bold border-2 border-cyan-400/50 shadow-[0_0_30px_rgba(0,217,255,0.4)] uppercase tracking-wider text-sm">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
               </svg>
