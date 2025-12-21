@@ -385,16 +385,16 @@ When showing tasks, format them clearly with their IDs. Always confirm actions t
                 # Execute tool
                 result = None
                 if function_name == "add_task":
-                    result = await add_task(user_id, arguments.get("title"), arguments.get("description"))
+                    result = add_task(user_id, arguments.get("title"), arguments.get("description"))
                 elif function_name == "list_tasks":
                     status = arguments.get("status", "all")
-                    result = await list_tasks(user_id, status)
+                    result = list_tasks(user_id, status)
                 elif function_name == "complete_task":
-                    result = await complete_task(user_id, arguments["task_id"])
+                    result = complete_task(user_id, arguments["task_id"])
                 elif function_name == "delete_task":
-                    result = await delete_task(user_id, arguments["task_id"])
+                    result = delete_task(user_id, arguments["task_id"])
                 elif function_name == "update_task":
-                    result = await update_task(
+                    result = update_task(
                         user_id,
                         arguments["task_id"],
                         arguments.get("title"),
@@ -611,24 +611,24 @@ When showing tasks, format them clearly with their IDs. Always confirm actions t
 
                 # Call the appropriate MCP tool
                 if function_name == "add_task":
-                    result = await add_task(user_id, arguments.get("title"), arguments.get("description"))
+                    result = add_task(user_id, arguments.get("title"), arguments.get("description"))
                     tool_calls_made.append(ToolCall(tool="add_task", parameters=arguments))
 
                 elif function_name == "list_tasks":
                     status = arguments.get("status", "all")
-                    result = await list_tasks(user_id, status)
+                    result = list_tasks(user_id, status)
                     tool_calls_made.append(ToolCall(tool="list_tasks", parameters={"status": status}))
 
                 elif function_name == "complete_task":
-                    result = await complete_task(user_id, arguments["task_id"])
+                    result = complete_task(user_id, arguments["task_id"])
                     tool_calls_made.append(ToolCall(tool="complete_task", parameters=arguments))
 
                 elif function_name == "delete_task":
-                    result = await delete_task(user_id, arguments["task_id"])
+                    result = delete_task(user_id, arguments["task_id"])
                     tool_calls_made.append(ToolCall(tool="delete_task", parameters=arguments))
 
                 elif function_name == "update_task":
-                    result = await update_task(
+                    result = update_task(
                         user_id,
                         arguments["task_id"],
                         arguments.get("title"),
@@ -676,7 +676,7 @@ async def get_mock_ai_response(
     if "add" in last_message or "create" in last_message:
         task_title = last_message.replace("add", "").replace("create", "").replace("task", "").strip()
         if task_title:
-            result = await add_task(user_id, task_title)
+            result = add_task(user_id, task_title)
             tool_calls.append(ToolCall(tool="add_task", parameters={"title": task_title}))
             if "error" not in result:
                 response = f"✓ Added '{result['title']}' to your todo list!"
@@ -686,7 +686,7 @@ async def get_mock_ai_response(
             response = "What task would you like to add?"
 
     elif "show" in last_message or "list" in last_message or "what" in last_message:
-        result = await list_tasks(user_id, "all")
+        result = list_tasks(user_id, "all")
         tool_calls.append(ToolCall(tool="list_tasks", parameters={"status": "all"}))
         if isinstance(result, list) and len(result) > 0:
             task_list = "\n".join([f"#{t['id']} - {t['title']} {'✓' if t['completed'] else '○'}" for t in result[:10]])
@@ -702,7 +702,7 @@ async def get_mock_ai_response(
                 task_id = int(word)
                 break
         if task_id:
-            result = await complete_task(user_id, task_id)
+            result = complete_task(user_id, task_id)
             tool_calls.append(ToolCall(tool="complete_task", parameters={"task_id": task_id}))
             if "error" not in result:
                 response = f"✓ Marked '{result['title']}' as {result['status']}!"
@@ -719,7 +719,7 @@ async def get_mock_ai_response(
                 task_id = int(word)
                 break
         if task_id:
-            result = await delete_task(user_id, task_id)
+            result = delete_task(user_id, task_id)
             tool_calls.append(ToolCall(tool="delete_task", parameters={"task_id": task_id}))
             if "error" not in result:
                 response = f"✓ Deleted '{result['title']}'!"

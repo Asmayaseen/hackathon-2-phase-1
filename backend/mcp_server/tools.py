@@ -17,20 +17,13 @@ All tools follow these Constitution principles:
 
 from typing import Dict, List, Any, Optional
 from database import get_db
-from services.task_service import (
-    create_task as service_create_task,
-    list_tasks as service_list_tasks,
-    get_task as service_get_task,
-    update_task as service_update_task,
-    delete_task as service_delete_task,
-    toggle_complete as service_toggle_complete,
-)
+from services.task_service import TaskService
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-async def add_task(
+def add_task(
     user_id: str,
     title: str,
     description: Optional[str] = None
@@ -79,11 +72,11 @@ async def add_task(
 
     try:
         # Call service layer
-        task = await service_create_task(
+        task = TaskService.create_task(
+            db=db,
             user_id=user_id,
             title=title,
-            description=description,
-            db=db
+            description=description
         )
 
         logger.info(f"Task created via MCP: user={user_id}, task_id={task.id}")
@@ -107,7 +100,7 @@ async def add_task(
 
 
 
-async def list_tasks(
+def list_tasks(
     user_id: str,
     status: str = "all"
 ) -> List[Dict[str, Any]]:
@@ -155,10 +148,10 @@ async def list_tasks(
 
     try:
         # Call service layer
-        tasks = await service_list_tasks(
+        tasks = TaskService.list_tasks(
+            db=db,
             user_id=user_id,
-            status=status,
-            db=db
+            status=status
         )
 
         logger.info(f"Tasks listed via MCP: user={user_id}, status={status}, count={len(tasks)}")
@@ -190,7 +183,7 @@ async def list_tasks(
 
 
 
-async def complete_task(
+def complete_task(
     user_id: str,
     task_id: int
 ) -> Dict[str, Any]:
@@ -231,10 +224,10 @@ async def complete_task(
 
     try:
         # Call service layer
-        task = await service_toggle_complete(
+        task = TaskService.toggle_complete(
+            db=db,
             user_id=user_id,
-            task_id=task_id,
-            db=db
+            task_id=task_id
         )
 
         if not task:
@@ -262,7 +255,7 @@ async def complete_task(
 
 
 
-async def delete_task(
+def delete_task(
     user_id: str,
     task_id: int
 ) -> Dict[str, Any]:
@@ -303,10 +296,10 @@ async def delete_task(
 
     try:
         # Get task first to return title (and verify ownership)
-        task = await service_get_task(
+        task = TaskService.get_task(
+            db=db,
             user_id=user_id,
-            task_id=task_id,
-            db=db
+            task_id=task_id
         )
 
         if not task:
@@ -316,10 +309,10 @@ async def delete_task(
         title = task.title
 
         # Delete task
-        success = await service_delete_task(
+        success = TaskService.delete_task(
+            db=db,
             user_id=user_id,
-            task_id=task_id,
-            db=db
+            task_id=task_id
         )
 
         if success:
@@ -346,7 +339,7 @@ async def delete_task(
 
 
 
-async def update_task(
+def update_task(
     user_id: str,
     task_id: int,
     title: Optional[str] = None,
@@ -409,11 +402,11 @@ async def update_task(
             updates["description"] = description
 
         # Call service layer
-        task = await service_update_task(
+        task = TaskService.update_task(
+            db=db,
             user_id=user_id,
             task_id=task_id,
-            updates=updates,
-            db=db
+            **updates
         )
 
         if not task:
