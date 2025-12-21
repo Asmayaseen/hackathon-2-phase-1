@@ -1,14 +1,15 @@
 """Task management API routes."""
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlmodel import Session, select
+from sqlmodel import Session
 from datetime import datetime
-from typing import Literal
+from typing import Literal, Optional
 
 from database import get_db
 from models import Task
 from schemas.task import TaskCreate, TaskUpdate, TaskResponse, TaskListResponse
 from middleware.auth import verify_jwt
+from services.task_service import TaskService
 
 router = APIRouter(prefix="/api/{user_id}/tasks", tags=["tasks"])
 
@@ -17,18 +18,22 @@ router = APIRouter(prefix="/api/{user_id}/tasks", tags=["tasks"])
 async def list_tasks(
     user_id: str,
     status: Literal["all", "pending", "completed"] = Query("all"),
-    priority: Literal["all", "low", "medium", "high"] | None = Query(None),
     sort: Literal["created", "title", "updated", "priority", "due_date"] = Query("created"),
+    search: Optional[str] = Query(None),
+    page: int = Query(1, gt=0),
+    limit: int = Query(20, gt=0, le=100),
     token_data: dict = Depends(verify_jwt),
     db: Session = Depends(get_db),
 ):
     """
-    List all tasks for a user with optional filtering and sorting.
+    List all tasks for a user with filtering, sorting, search, and pagination.
 
     - **user_id**: User ID from URL path
     - **status**: Filter by completion status (all/pending/completed)
-    - **priority**: Filter by priority (all/low/medium/high)
     - **sort**: Sort order (created/title/updated/priority/due_date)
+    - **search**: Search in title and description
+    - **page**: Page number (starts from 1)
+    - **limit**: Items per page (max 100)
     """
     # Verify user_id matches token
     if token_data.get("user_id") != user_id:
@@ -37,47 +42,27 @@ async def list_tasks(
             detail="Access forbidden: user_id mismatch"
         )
 
-    # Build query
-    query = select(Task).where(Task.user_id == user_id)
+    # Use service layer
+    tasks, total_count = TaskService.list_tasks(
+        db=db,
+        user_id=user_id,
+        status=status,
+        sort_by=sort,
+        search=search,
+        page=page,
+        limit=limit
+    )
 
-    # Apply status filter
-    if status == "pending":
-        query = query.where(Task.completed == False)
-    elif status == "completed":
-        query = query.where(Task.completed == True)
-
-    # Apply priority filter
-    if priority and priority != "all":
-        query = query.where(Task.priority == priority)
-
-    # Apply sorting
-    if sort == "title":
-        query = query.order_by(Task.title)
-    elif sort == "updated":
-        query = query.order_by(Task.updated_at.desc())
-    elif sort == "priority":
-        # Sort by priority: high -> medium -> low
-        priority_order = {"high": 3, "medium": 2, "low": 1}
-        query = query.order_by(
-            # Use case statement to map priority to numeric value for sorting
-            Task.priority.desc()
-        )
-    elif sort == "due_date":
-        query = query.order_by(Task.due_date.asc().nulls_last())
-    else:  # created (default)
-        query = query.order_by(Task.created_at.desc())
-
-    # Execute query
-    tasks = db.exec(query).all()
-
-    # Calculate statistics
-    total = len(tasks)
+    # Calculate statistics for current filter
     completed = sum(1 for task in tasks if task.completed)
-    pending = total - completed
+    pending = len(tasks) - completed
+
+    # Get overall stats (not filtered)
+    stats = TaskService.get_stats(db, user_id)
 
     return TaskListResponse(
         tasks=tasks,
-        total=total,
+        total=total_count,
         completed=completed,
         pending=pending
     )
@@ -291,3 +276,204 @@ async def toggle_task_completion(
     db.refresh(task)
 
     return task
+
+
+# Bulk Operations
+@router.post("/bulk/delete")
+async def bulk_delete_tasks(
+    user_id: str,
+    task_ids: list[int],
+    token_data: dict = Depends(verify_jwt),
+    db: Session = Depends(get_db),
+):
+    """
+    Bulk delete multiple tasks.
+    
+    - **user_id**: User ID from URL path
+    - **task_ids**: List of task IDs to delete
+    """
+    # Verify user_id matches token
+    if token_data.get("user_id") != user_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Access forbidden: user_id mismatch"
+        )
+
+    deleted_count = TaskService.bulk_delete(db, user_id, task_ids)
+
+    return {
+        "message": f"Successfully deleted {deleted_count} task(s)",
+        "deleted_count": deleted_count
+    }
+
+
+@router.post("/bulk/complete")
+async def bulk_complete_tasks(
+    user_id: str,
+    task_ids: list[int],
+    completed: bool = True,
+    token_data: dict = Depends(verify_jwt),
+    db: Session = Depends(get_db),
+):
+    """
+    Bulk update completion status of multiple tasks.
+    
+    - **user_id**: User ID from URL path
+    - **task_ids**: List of task IDs to update
+    - **completed**: Completion status (true/false)
+    """
+    # Verify user_id matches token
+    if token_data.get("user_id") != user_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Access forbidden: user_id mismatch"
+        )
+
+    updated_count = TaskService.bulk_complete(db, user_id, task_ids, completed)
+
+    return {
+        "message": f"Successfully updated {updated_count} task(s)",
+        "updated_count": updated_count,
+        "completed": completed
+    }
+
+
+@router.get("/stats")
+async def get_task_stats(
+    user_id: str,
+    token_data: dict = Depends(verify_jwt),
+    db: Session = Depends(get_db),
+):
+    """
+    Get task statistics for a user.
+    
+    - **user_id**: User ID from URL path
+    """
+    # Verify user_id matches token
+    if token_data.get("user_id") != user_id:
+        raise HTTPException(
+            status_code=403,
+            detail="Access forbidden: user_id mismatch"
+        )
+
+    stats = TaskService.get_stats(db, user_id)
+    return stats
+
+
+# Export/Import Operations
+from fastapi.responses import StreamingResponse
+import csv
+import json
+import io
+
+
+@router.get("/export/csv")
+async def export_tasks_csv(
+    user_id: str,
+    token_data: dict = Depends(verify_jwt),
+    db: Session = Depends(get_db),
+):
+    """Export all tasks as CSV file."""
+    if token_data.get("user_id") != user_id:
+        raise HTTPException(status_code=403, detail="Access forbidden")
+
+    tasks, _ = TaskService.list_tasks(db, user_id, status="all", limit=10000)
+
+    # Create CSV in memory
+    output = io.StringIO()
+    writer = csv.writer(output)
+    
+    # Write header
+    writer.writerow(["ID", "Title", "Description", "Priority", "Due Date", "Tags", "Completed", "Created At"])
+    
+    # Write tasks
+    for task in tasks:
+        writer.writerow([
+            task.id,
+            task.title,
+            task.description or "",
+            task.priority,
+            task.due_date.isoformat() if task.due_date else "",
+            ",".join(task.tags) if task.tags else "",
+            task.completed,
+            task.created_at.isoformat()
+        ])
+    
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=tasks.csv"}
+    )
+
+
+@router.get("/export/json")
+async def export_tasks_json(
+    user_id: str,
+    token_data: dict = Depends(verify_jwt),
+    db: Session = Depends(get_db),
+):
+    """Export all tasks as JSON file."""
+    if token_data.get("user_id") != user_id:
+        raise HTTPException(status_code=403, detail="Access forbidden")
+
+    tasks, _ = TaskService.list_tasks(db, user_id, status="all", limit=10000)
+
+    # Convert to dict
+    tasks_data = [
+        {
+            "id": task.id,
+            "title": task.title,
+            "description": task.description,
+            "priority": task.priority,
+            "due_date": task.due_date.isoformat() if task.due_date else None,
+            "tags": task.tags,
+            "completed": task.completed,
+            "created_at": task.created_at.isoformat(),
+            "updated_at": task.updated_at.isoformat()
+        }
+        for task in tasks
+    ]
+
+    json_str = json.dumps(tasks_data, indent=2)
+    
+    return StreamingResponse(
+        iter([json_str]),
+        media_type="application/json",
+        headers={"Content-Disposition": "attachment; filename=tasks.json"}
+    )
+
+
+@router.post("/import/json")
+async def import_tasks_json(
+    user_id: str,
+    tasks_data: list[dict],
+    token_data: dict = Depends(verify_jwt),
+    db: Session = Depends(get_db),
+):
+    """Import tasks from JSON data."""
+    if token_data.get("user_id") != user_id:
+        raise HTTPException(status_code=403, detail="Access forbidden")
+
+    imported_count = 0
+    errors = []
+
+    for task_data in tasks_data:
+        try:
+            TaskService.create_task(
+                db=db,
+                user_id=user_id,
+                title=task_data.get("title", "Untitled"),
+                description=task_data.get("description"),
+                priority=task_data.get("priority", "medium"),
+                due_date=datetime.fromisoformat(task_data["due_date"]) if task_data.get("due_date") else None,
+            )
+            imported_count += 1
+        except Exception as e:
+            errors.append(f"Error importing task '{task_data.get('title', 'Unknown')}': {str(e)}")
+
+    return {
+        "message": f"Successfully imported {imported_count} task(s)",
+        "imported": imported_count,
+        "errors": errors
+    }

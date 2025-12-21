@@ -20,12 +20,15 @@ Following Constitution principles:
 """
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
-from typing import Optional, List, Dict, Any
+from typing import Optional, List, Dict, Any, AsyncIterator
 from datetime import datetime
 import os
 import logging
+import json
+import asyncio
 
 from database import get_db
 from middleware.auth import verify_jwt
@@ -179,12 +182,273 @@ async def save_message(
     logger.debug(f"Saved message: conv={conversation_id}, role={role}, length={len(content)}")
 
 
+async def get_ai_response_stream(
+    messages: List[Dict[str, str]],
+    user_id: str
+) -> AsyncIterator[str]:
+    """
+    Stream AI response using OpenAI API with function calling.
+
+    Task: SSE Streaming Implementation
+    Constitution: Real-time Response Streaming
+
+    Args:
+        messages: Conversation history in OpenAI format
+        user_id: User ID (for MCP tool calls)
+
+    Yields:
+        str: SSE-formatted chunks of the response
+    """
+    try:
+        from openai import OpenAI
+        import json as json_module
+
+        # Check if OpenAI API key is configured
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            logger.warning("OPENAI_API_KEY not set, using mock streaming response")
+            async for chunk in get_mock_ai_response_stream(messages, user_id):
+                yield chunk
+            return
+
+        client = OpenAI(api_key=api_key)
+        tool_calls_made = []
+
+        # Define available MCP tools for OpenAI
+        tools = [
+            {
+                "type": "function",
+                "function": {
+                    "name": "add_task",
+                    "description": "Create a new task in the user's todo list",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "description": "The task title or description"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "Optional detailed description"
+                            }
+                        },
+                        "required": ["title"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "list_tasks",
+                    "description": "Get the user's tasks, optionally filtered by status",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": ["all", "pending", "completed"],
+                                "description": "Filter tasks by status (default: all)"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "complete_task",
+                    "description": "Toggle the completion status of a task",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "task_id": {
+                                "type": "integer",
+                                "description": "The ID of the task to toggle"
+                            }
+                        },
+                        "required": ["task_id"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "delete_task",
+                    "description": "Delete a task from the user's todo list",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "task_id": {
+                                "type": "integer",
+                                "description": "The ID of the task to delete"
+                            }
+                        },
+                        "required": ["task_id"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "update_task",
+                    "description": "Update a task's title or description",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "task_id": {
+                                "type": "integer",
+                                "description": "The ID of the task to update"
+                            },
+                            "title": {
+                                "type": "string",
+                                "description": "New title for the task"
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "New description for the task"
+                            }
+                        },
+                        "required": ["task_id"]
+                    }
+                }
+            }
+        ]
+
+        # Add system message for AI personality
+        system_message = {
+            "role": "system",
+            "content": """You are a helpful AI assistant for managing todo tasks. You have access to tools to help users:
+- Create new tasks
+- View their tasks (all, pending, or completed)
+- Mark tasks as complete/incomplete
+- Update task details
+- Delete tasks
+
+Be friendly, concise, and helpful. When users ask to add tasks, extract the task details and use the add_task function.
+When showing tasks, format them clearly with their IDs. Always confirm actions taken."""
+        }
+
+        # Call OpenAI API with streaming enabled
+        stream = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[system_message] + messages,
+            tools=tools,
+            tool_choice="auto",
+            temperature=0.7,
+            max_tokens=500,
+            stream=True
+        )
+
+        full_response = ""
+        tool_calls_buffer = {}
+
+        # Process streaming response
+        for chunk in stream:
+            delta = chunk.choices[0].delta
+
+            # Handle content chunks
+            if delta.content:
+                full_response += delta.content
+                # Send SSE event with content chunk
+                yield f"data: {json_module.dumps({'type': 'content', 'content': delta.content})}\n\n"
+                await asyncio.sleep(0)  # Allow other tasks to run
+
+            # Handle tool calls
+            if delta.tool_calls:
+                for tool_call in delta.tool_calls:
+                    idx = tool_call.index
+                    if idx not in tool_calls_buffer:
+                        tool_calls_buffer[idx] = {
+                            "id": tool_call.id or "",
+                            "name": "",
+                            "arguments": ""
+                        }
+
+                    if tool_call.function:
+                        if tool_call.function.name:
+                            tool_calls_buffer[idx]["name"] = tool_call.function.name
+                        if tool_call.function.arguments:
+                            tool_calls_buffer[idx]["arguments"] += tool_call.function.arguments
+
+        # Execute tool calls if any
+        if tool_calls_buffer:
+            for tool_call_data in tool_calls_buffer.values():
+                function_name = tool_call_data["name"]
+                arguments = json_module.loads(tool_call_data["arguments"])
+
+                logger.info(f"AI calling tool: {function_name} with args: {arguments}")
+
+                # Send tool call notification
+                yield f"data: {json_module.dumps({'type': 'tool_call', 'tool': function_name, 'parameters': arguments})}\n\n"
+
+                # Execute tool
+                result = None
+                if function_name == "add_task":
+                    result = await add_task(user_id, arguments.get("title"), arguments.get("description"))
+                elif function_name == "list_tasks":
+                    status = arguments.get("status", "all")
+                    result = await list_tasks(user_id, status)
+                elif function_name == "complete_task":
+                    result = await complete_task(user_id, arguments["task_id"])
+                elif function_name == "delete_task":
+                    result = await delete_task(user_id, arguments["task_id"])
+                elif function_name == "update_task":
+                    result = await update_task(
+                        user_id,
+                        arguments["task_id"],
+                        arguments.get("title"),
+                        arguments.get("description")
+                    )
+
+                # Send tool result
+                if result:
+                    yield f"data: {json_module.dumps({'type': 'tool_result', 'tool': function_name, 'result': result})}\n\n"
+
+        # Send completion event
+        yield f"data: {json_module.dumps({'type': 'done', 'full_response': full_response})}\n\n"
+
+    except ImportError:
+        logger.warning("OpenAI library not available, using mock streaming response")
+        async for chunk in get_mock_ai_response_stream(messages, user_id):
+            yield chunk
+    except Exception as e:
+        logger.error(f"OpenAI streaming error: {str(e)}")
+        yield f"data: {json.dumps({'type': 'error', 'message': 'Error processing request'})}\n\n"
+
+
+async def get_mock_ai_response_stream(
+    messages: List[Dict[str, str]],
+    user_id: str
+) -> AsyncIterator[str]:
+    """
+    Mock streaming AI response for testing without OpenAI API.
+    """
+    last_message = messages[-1]["content"].lower() if messages else ""
+
+    # Simulate streaming by sending response word by word
+    response = "I can help you manage your tasks!"
+
+    if "add" in last_message or "create" in last_message:
+        response = "I'll add that task for you right away!"
+    elif "show" in last_message or "list" in last_message:
+        response = "Let me fetch your tasks for you..."
+
+    # Stream response word by word
+    words = response.split()
+    for word in words:
+        yield f"data: {json.dumps({'type': 'content', 'content': word + ' '})}\n\n"
+        await asyncio.sleep(0.05)  # Simulate network delay
+
+    yield f"data: {json.dumps({'type': 'done', 'full_response': response})}\n\n"
+
+
 async def get_ai_response(
     messages: List[Dict[str, str]],
     user_id: str
 ) -> tuple[str, List[ToolCall]]:
     """
-    Get AI response using OpenAI API with function calling.
+    Get AI response using OpenAI API with function calling (non-streaming version).
 
     Task: T-404 - Integrate OpenAI Agents SDK
     Constitution: AI Agent Principles
@@ -570,6 +834,98 @@ async def chat(
         )
 
 
+# SSE Streaming Chat Endpoint
+@router.post("/stream")
+async def chat_stream(
+    user_id: str,
+    request: ChatRequest,
+    db: Session = Depends(get_db)
+):
+    """
+    Server-Sent Events (SSE) streaming chat endpoint.
+
+    Constitution: Real-time Response Streaming (Section 6.2)
+
+    Args:
+        user_id: User ID from URL path
+        request: Chat request with message and optional conversation_id
+        db: Database session
+
+    Returns:
+        StreamingResponse: SSE stream of AI response chunks
+
+    SSE Event Types:
+        - content: Partial response text chunk
+        - tool_call: Tool invocation notification
+        - tool_result: Tool execution result
+        - done: Streaming complete with full response
+        - error: Error occurred during processing
+    """
+    async def event_generator():
+        try:
+            # Get or create conversation
+            conv_id = await get_or_create_conversation(
+                user_id=user_id,
+                conversation_id=request.conversation_id,
+                db=db
+            )
+
+            # Send conversation ID immediately
+            yield f"data: {json.dumps({'type': 'conversation_id', 'conversation_id': conv_id})}\n\n"
+
+            # Load conversation history
+            history = await load_conversation_history(conv_id, limit=10, db=db)
+
+            # Save user message
+            await save_message(
+                conversation_id=conv_id,
+                user_id=user_id,
+                role="user",
+                content=request.message,
+                db=db
+            )
+
+            # Build messages for AI
+            messages = history + [{"role": "user", "content": request.message}]
+
+            # Stream AI response
+            full_response = ""
+            async for chunk in get_ai_response_stream(messages, user_id):
+                yield chunk
+
+                # Extract full response from done event
+                if '"type": "done"' in chunk:
+                    import json as json_module
+                    chunk_data = json_module.loads(chunk.replace("data: ", "").strip())
+                    full_response = chunk_data.get("full_response", "")
+
+            # Save assistant response
+            if full_response:
+                await save_message(
+                    conversation_id=conv_id,
+                    user_id=user_id,
+                    role="assistant",
+                    content=full_response,
+                    db=db
+                )
+
+            logger.info(f"Stream completed: user={user_id}, conv={conv_id}")
+
+        except Exception as e:
+            logger.error(f"Stream error: {str(e)}", exc_info=True)
+            yield f"data: {json.dumps({'type': 'error', 'message': 'Stream interrupted'})}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"  # Disable buffering in nginx
+        }
+    )
+
+
 # Health check for chat endpoint
 @router.get("/health")
 async def chat_health():
@@ -577,5 +933,6 @@ async def chat_health():
     return {
         "status": "healthy",
         "endpoint": "chat",
-        "mcp_tools": ["add_task", "list_tasks", "complete_task", "delete_task", "update_task"]
+        "mcp_tools": ["add_task", "list_tasks", "complete_task", "delete_task", "update_task"],
+        "streaming": True
     }

@@ -1,60 +1,59 @@
 version: '3.8'
 
 services:
-  # PostgreSQL Database (for local development)
-  db:
-    image: postgres:16-alpine
-    container_name: todo-db
-    environment:
-      POSTGRES_USER: todo_user
-      POSTGRES_PASSWORD: todo_password
-      POSTGRES_DB: todo_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U todo_user"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  # FastAPI Backend
+  # Backend API
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: todo-backend
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql://todo_user:todo_password@db:5432/todo_db
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-development-secret-key-min-32-chars}
-      ALLOWED_ORIGINS: http://localhost:3000
-      ENVIRONMENT: development
-    depends_on:
-      db:
-        condition: service_healthy
+      - DATABASE_URL=${DATABASE_URL}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      - ALLOWED_ORIGINS=http://localhost:3000
     volumes:
       - ./backend:/app
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - todo-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
-  # Next.js Frontend
+  # Frontend Web App
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     container_name: todo-frontend
     ports:
       - "3000:3000"
     environment:
-      NEXT_PUBLIC_API_URL: http://localhost:8000
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET:-development-secret-key-min-32-chars}
-      BETTER_AUTH_URL: http://localhost:3000
-      DATABASE_URL: postgresql://todo_user:todo_password@db:5432/todo_db
-    depends_on:
-      - backend
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - BETTER_AUTH_URL=http://localhost:3000
     volumes:
       - ./frontend:/app
       - /app/node_modules
       - /app/.next
-    command: npm run dev
+    networks:
+      - todo-network
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  todo-network:
+    driver: bridge
 
 volumes:
-  postgres_data:
+  node_modules:
+  next_build:

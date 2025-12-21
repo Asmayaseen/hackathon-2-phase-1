@@ -1,15 +1,16 @@
 """Database models."""
 
-from sqlmodel import SQLModel, Field
+from sqlmodel import SQLModel, Field, Column
+from sqlalchemy import JSON
 from datetime import datetime
-from typing import Optional, Literal
+from typing import Optional, Literal, List
 
 # Type for task priority
 TaskPriority = Literal['low', 'medium', 'high']
 
 
 class Task(SQLModel, table=True):
-    """Task model with priority and due date support."""
+    """Task model with priority, due date, and tags support."""
 
     __tablename__ = "tasks"
 
@@ -20,6 +21,7 @@ class Task(SQLModel, table=True):
     completed: bool = Field(default=False, index=True)
     priority: str = Field(default='medium', index=True)  # 'low', 'medium', 'high'
     due_date: Optional[datetime] = Field(default=None, index=True)
+    tags: Optional[List[str]] = Field(default=None, sa_column=Column(JSON))  # Tags as JSON array
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -45,4 +47,5 @@ class Message(SQLModel, table=True):
     user_id: str = Field(index=True)  # Removed foreign key for now (Better Auth manages users separately)
     role: str = Field(max_length=20)  # "user" or "assistant"
     content: str
+    tool_calls: Optional[str] = Field(default=None)  # JSON string of tool calls made
     created_at: datetime = Field(default_factory=datetime.utcnow)

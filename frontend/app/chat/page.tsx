@@ -53,7 +53,7 @@ export default function ChatPage() {
     */
   }, [router])
 
-  // Send message handler
+  // Send message handler with SSE streaming
   const handleSendMessage = async (messageContent: string) => {
     if (!userId) {
       console.error('No user ID available')
@@ -70,33 +70,97 @@ export default function ChatPage() {
 
     setLoading(true)
 
+    // Create placeholder for assistant message
+    const assistantMessageIndex = messages.length + 1
+    const assistantMessage: ChatMessage = {
+      role: 'assistant',
+      content: '',
+      timestamp: new Date().toISOString(),
+    }
+    setMessages((prev) => [...prev, assistantMessage])
+
     try {
-      // Send to backend
-      const response = await chatApi.sendMessage(userId, messageContent, conversationId)
+      // Send with SSE streaming
+      await chatApi.sendMessageStream(
+        userId,
+        messageContent,
+        conversationId,
+        {
+          onStart: () => {
+            console.log('Stream started')
+          },
 
-      // Update conversation ID if this is the first message
-      if (!conversationId) {
-        setConversationId(response.conversation_id)
-      }
+          onContent: (content: string) => {
+            // Append content chunks to the assistant message
+            setMessages((prev) => {
+              const updated = [...prev]
+              const lastMsg = updated[updated.length - 1]
+              if (lastMsg && lastMsg.role === 'assistant') {
+                lastMsg.content += content
+              }
+              return updated
+            })
+          },
 
-      // Add assistant response to UI
-      const assistantMessage: ChatMessage = {
-        role: 'assistant',
-        content: response.response,
-        timestamp: new Date().toISOString(),
-      }
-      setMessages((prev) => [...prev, assistantMessage])
+          onToolCall: (tool: string, parameters: Record<string, any>) => {
+            console.log(`Tool called: ${tool}`, parameters)
+            // Optionally show tool execution in UI
+          },
+
+          onToolResult: (tool: string, result: any) => {
+            console.log(`Tool result for ${tool}:`, result)
+          },
+
+          onDone: (fullResponse: string, convId: number) => {
+            // Update conversation ID if this is the first message
+            if (!conversationId) {
+              setConversationId(convId)
+            }
+
+            // Ensure the final message is complete
+            setMessages((prev) => {
+              const updated = [...prev]
+              const lastMsg = updated[updated.length - 1]
+              if (lastMsg && lastMsg.role === 'assistant' && lastMsg.content !== fullResponse) {
+                lastMsg.content = fullResponse
+              }
+              return updated
+            })
+
+            console.log('Stream completed')
+            setLoading(false)
+          },
+
+          onError: (error: string) => {
+            console.error('Stream error:', error)
+
+            // Update last message with error
+            setMessages((prev) => {
+              const updated = [...prev]
+              const lastMsg = updated[updated.length - 1]
+              if (lastMsg && lastMsg.role === 'assistant') {
+                lastMsg.content = `Sorry, I encountered an error: ${error}. Please try again.`
+              }
+              return updated
+            })
+
+            setLoading(false)
+          },
+        }
+      )
     } catch (error) {
       console.error('Failed to send message:', error)
 
-      // Add error message to UI
-      const errorMessage: ChatMessage = {
-        role: 'assistant',
-        content: `Sorry, I encountered an error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`,
-        timestamp: new Date().toISOString(),
-      }
-      setMessages((prev) => [...prev, errorMessage])
-    } finally {
+      // Update last message with error
+      setMessages((prev) => {
+        const updated = [...prev]
+        const lastMsg = updated[updated.length - 1]
+        if (lastMsg && lastMsg.role === 'assistant') {
+          lastMsg.content = `Sorry, I encountered an error: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`
+        }
+        return updated
+      })
+
       setLoading(false)
     }
   }

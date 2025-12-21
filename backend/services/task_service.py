@@ -1,285 +1,200 @@
-"""
-Task service layer - Reusable business logic for task operations.
+"""Task service - Business logic for task operations."""
 
-Tasks: T-202, T-203, T-204 - Implement Task Service Functions
-Spec: specs-history/phase-3-chatbot/spec.md §3.1.2
-Plan: specs-history/phase-3-chatbot/plan.md Phase 2 Step 2.2
-
-This service layer provides shared business logic that can be used by:
-1. REST API endpoints (routes/tasks.py)
-2. MCP tools (mcp_server/tools.py)
-3. Any future interfaces
-
-Following Constitution principles:
-- Service Layer Pattern: Business logic centralized
-- Type Safety: Full type hints
-- User Isolation: Every function validates user_id
-"""
-
-from sqlmodel import Session, select
+from sqlmodel import Session, select, or_, func
 from models import Task
 from datetime import datetime
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 
 
-async def create_task(
-    user_id: str,
-    title: str,
-    description: Optional[str] = None,
-    priority: str = "medium",
-    due_date: Optional[datetime] = None,
-    db: Session = None
-) -> Task:
-    """
-    Create a new task for the user.
+class TaskService:
+    """Service class for task-related business logic."""
 
-    Args:
-        user_id: User ID who owns the task
-        title: Task title (1-200 characters)
-        description: Optional task description (max 1000 characters)
-        priority: Task priority ('low', 'medium', 'high')
-        due_date: Optional due date
-        db: Database session
+    @staticmethod
+    def create_task(
+        db: Session,
+        user_id: str,
+        title: str,
+        description: Optional[str] = None,
+        priority: str = "medium",
+        due_date: Optional[datetime] = None,
+    ) -> Task:
+        """Create a new task."""
+        task = Task(
+            user_id=user_id,
+            title=title,
+            description=description,
+            priority=priority,
+            due_date=due_date,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
+        )
+        db.add(task)
+        db.commit()
+        db.refresh(task)
+        return task
 
-    Returns:
-        Created Task object
+    @staticmethod
+    def get_task(db: Session, user_id: str, task_id: int) -> Optional[Task]:
+        """Get a single task by ID."""
+        statement = select(Task).where(Task.id == task_id, Task.user_id == user_id)
+        return db.exec(statement).first()
 
-    Raises:
-        ValueError: If title is invalid or user_id is missing
-    """
-    # Validation
-    if not user_id:
-        raise ValueError("user_id is required")
+    @staticmethod
+    def list_tasks(
+        db: Session,
+        user_id: str,
+        status: str = "all",
+        sort_by: str = "created",
+        search: Optional[str] = None,
+        page: int = 1,
+        limit: int = 20,
+    ) -> tuple:
+        """List tasks with filtering, sorting, search, and pagination."""
+        # Base query
+        statement = select(Task).where(Task.user_id == user_id)
 
-    if not title or len(title) > 200:
-        raise ValueError("Title must be 1-200 characters")
+        # Filter by status
+        if status == "pending":
+            statement = statement.where(Task.completed == False)
+        elif status == "completed":
+            statement = statement.where(Task.completed == True)
 
-    if description and len(description) > 1000:
-        raise ValueError("Description must be max 1000 characters")
+        # Search in title and description
+        if search:
+            search_term = f"%{search}%"
+            statement = statement.where(
+                or_(
+                    Task.title.ilike(search_term),
+                    Task.description.ilike(search_term) if Task.description.isnot(None) else False
+                )
+            )
 
-    if priority not in ['low', 'medium', 'high']:
-        raise ValueError("Priority must be 'low', 'medium', or 'high'")
+        # Get total count
+        count_statement = select(func.count()).select_from(statement.subquery())
+        total_count = db.exec(count_statement).one()
 
-    # Create task
-    task = Task(
-        user_id=user_id,
-        title=title,
-        description=description,
-        priority=priority,
-        due_date=due_date,
-        completed=False
-    )
+        # Sorting
+        if sort_by == "created":
+            statement = statement.order_by(Task.created_at.desc())
+        elif sort_by == "title":
+            statement = statement.order_by(Task.title.asc())
+        elif sort_by == "updated":
+            statement = statement.order_by(Task.updated_at.desc())
+        elif sort_by == "priority":
+            statement = statement.order_by(Task.priority.desc())
+        elif sort_by == "due_date":
+            statement = statement.order_by(Task.due_date.asc())
+        else:
+            statement = statement.order_by(Task.created_at.desc())
 
-    db.add(task)
-    db.commit()
-    db.refresh(task)
+        # Pagination
+        offset = (page - 1) * limit
+        statement = statement.offset(offset).limit(limit)
 
-    return task
+        tasks = db.exec(statement).all()
+        return list(tasks), total_count
 
+    @staticmethod
+    def update_task(
+        db: Session,
+        user_id: str,
+        task_id: int,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        priority: Optional[str] = None,
+        due_date: Optional[datetime] = None,
+    ) -> Optional[Task]:
+        """Update a task."""
+        task = TaskService.get_task(db, user_id, task_id)
+        if not task:
+            return None
 
-async def list_tasks(
-    user_id: str,
-    status: str = "all",
-    priority: Optional[str] = None,
-    db: Session = None
-) -> List[Task]:
-    """
-    List tasks for user with optional filtering.
+        if title is not None:
+            task.title = title
+        if description is not None:
+            task.description = description
+        if priority is not None:
+            task.priority = priority
+        if due_date is not None:
+            task.due_date = due_date
 
-    Args:
-        user_id: User ID
-        status: Filter by status ("all", "pending", "completed")
-        priority: Optional filter by priority ('low', 'medium', 'high')
-        db: Database session
+        task.updated_at = datetime.utcnow()
+        db.add(task)
+        db.commit()
+        db.refresh(task)
+        return task
 
-    Returns:
-        List of Task objects matching filters
+    @staticmethod
+    def delete_task(db: Session, user_id: str, task_id: int) -> bool:
+        """Delete a task."""
+        task = TaskService.get_task(db, user_id, task_id)
+        if not task:
+            return False
 
-    Raises:
-        ValueError: If user_id is missing or filters are invalid
-    """
-    if not user_id:
-        raise ValueError("user_id is required")
+        db.delete(task)
+        db.commit()
+        return True
 
-    if status not in ["all", "pending", "completed"]:
-        raise ValueError("Status must be 'all', 'pending', or 'completed'")
+    @staticmethod
+    def toggle_complete(db: Session, user_id: str, task_id: int) -> Optional[Task]:
+        """Toggle task completion status."""
+        task = TaskService.get_task(db, user_id, task_id)
+        if not task:
+            return None
 
-    # Base query: filter by user
-    statement = select(Task).where(Task.user_id == user_id)
+        task.completed = not task.completed
+        task.updated_at = datetime.utcnow()
+        db.add(task)
+        db.commit()
+        db.refresh(task)
+        return task
 
-    # Apply status filter
-    if status == "pending":
-        statement = statement.where(Task.completed == False)
-    elif status == "completed":
-        statement = statement.where(Task.completed == True)
+    @staticmethod
+    def bulk_delete(db: Session, user_id: str, task_ids: List[int]) -> int:
+        """Bulk delete tasks."""
+        statement = select(Task).where(
+            Task.user_id == user_id,
+            Task.id.in_(task_ids)
+        )
+        tasks = db.exec(statement).all()
 
-    # Apply priority filter
-    if priority:
-        if priority not in ['low', 'medium', 'high']:
-            raise ValueError("Priority must be 'low', 'medium', or 'high'")
-        statement = statement.where(Task.priority == priority)
+        for task in tasks:
+            db.delete(task)
 
-    # Order by created date (newest first)
-    statement = statement.order_by(Task.created_at.desc())
+        db.commit()
+        return len(tasks)
 
-    result = db.exec(statement)
-    return result.all()
+    @staticmethod
+    def bulk_complete(db: Session, user_id: str, task_ids: List[int], completed: bool = True) -> int:
+        """Bulk update completion status."""
+        statement = select(Task).where(
+            Task.user_id == user_id,
+            Task.id.in_(task_ids)
+        )
+        tasks = db.exec(statement).all()
 
+        for task in tasks:
+            task.completed = completed
+            task.updated_at = datetime.utcnow()
+            db.add(task)
 
-async def get_task(
-    user_id: str,
-    task_id: int,
-    db: Session = None
-) -> Optional[Task]:
-    """
-    Get a specific task by ID.
+        db.commit()
+        return len(tasks)
 
-    Args:
-        user_id: User ID (for authorization)
-        task_id: Task ID to retrieve
-        db: Database session
+    @staticmethod
+    def get_stats(db: Session, user_id: str) -> dict:
+        """Get task statistics."""
+        statement = select(Task).where(Task.user_id == user_id)
+        tasks = db.exec(statement).all()
 
-    Returns:
-        Task object if found and belongs to user, None otherwise
+        total = len(tasks)
+        completed = sum(1 for task in tasks if task.completed)
+        pending = total - completed
+        completion_rate = int((completed / total * 100)) if total > 0 else 0
 
-    Note:
-        Returns None for both "not found" and "not authorized" to avoid
-        revealing task existence to unauthorized users.
-    """
-    if not user_id:
-        raise ValueError("user_id is required")
-
-    statement = select(Task).where(
-        Task.id == task_id,
-        Task.user_id == user_id  # Ensure user owns the task
-    )
-
-    result = db.exec(statement)
-    return result.first()
-
-
-async def update_task(
-    user_id: str,
-    task_id: int,
-    updates: Dict[str, Any],
-    db: Session = None
-) -> Optional[Task]:
-    """
-    Update task fields.
-
-    Args:
-        user_id: User ID (for authorization)
-        task_id: Task ID to update
-        updates: Dictionary of field updates (e.g., {"title": "New title"})
-        db: Database session
-
-    Returns:
-        Updated Task object if found and authorized, None otherwise
-
-    Raises:
-        ValueError: If updates are invalid
-    """
-    if not user_id:
-        raise ValueError("user_id is required")
-
-    if not updates:
-        raise ValueError("At least one field must be updated")
-
-    # Get task (with authorization check)
-    task = await get_task(user_id, task_id, db)
-    if not task:
-        return None
-
-    # Validate and apply updates
-    allowed_fields = {"title", "description", "priority", "due_date", "completed"}
-    for field, value in updates.items():
-        if field not in allowed_fields:
-            raise ValueError(f"Cannot update field: {field}")
-
-        # Field-specific validation
-        if field == "title":
-            if not value or len(value) > 200:
-                raise ValueError("Title must be 1-200 characters")
-        elif field == "description" and value is not None:
-            if len(value) > 1000:
-                raise ValueError("Description must be max 1000 characters")
-        elif field == "priority":
-            if value not in ['low', 'medium', 'high']:
-                raise ValueError("Priority must be 'low', 'medium', or 'high'")
-
-        # Apply update
-        setattr(task, field, value)
-
-    # Update timestamp
-    task.updated_at = datetime.utcnow()
-
-    db.add(task)
-    db.commit()
-    db.refresh(task)
-
-    return task
-
-
-async def delete_task(
-    user_id: str,
-    task_id: int,
-    db: Session = None
-) -> bool:
-    """
-    Delete a task.
-
-    Args:
-        user_id: User ID (for authorization)
-        task_id: Task ID to delete
-        db: Database session
-
-    Returns:
-        True if task was deleted, False if not found or unauthorized
-    """
-    if not user_id:
-        raise ValueError("user_id is required")
-
-    # Get task (with authorization check)
-    task = await get_task(user_id, task_id, db)
-    if not task:
-        return False
-
-    db.delete(task)
-    db.commit()
-
-    return True
-
-
-async def toggle_complete(
-    user_id: str,
-    task_id: int,
-    db: Session = None
-) -> Optional[Task]:
-    """
-    Toggle task completion status.
-
-    Args:
-        user_id: User ID (for authorization)
-        task_id: Task ID to toggle
-        db: Database session
-
-    Returns:
-        Updated Task object with toggled status, None if not found/authorized
-    """
-    if not user_id:
-        raise ValueError("user_id is required")
-
-    # Get task (with authorization check)
-    task = await get_task(user_id, task_id, db)
-    if not task:
-        return None
-
-    # Toggle completion
-    task.completed = not task.completed
-    task.updated_at = datetime.utcnow()
-
-    db.add(task)
-    db.commit()
-    db.refresh(task)
-
-    return task
+        return {
+            "total": total,
+            "completed": completed,
+            "pending": pending,
+            "completionRate": completion_rate,
+        }
