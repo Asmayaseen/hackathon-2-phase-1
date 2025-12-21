@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import ThemeToggle from '@/components/ThemeToggle'
 
 export default function HomePage() {
   return (
@@ -30,11 +31,18 @@ export default function HomePage() {
             </span>
           </div>
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             <Link
-              href="/login"
-              className="text-gray-400 hover:text-cyan-400 font-medium transition-colors"
+              href="/dashboard"
+              className="text-gray-400 dark:text-gray-400 hover:text-cyan-400 font-medium transition-colors"
             >
-              Sign In
+              Dashboard
+            </Link>
+            <Link
+              href="/chat"
+              className="text-gray-400 dark:text-gray-400 hover:text-fuchsia-400 font-medium transition-colors"
+            >
+              AI Chat
             </Link>
             <Link
               href="/signup"
