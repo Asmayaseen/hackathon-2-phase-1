@@ -1,7 +1,7 @@
 """Database models."""
 
 from sqlmodel import SQLModel, Field, Column
-from sqlalchemy import JSON
+from sqlalchemy import ARRAY, String
 from datetime import datetime
 from typing import Optional, Literal, List
 
@@ -21,7 +21,7 @@ class Task(SQLModel, table=True):
     completed: bool = Field(default=False, index=True)
     priority: str = Field(default='medium', index=True)  # 'low', 'medium', 'high'
     due_date: Optional[datetime] = Field(default=None, index=True)
-    tags: Optional[List[str]] = Field(default=None, sa_column=Column(JSON))  # Tags as JSON array
+    tags: Optional[List[str]] = Field(default_factory=lambda: [], sa_column=Column(ARRAY(String)))  # Tags as PostgreSQL array
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
 

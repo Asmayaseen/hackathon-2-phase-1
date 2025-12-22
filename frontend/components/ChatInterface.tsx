@@ -82,10 +82,10 @@ export default function ChatInterface({ messages, onSendMessage, loading }: Chat
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-2xl w-full">
-              <ExamplePrompt icon={<Zap className="w-4 h-4" />} text="Add buy milk to my todo list" />
-              <ExamplePrompt icon={<Zap className="w-4 h-4" />} text="Show me all my tasks" />
-              <ExamplePrompt icon={<Zap className="w-4 h-4" />} text="Mark task 5 as complete" />
-              <ExamplePrompt icon={<Zap className="w-4 h-4" />} text="Delete the first task" />
+              <ExamplePrompt icon={<Zap className="w-4 h-4" />} text="Add buy milk to my todo list" onSend={onSendMessage} />
+              <ExamplePrompt icon={<Zap className="w-4 h-4" />} text="Show me all my tasks" onSend={onSendMessage} />
+              <ExamplePrompt icon={<Zap className="w-4 h-4" />} text="Mark task 5 as complete" onSend={onSendMessage} />
+              <ExamplePrompt icon={<Zap className="w-4 h-4" />} text="Delete the first task" onSend={onSendMessage} />
             </div>
           </div>
         ) : (
@@ -166,9 +166,15 @@ export default function ChatInterface({ messages, onSendMessage, loading }: Chat
 /**
  * Example Prompt Component
  */
-function ExamplePrompt({ icon, text }: { icon: React.ReactNode; text: string }) {
+interface ExamplePromptProps {
+  icon: React.ReactNode
+  text: string
+  onSend: (message: string) => void
+}
+
+function ExamplePrompt({ icon, text, onSend }: ExamplePromptProps) {
   return (
-    <div className="group relative">
+    <div className="group relative" onClick={() => onSend(text)}>
       <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
       <div className="relative flex items-center gap-2 px-4 py-3 bg-slate-900/50 backdrop-blur-sm border border-slate-700 hover:border-purple-500/50 rounded-lg cursor-pointer transition-all duration-300">
         <span className="text-cyan-400">{icon}</span>

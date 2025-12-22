@@ -386,13 +386,36 @@ When showing tasks, format them clearly with their IDs. Always confirm actions t
                 result = None
                 if function_name == "add_task":
                     result = add_task(user_id, arguments.get("title"), arguments.get("description"))
+                    # Generate confirmation message
+                    if result and "title" in result:
+                        confirmation = f"✅ I've added '{result['title']}' to your tasks!"
+                        full_response += confirmation
+                        yield f"data: {json_module.dumps({'type': 'content', 'content': confirmation})}\n\n"
                 elif function_name == "list_tasks":
                     status = arguments.get("status", "all")
                     result = list_tasks(user_id, status)
+                    # Generate task list message
+                    if isinstance(result, list):
+                        if len(result) > 0:
+                            task_list = "\n".join([f"• {t.get('title', 'Untitled')} {'✅' if t.get('completed') else '⭕'}" for t in result[:10]])
+                            confirmation = f"Here are your tasks:\n{task_list}"
+                        else:
+                            confirmation = "You don't have any tasks yet!"
+                        full_response += confirmation
+                        yield f"data: {json_module.dumps({'type': 'content', 'content': confirmation})}\n\n"
                 elif function_name == "complete_task":
                     result = complete_task(user_id, arguments["task_id"])
+                    if result and "title" in result:
+                        status = "completed" if result.get("completed") else "incomplete"
+                        confirmation = f"✅ Marked '{result['title']}' as {status}!"
+                        full_response += confirmation
+                        yield f"data: {json_module.dumps({'type': 'content', 'content': confirmation})}\n\n"
                 elif function_name == "delete_task":
                     result = delete_task(user_id, arguments["task_id"])
+                    if result and "title" in result:
+                        confirmation = f"🗑️ Deleted '{result['title']}'!"
+                        full_response += confirmation
+                        yield f"data: {json_module.dumps({'type': 'content', 'content': confirmation})}\n\n"
                 elif function_name == "update_task":
                     result = update_task(
                         user_id,
@@ -400,6 +423,10 @@ When showing tasks, format them clearly with their IDs. Always confirm actions t
                         arguments.get("title"),
                         arguments.get("description")
                     )
+                    if result and "title" in result:
+                        confirmation = f"✏️ Updated '{result['title']}'!"
+                        full_response += confirmation
+                        yield f"data: {json_module.dumps({'type': 'content', 'content': confirmation})}\n\n"
 
                 # Send tool result
                 if result:

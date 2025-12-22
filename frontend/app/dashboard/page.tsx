@@ -36,8 +36,8 @@ export default function DashboardPage() {
   const searchInputRef = useRef<HTMLInputElement>(null)
   const { showToast } = useToast()
 
-  // Mock user ID - replace with actual auth
-  const userId = 'user123'
+  // Mock user ID - same as chat page
+  const userId = 'demo-user'
 
   useEffect(() => {
     fetchTasks()
@@ -46,88 +46,106 @@ export default function DashboardPage() {
   const fetchTasks = async () => {
     try {
       setLoading(true)
-      // Mock data for now
-      const mockTasks: Task[] = [
-        {
-          id: 1,
-          user_id: userId,
-          title: 'Complete project proposal',
-          description: 'Write and submit Q1 proposal',
-          completed: false,
-          priority: 'high',
-          due_date: '2025-12-20T17:00:00Z',
-          created_at: '2025-12-13T10:00:00Z',
-          updated_at: '2025-12-13T10:00:00Z',
-        },
-        {
-          id: 2,
-          user_id: userId,
-          title: 'Review pull requests',
-          description: 'Review pending PRs',
-          completed: false,
-          priority: 'medium',
-          due_date: '2025-12-15T12:00:00Z',
-          created_at: '2025-12-13T09:00:00Z',
-          updated_at: '2025-12-13T09:00:00Z',
-        },
-        {
-          id: 3,
-          user_id: userId,
-          title: 'Update documentation',
-          description: 'Update API docs',
-          completed: true,
-          priority: 'low',
-          due_date: '2025-12-10T12:00:00Z',
-          created_at: '2025-12-10T09:00:00Z',
-          updated_at: '2025-12-13T09:00:00Z',
-        },
-      ]
+      // Fetch real tasks from backend
+      const response = await fetch(`http://localhost:8000/api/${userId}/tasks`)
 
-      setTasks(mockTasks)
+      if (!response.ok) {
+        throw new Error('Failed to fetch tasks')
+      }
+
+      const data = await response.json()
+      const fetchedTasks = data.tasks || data || []
+
+      setTasks(fetchedTasks)
     } catch (error) {
+      console.error('Error fetching tasks:', error)
       showToast('error', 'Failed to fetch tasks')
+      // Show empty list on error
+      setTasks([])
     } finally {
       setLoading(false)
     }
   }
 
   const handleCreateTask = async (taskData: any) => {
-    const newTask: Task = {
-      id: Math.max(0, ...tasks.map(t => t.id)) + 1,
-      user_id: userId,
-      ...taskData,
-      completed: false,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    }
+    try {
+      const response = await fetch(`http://localhost:8000/api/${userId}/tasks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(taskData),
+      })
 
-    setTasks([newTask, ...tasks])
-    setShowCreateForm(false)
-    showToast('success', 'Task created successfully!')
+      if (!response.ok) throw new Error('Failed to create task')
+
+      const newTask = await response.json()
+      setTasks([newTask, ...tasks])
+      setShowCreateForm(false)
+      showToast('success', 'Task created successfully!')
+    } catch (error) {
+      console.error('Error creating task:', error)
+      showToast('error', 'Failed to create task')
+    }
   }
 
   const handleToggleComplete = async (taskId: number) => {
-    setTasks(tasks.map(task =>
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    ))
-    showToast('success', 'Task updated')
+    try {
+      const response = await fetch(`http://localhost:8000/api/${userId}/tasks/${taskId}/complete`, {
+        method: 'PATCH',
+      })
+
+      if (!response.ok) throw new Error('Failed to toggle task')
+
+      const updatedTask = await response.json()
+      setTasks(tasks.map(task =>
+        task.id === taskId ? updatedTask : task
+      ))
+      showToast('success', 'Task updated')
+    } catch (error) {
+      console.error('Error toggling task:', error)
+      showToast('error', 'Failed to update task')
+    }
   }
 
   const handleUpdateTask = async (taskId: number, updates: Partial<Task>) => {
-    setTasks(tasks.map(task =>
-      task.id === taskId ? { ...task, ...updates } : task
-    ))
-    showToast('success', 'Task updated!')
+    try {
+      const response = await fetch(`http://localhost:8000/api/${userId}/tasks/${taskId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates),
+      })
+
+      if (!response.ok) throw new Error('Failed to update task')
+
+      const updatedTask = await response.json()
+      setTasks(tasks.map(task =>
+        task.id === taskId ? updatedTask : task
+      ))
+      showToast('success', 'Task updated!')
+    } catch (error) {
+      console.error('Error updating task:', error)
+      showToast('error', 'Failed to update task')
+    }
   }
 
   const handleDeleteTask = async (taskId: number) => {
-    setTasks(tasks.filter(task => task.id !== taskId))
-    setSelectedTaskIds(prev => {
-      const newSet = new Set(prev)
-      newSet.delete(taskId)
-      return newSet
-    })
-    showToast('success', 'Task deleted!')
+    try {
+      const response = await fetch(`http://localhost:8000/api/${userId}/tasks/${taskId}`, {
+        method: 'DELETE',
+      })
+
+      if (!response.ok) throw new Error('Failed to delete task')
+
+      setTasks(tasks.filter(task => task.id !== taskId))
+      setSelectedTaskIds(prev => {
+        const newSet = new Set(prev)
+        newSet.delete(taskId)
+        return newSet
+      })
+      showToast('success', 'Task deleted!')
+    } catch (error) {
+      console.error('Error deleting task:', error)
+      showToast('error', 'Failed to delete task')
+    }
   }
 
   // Bulk operations
@@ -269,9 +287,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Cyber grid background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00d9ff10_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff10_1px,transparent_1px)] bg-[size:50px_50px]" />
+    <div className="min-h-screen bg-background relative overflow-hidden transition-colors duration-300">
+      {/* Cyber grid background - visible in dark mode */}
+      <div className="absolute inset-0 dark:bg-[linear-gradient(to_right,#00d9ff10_1px,transparent_1px),linear-gradient(to_bottom,#00d9ff10_1px,transparent_1px)] bg-[size:50px_50px]" />
 
       {/* Neon glow effects */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full filter blur-[120px] animate-pulse" />
@@ -295,10 +313,10 @@ export default function DashboardPage() {
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-2">
-              <span className="text-white">Neural</span>{' '}
+              <span className="text-foreground">Neural</span>{' '}
               <span className="bg-gradient-to-r from-cyan-400 to-fuchsia-500 bg-clip-text text-transparent">Task Stream</span>
             </h1>
-            <p className="text-cyan-100/70">
+            <p className="text-muted-foreground">
               Manage your tasks efficiently • Press <kbd className="px-2 py-1 text-xs bg-cyan-500/30 border-2 border-cyan-500/50 text-cyan-400 rounded shadow-[0_0_10px_rgba(0,217,255,0.3)]">?</kbd> for shortcuts
             </p>
           </div>
@@ -315,7 +333,7 @@ export default function DashboardPage() {
               placeholder="Search neural stream... (Ctrl+K)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-3 bg-black/80 border-2 border-cyan-500/30 rounded-2xl text-white placeholder:text-cyan-100/40 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,217,255,0.3)] backdrop-blur-sm transition-all"
+              className="w-full px-4 py-3 bg-card/80 border-2 border-cyan-500/30 rounded-2xl text-foreground placeholder:text-cyan-100/40 focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,217,255,0.3)] backdrop-blur-sm transition-all"
             />
             <kbd className="absolute right-3 top-1/2 -translate-y-1/2 px-2 py-1 text-xs bg-cyan-500/30 border-2 border-cyan-500/50 rounded text-cyan-400 shadow-[0_0_10px_rgba(0,217,255,0.2)]">
               Ctrl+K
@@ -324,7 +342,7 @@ export default function DashboardPage() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="px-4 py-3 bg-black/80 border-2 border-fuchsia-500/30 rounded-2xl text-white backdrop-blur-sm focus:outline-none focus:border-fuchsia-400 focus:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all uppercase tracking-wider font-bold text-sm"
+            className="px-4 py-3 bg-card/80 border-2 border-fuchsia-500/30 rounded-2xl text-foreground backdrop-blur-sm focus:outline-none focus:border-fuchsia-400 focus:shadow-[0_0_20px_rgba(236,72,153,0.3)] transition-all uppercase tracking-wider font-bold text-sm"
           >
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
@@ -333,7 +351,7 @@ export default function DashboardPage() {
           <select
             value={priorityFilter}
             onChange={(e) => setPriorityFilter(e.target.value as any)}
-            className="px-4 py-3 bg-black/80 border-2 border-cyan-500/30 rounded-2xl text-white backdrop-blur-sm focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,217,255,0.3)] transition-all uppercase tracking-wider font-bold text-sm"
+            className="px-4 py-3 bg-card/80 border-2 border-cyan-500/30 rounded-2xl text-foreground backdrop-blur-sm focus:outline-none focus:border-cyan-400 focus:shadow-[0_0_20px_rgba(0,217,255,0.3)] transition-all uppercase tracking-wider font-bold text-sm"
           >
             <option value="all">All Priorities</option>
             <option value="high">High</option>
@@ -393,7 +411,7 @@ export default function DashboardPage() {
             {!searchQuery && statusFilter === 'all' && priorityFilter === 'all' && (
               <button
                 onClick={() => setShowCreateForm(true)}
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all"
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-foreground rounded-lg shadow-md hover:shadow-lg transition-all"
               >
                 Create First Task
               </button>

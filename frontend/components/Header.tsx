@@ -18,8 +18,8 @@ export default function Header() {
 
   // Mock user data - replace with actual auth later
   const mockUser = {
-    name: 'Demo User',
-    email: 'demo@taskflow.com'
+    name: 'Neural Operator',
+    email: 'operator@neuraltasks.io'
   }
 
   const handleLogout = () => {
@@ -27,7 +27,7 @@ export default function Header() {
   }
 
   return (
-    <header className="relative z-50 border-b border-purple-500/30 bg-slate-950/80 backdrop-blur-md shadow-lg shadow-purple-500/10">
+    <header className="relative z-50 border-b border-purple-500/30 bg-background/80 backdrop-blur-md shadow-lg shadow-purple-500/10">
       {/* Neon glow effect on top border */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
 
@@ -38,12 +38,12 @@ export default function Header() {
             {/* Home Icon */}
             <Link
               href="/"
-              className="group relative flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-slate-900/50 transition-all duration-300"
+              className="group relative flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-secondary/50 transition-all duration-300"
               title="Go to Home"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/0 via-purple-500/0 to-pink-500/0 group-hover:from-cyan-500/10 group-hover:via-purple-500/10 group-hover:to-pink-500/10 rounded-lg blur transition-all duration-300"></div>
-              <Home className="relative w-4 h-4 sm:w-5 sm:h-5 text-slate-400 group-hover:text-cyan-400 transition-colors duration-300" />
-              <span className="relative hidden sm:inline text-sm font-medium text-slate-400 group-hover:text-cyan-400 transition-colors duration-300">
+              <Home className="relative w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground group-hover:text-cyan-400 transition-colors duration-300" />
+              <span className="relative hidden sm:inline text-sm font-medium text-muted-foreground group-hover:text-cyan-400 transition-colors duration-300">
                 Home
               </span>
             </Link>
@@ -99,7 +99,7 @@ export default function Header() {
               <div>
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
-                  className="group relative flex items-center gap-1.5 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl hover:bg-slate-900/50 transition-all duration-300"
+                  className="group relative flex items-center gap-1.5 sm:gap-3 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl hover:bg-secondary/50 transition-all duration-300"
                 >
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full blur-md opacity-0 group-hover:opacity-75 transition-opacity duration-300"></div>
@@ -108,10 +108,10 @@ export default function Header() {
                     </div>
                   </div>
                   <div className="hidden md:block text-left">
-                    <p className="font-semibold text-slate-200 text-sm group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300">
+                    <p className="font-semibold text-foreground text-sm group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-cyan-400 group-hover:to-purple-400 group-hover:bg-clip-text transition-all duration-300">
                       {mockUser.name}
                     </p>
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-muted-foreground/70">
                       {mockUser.email}
                     </p>
                   </div>
@@ -133,13 +133,13 @@ export default function Header() {
                       <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-purple-500/20 to-pink-500/20 rounded-2xl blur-xl"></div>
 
                       {/* Menu content */}
-                      <div className="relative bg-slate-900/95 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-500/20 overflow-hidden">
+                      <div className="relative bg-card/95 backdrop-blur-md rounded-2xl border border-purple-500/30 shadow-2xl shadow-purple-500/20 overflow-hidden">
                         {/* User info section */}
                         <div className="px-4 py-3 border-b border-purple-500/30 bg-gradient-to-r from-slate-900 to-purple-900/20">
-                          <p className="font-semibold text-slate-100">
+                          <p className="font-semibold text-foreground">
                             {mockUser.name}
                           </p>
-                          <p className="text-sm text-slate-400 truncate">
+                          <p className="text-sm text-muted-foreground truncate">
                             {mockUser.email}
                           </p>
                         </div>
@@ -148,9 +148,9 @@ export default function Header() {
                         <div className="py-2">
                           <a
                             href="/dashboard"
-                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition-all duration-200 group"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-card-foreground hover:bg-secondary/50 hover:text-cyan-400 transition-all duration-200 group"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center group-hover:bg-cyan-500/20 transition-colors">
+                            <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-cyan-500/20 transition-colors">
                               <span className="text-base">📊</span>
                             </div>
                             <span className="font-medium">Dashboard</span>
@@ -158,9 +158,9 @@ export default function Header() {
 
                           <a
                             href="/chat"
-                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800/50 hover:text-purple-400 transition-all duration-200 group"
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-card-foreground hover:bg-secondary/50 hover:text-purple-400 transition-all duration-200 group"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
+                            <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-purple-500/20 transition-colors">
                               <Bot className="w-4 h-4" />
                             </div>
                             <span className="font-medium">AI Assistant</span>
@@ -171,9 +171,9 @@ export default function Header() {
                               setShowUserMenu(false)
                               alert('Settings feature coming soon!')
                             }}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800/50 hover:text-pink-400 transition-all duration-200 group"
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-card-foreground hover:bg-secondary/50 hover:text-pink-400 transition-all duration-200 group"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center group-hover:bg-pink-500/20 transition-colors">
+                            <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-pink-500/20 transition-colors">
                               <Settings className="w-4 h-4" />
                             </div>
                             <span className="font-medium">Settings</span>
@@ -184,9 +184,9 @@ export default function Header() {
                               setShowUserMenu(false)
                               setShowShortcuts(true)
                             }}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-slate-300 hover:bg-slate-800/50 hover:text-cyan-400 transition-all duration-200 group"
+                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-card-foreground hover:bg-secondary/50 hover:text-cyan-400 transition-all duration-200 group"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center group-hover:bg-cyan-500/20 transition-colors">
+                            <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-cyan-500/20 transition-colors">
                               <Keyboard className="w-4 h-4" />
                             </div>
                             <span className="font-medium">Shortcuts</span>
@@ -199,7 +199,7 @@ export default function Header() {
                             onClick={handleLogout}
                             className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-all duration-200 group"
                           >
-                            <div className="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
+                            <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center group-hover:bg-red-500/20 transition-colors">
                               <LogOut className="w-4 h-4" />
                             </div>
                             <span className="font-medium">Sign Out</span>
