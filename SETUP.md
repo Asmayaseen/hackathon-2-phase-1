@@ -90,8 +90,8 @@ npm run dev
 
 ### Backend (.env)
 ```env
-DATABASE_URL=postgresql://neondb_owner:npg_9o7LbiyKpwrN@ep-divine-union-ahlsszpq-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
-BETTER_AUTH_SECRET=5Uk7VYMMiWOxhfeU1LCCWey2qQcpp1PX4sxFMQzKhGk=
+DATABASE_URL=your-neon-database-url
+BETTER_AUTH_SECRET=your-better-auth-secret
 ALLOWED_ORIGINS=http://localhost:3000
 PORT=8000
 ENVIRONMENT=development
@@ -100,9 +100,9 @@ ENVIRONMENT=development
 ### Frontend (.env.local)
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:8000
-BETTER_AUTH_SECRET=5Uk7VYMMiWOxhfeU1LCCWey2qQcpp1PX4sxFMQzKhGk=
+BETTER_AUTH_SECRET=your-better-auth-secret
 BETTER_AUTH_URL=http://localhost:3000
-DATABASE_URL=postgresql://neondb_owner:npg_9o7LbiyKpwrN@ep-divine-union-ahlsszpq-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+DATABASE_URL=your-neon-database-url
 ```
 
 ✅ **Both files are already configured with credentials.**
@@ -204,7 +204,7 @@ npm run dev
 ### Database connection fails
 ```bash
 # Test database connection
-psql "postgresql://neondb_owner:npg_9o7LbiyKpwrN@ep-divine-union-ahlsszpq-pooler.c-3.us-east-1.aws.neon.tech/neondb?sslmode=require"
+psql "your-neon-database-url"
 ```
 
 ### CORS errors
