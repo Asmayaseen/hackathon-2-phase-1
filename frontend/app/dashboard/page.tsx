@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Header from '@/components/Header'
 import StatsCards from '@/components/StatsCards'
 import TaskList from '@/components/TaskList'
@@ -39,11 +39,7 @@ export default function DashboardPage() {
   // Mock user ID - same as chat page
   const userId = 'demo-user'
 
-  useEffect(() => {
-    fetchTasks()
-  }, [])
-
-  const fetchTasks = async () => {
+  const fetchTasks = useCallback(async () => {
     try {
       setLoading(true)
       // Fetch real tasks from backend
@@ -65,7 +61,11 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [userId, showToast])
+
+  useEffect(() => {
+    fetchTasks()
+  }, [fetchTasks])
 
   const handleCreateTask = async (taskData: any) => {
     try {
