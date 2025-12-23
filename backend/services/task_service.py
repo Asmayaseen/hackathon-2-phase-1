@@ -60,9 +60,9 @@ class TaskService:
 
         # Filter by status
         if status == "pending":
-            statement = statement.where(Task.completed == False)
+            statement = statement.where(~Task.completed)
         elif status == "completed":
-            statement = statement.where(Task.completed == True)
+            statement = statement.where(Task.completed)
 
         # Search in title and description
         if search:
@@ -211,14 +211,14 @@ class TaskService:
     def export_to_csv(db: Session, user_id: str) -> str:
         """Export tasks to CSV format."""
         tasks, _ = TaskService.list_tasks(db, user_id, status="all", limit=1000)
-        
+
         output = StringIO()
         writer = csv.DictWriter(output, fieldnames=[
-            'id', 'title', 'description', 'priority', 'due_date', 
+            'id', 'title', 'description', 'priority', 'due_date',
             'tags', 'completed', 'created_at', 'updated_at'
         ])
         writer.writeheader()
-        
+
         for task in tasks:
             writer.writerow({
                 'id': task.id,
@@ -231,14 +231,14 @@ class TaskService:
                 'created_at': task.created_at.isoformat(),
                 'updated_at': task.updated_at.isoformat(),
             })
-        
+
         return output.getvalue()
 
     @staticmethod
     def export_to_json(db: Session, user_id: str) -> str:
         """Export tasks to JSON format."""
         tasks, _ = TaskService.list_tasks(db, user_id, status="all", limit=1000)
-        
+
         tasks_data = [
             {
                 'id': task.id,
@@ -253,5 +253,5 @@ class TaskService:
             }
             for task in tasks
         ]
-        
+
         return json.dumps(tasks_data, indent=2)

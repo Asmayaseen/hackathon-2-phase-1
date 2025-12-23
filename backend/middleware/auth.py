@@ -1,9 +1,6 @@
 """JWT authentication middleware."""
 
-from fastapi import Header, HTTPException
-from jose import jwt, JWTError
-from datetime import datetime
-from config import settings
+from fastapi import Header
 
 
 async def verify_jwt(authorization: str = Header(None)) -> dict:

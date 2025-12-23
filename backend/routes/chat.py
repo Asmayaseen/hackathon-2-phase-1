@@ -19,19 +19,17 @@ Following Constitution principles:
 - Error Handling: Graceful, user-friendly messages
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 from typing import Optional, List, Dict, Any, AsyncIterator
-from datetime import datetime
 import os
 import logging
 import json
 import asyncio
 
 from database import get_db
-from middleware.auth import verify_jwt
 from models import Conversation, Message
 from mcp_server.tools import add_task, list_tasks, complete_task, delete_task, update_task
 
@@ -212,7 +210,6 @@ async def get_ai_response_stream(
             return
 
         client = OpenAI(api_key=api_key)
-        tool_calls_made = []
 
         # Define available MCP tools for OpenAI
         tools = [
@@ -638,24 +635,24 @@ When showing tasks, format them clearly with their IDs. Always confirm actions t
 
                 # Call the appropriate MCP tool
                 if function_name == "add_task":
-                    result = add_task(user_id, arguments.get("title"), arguments.get("description"))
+                    add_task(user_id, arguments.get("title"), arguments.get("description"))
                     tool_calls_made.append(ToolCall(tool="add_task", parameters=arguments))
 
                 elif function_name == "list_tasks":
                     status = arguments.get("status", "all")
-                    result = list_tasks(user_id, status)
+                    list_tasks(user_id, status)
                     tool_calls_made.append(ToolCall(tool="list_tasks", parameters={"status": status}))
 
                 elif function_name == "complete_task":
-                    result = complete_task(user_id, arguments["task_id"])
+                    complete_task(user_id, arguments["task_id"])
                     tool_calls_made.append(ToolCall(tool="complete_task", parameters=arguments))
 
                 elif function_name == "delete_task":
-                    result = delete_task(user_id, arguments["task_id"])
+                    delete_task(user_id, arguments["task_id"])
                     tool_calls_made.append(ToolCall(tool="delete_task", parameters=arguments))
 
                 elif function_name == "update_task":
-                    result = update_task(
+                    update_task(
                         user_id,
                         arguments["task_id"],
                         arguments.get("title"),

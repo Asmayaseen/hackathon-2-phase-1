@@ -1,9 +1,13 @@
 """Task management API routes."""
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import StreamingResponse
 from sqlmodel import Session, select
 from datetime import datetime
 from typing import Literal, Optional
+import csv
+import json
+import io
 
 from database import get_db
 from models import Task
@@ -56,9 +60,6 @@ async def list_tasks(
     # Calculate statistics for current filter
     completed = sum(1 for task in tasks if task.completed)
     pending = len(tasks) - completed
-
-    # Get overall stats (not filtered)
-    stats = TaskService.get_stats(db, user_id)
 
     return TaskListResponse(
         tasks=tasks,
@@ -288,7 +289,7 @@ async def bulk_delete_tasks(
 ):
     """
     Bulk delete multiple tasks.
-    
+
     - **user_id**: User ID from URL path
     - **task_ids**: List of task IDs to delete
     """
@@ -317,7 +318,7 @@ async def bulk_complete_tasks(
 ):
     """
     Bulk update completion status of multiple tasks.
-    
+
     - **user_id**: User ID from URL path
     - **task_ids**: List of task IDs to update
     - **completed**: Completion status (true/false)
@@ -346,7 +347,7 @@ async def get_task_stats(
 ):
     """
     Get task statistics for a user.
-    
+
     - **user_id**: User ID from URL path
     """
     # Verify user_id matches token
@@ -361,10 +362,6 @@ async def get_task_stats(
 
 
 # Export/Import Operations
-from fastapi.responses import StreamingResponse
-import csv
-import json
-import io
 
 
 @router.get("/export/csv")
@@ -382,10 +379,10 @@ async def export_tasks_csv(
     # Create CSV in memory
     output = io.StringIO()
     writer = csv.writer(output)
-    
+
     # Write header
     writer.writerow(["ID", "Title", "Description", "Priority", "Due Date", "Tags", "Completed", "Created At"])
-    
+
     # Write tasks
     for task in tasks:
         writer.writerow([
@@ -398,7 +395,7 @@ async def export_tasks_csv(
             task.completed,
             task.created_at.isoformat()
         ])
-    
+
     output.seek(0)
     return StreamingResponse(
         iter([output.getvalue()]),
@@ -436,7 +433,7 @@ async def export_tasks_json(
     ]
 
     json_str = json.dumps(tasks_data, indent=2)
-    
+
     return StreamingResponse(
         iter([json_str]),
         media_type="application/json",

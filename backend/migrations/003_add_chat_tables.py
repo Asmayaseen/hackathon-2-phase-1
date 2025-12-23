@@ -7,7 +7,7 @@ This migration adds Conversation and Message tables to support
 the AI chatbot feature in Phase III.
 """
 
-from sqlmodel import SQLModel, create_engine, text
+from sqlmodel import create_engine, text
 import os
 import sys
 from dotenv import load_dotenv
@@ -96,7 +96,7 @@ def upgrade():
         ))
         created_tables = [row[0] for row in result]
 
-    print(f"✓ Migration applied successfully!")
+    print("✓ Migration applied successfully!")
     print(f"  Created tables: {', '.join(created_tables)}")
 
     # Show indexes
