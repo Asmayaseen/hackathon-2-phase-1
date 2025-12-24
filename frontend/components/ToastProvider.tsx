@@ -43,11 +43,11 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
     setToasts((prev) => [...prev, toast])
 
-    // Auto-dismiss
+    // Auto-dismiss after duration
     setTimeout(() => {
-      dismissToast(id)
+      setToasts((prev) => prev.filter((t) => t.id !== id))
     }, toast.duration)
-  }, [dismissToast])
+  }, [])
 
   return (
     <ToastContext.Provider value={{ toasts, showToast, dismissToast }}>
