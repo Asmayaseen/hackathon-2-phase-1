@@ -50,6 +50,7 @@ class Settings(BaseSettings):
 
     # Logging
     LOG_LEVEL: str = "INFO"
+    LOG_FORMAT: str = "json"
 
     # Phase III - AI Chatbot
     OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
@@ -64,6 +65,7 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
         case_sensitive = True
+        extra = "ignore"  # Ignore extra fields from .env
 
 
 # Create settings instance
